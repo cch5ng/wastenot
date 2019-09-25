@@ -1,6 +1,7 @@
 /client/node_modules
 /client/.env
 /client/dist/bundle.js
+/client/dist/index.html
 /server/node_modules
 /server/.env
 .DS_Store
