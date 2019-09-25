@@ -15,6 +15,7 @@
     "postcss-plugin": "^1.0.0",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
+    "react-hot-loader": "^4.12.14",
     "react-router-dom": "^5.1.0",
     "style-loader": "^1.0.0",
     "sugarss": "^2.0.0",
