@@ -10,6 +10,8 @@
   "dependencies": {
     "@babel/core": "^7.6.2",
     "@babel/preset-env": "^7.6.2",
+    "classnames": "^2.2.6",
+    "dotenv": "^8.1.0",
     "mini-css-extract-plugin": "^0.8.0",
     "postcss-load-config": "^2.1.0",
     "postcss-plugin": "^1.0.0",
