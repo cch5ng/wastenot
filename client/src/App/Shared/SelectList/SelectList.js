@@ -1,7 +1,7 @@
 import React from 'react';
 import './SelectList.css';
 
-const SelectList = (props) {
+const SelectList = (props) => {
 
   let {defVal, options, onChange, idVal} = props;
   return (

@@ -1,7 +1,7 @@
 import React from 'react';
 import './Button.css';
 
-const Button = (props) {
+const Button = (props) => {
   let { label, onClickHandler, classVal, idVal } = props;
 
   return (
