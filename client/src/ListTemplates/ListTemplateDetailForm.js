@@ -87,30 +87,38 @@ const ListTemplateDetailForm = (props) => {
     setListName(listName);
   }
 
+  //DEBUG
   function listItemInputChangeHandler(ev) {
-    let name = ev.target.value
-    let id = ev.target.id
+    let name = ev.target.value;
+    let id = ev.target.id;
 
-    this.setState(prevState => {
-      let newInput2 = {}
-      newInput2.name = name
+    let prevListItemInputs = {listItemInputs};
+    let newListItemInputs = { ...prevListItemInputs, [id]: name};
+    setListItemInputs(newListItemInputs);
 
-      let newInput = {}
-      newInput[id] = {...prevState.listItemInputs[id], ...newInput2}
-      let newState = {...prevState.listItemInputs, ...newInput}
-      return {listItemInputs: newState}
-    })
+    // this.setState(prevState => {
+    //   let newInput2 = {}
+    //   newInput2.name = name
+
+    //   let newInput = {}
+    //   newInput[id] = {...prevState.listItemInputs[id], ...newInput2}
+    //   let newState = {...prevState.listItemInputs, ...newInput}
+    //   return {listItemInputs: newState}
+    // })
   }
 
   function getInputValue(id) {
-    return this.state.listItemInputs[id]
+    let curInputs = {listItemInputs};
+    return curInputs[id];
+    //return this.state.listItemInputs[id]
   }
 
+  //DEBUG and figure out how to handle actions
   function formSubmitHandler(ev) {
-    let listItemInputs = this.state.listItemInputs
-    let listName = this.state.listName
-    let requestBody
-    let listId
+    let listItemInputs = {listItemInputs};
+    let listName = {listName};
+    let requestBody;
+    let listId;
 
     if (mode === "add") {
       listId = uuidv1();
@@ -118,14 +126,14 @@ const ListTemplateDetailForm = (props) => {
         listItemInputs[itemKey].parentId = listId
       }
       requestBody = { listId, listName, listItemInputs}
-      this.props.receiveTemplateListCreate(requestBody)
+      //this.props.receiveTemplateListCreate(requestBody)
     } else if (this.state.mode === "Edit") {
       listId = this.props.templateListId
       requestBody = { listId, listName, listItemInputs}
-      this.props.receiveTemplateListEdit(requestBody)
+      //this.props.receiveTemplateListEdit(requestBody)
     }
 
-    this.clearForm('empty')
+    clearForm('empty')
   }
 
   function reformatSelectId(id) {
@@ -133,31 +141,42 @@ const ListTemplateDetailForm = (props) => {
     return tempAr.join('')
   }
 
+  //DEBUG
   function onChangeHandlerSelectSection(ev) {
-    let id = ev.target.id
-    let reformattedId = this.reformatSelectId(id)
-    let section = ev.target.value
-    this.setState(prevState => {
+    let id = ev.target.id;
+    let reformattedId = reformatSelectId(id);
+    let section = ev.target.value;
+
+
+
+
+    //this.setState(prevState => {
       let newInput2 = {}
       newInput2.section = section
+      let prevState = listItemInputs
+
 
       let newInput = {}
       newInput[reformattedId] = {...prevState.listItemInputs[reformattedId], ...newInput2}
       let newState = {...prevState.listItemInputs, ...newInput}
-      return {listItemInputs: newState}
-    })
+
+      setListItemInputs(newState)
+    //})
   }
 
   function renderForm() {
-    let htmlResult = []
+    let htmlResult = [];
+    let curInputs = listItemInputs;
+
+    console.log('curInputs', curInputs);
 
     for (let i = 0; i < 50; i++) {
-      let key = 'shoppingListItem' + i.toString()
-      let selectKey = 'shoppingListItemSelect' + i.toString()
+      let key = 'templateListItem' + i.toString();
+      let selectKey = 'templateListItemSelect' + i.toString();
       htmlResult.push(
         <li key={key} >
-          <InputText defVal={listItemInputs[key].name} placeholderVal="item name" idVal={key} onChangeHandler={listItemInputChangeHandler} />
-          <SelectList defVal={listItemInputs[key].section} idVal={selectKey} options={sectionOptions} onChange={onChangeHandlerSelectSection} />
+          <InputText defVal={curInputs[key].name} placeholderVal="item name" idVal={key} onChangeHandler={listItemInputChangeHandler} />
+          <SelectList defVal={curInputs[key].section} idVal={selectKey} options={sectionOptions} onChange={onChangeHandlerSelectSection} />
         </li>
       )
     }
@@ -168,21 +187,25 @@ const ListTemplateDetailForm = (props) => {
     let formClearMode = clearMode === "empty" ? clearMode : {mode};
 
     switch(formClearMode) {
-      case "Edit":
-        this.setState({
-          listItemInputs: this.props.editList.listItemInputs,
-          listName: this.props.editList.listName
-        })
-        break
+      case "edit":
+        setListItemInputs(props.editList.listItemInputs);
+        setListName(props.editList.listName);
+        // this.setState({
+        //   listItemInputs: this.props.editList.listItemInputs,
+        //   listName: this.props.editList.listName
+        // })
+        break;
 
-      case "Add":
+      case "add":
       case "empty":
       default:
-        this.setState({
-          listItemInputs: initListItemInputs,
-          listName: ''
-        })
-        break
+        setListItemInputs(initListItemInputs);
+        setListName('');
+        // this.setState({
+        //   listItemInputs: initListItemInputs,
+        //   listName: ''
+        // })
+        break;
     }
   }
 
