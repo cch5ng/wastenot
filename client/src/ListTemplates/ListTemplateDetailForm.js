@@ -72,7 +72,7 @@ const sectionOptions = [
       {label: 'produce', value: 'produce'},
 ]
 
-const ListTemplateDetailForm = (props) {
+const ListTemplateDetailForm = (props) => {
 
   const [mode, setMode] = useState(props.mode === 'edit' ? props.mode : 'create');
   const [title, setTitle] = useState(props.mode === 'edit' ? 'Edit Template List' : 'Add Template List');
@@ -112,27 +112,19 @@ const ListTemplateDetailForm = (props) {
     let requestBody
     let listId
 
-    if (this.state.mode === "Add") {
-      // adding parentId
-      listId = uuidv1()
+    if (mode === "add") {
+      listId = uuidv1();
       for (let itemKey in listItemInputs) {
         listItemInputs[itemKey].parentId = listId
       }
       requestBody = { listId, listName, listItemInputs}
-      // TODO api call
-      // TODO update store
       this.props.receiveTemplateListCreate(requestBody)
-      //this.props.receiveListCreate(requestBody)
     } else if (this.state.mode === "Edit") {
       listId = this.props.templateListId
       requestBody = { listId, listName, listItemInputs}
-      // TODO api call
-      // TODO update store
       this.props.receiveTemplateListEdit(requestBody)
     }
 
-    // TODO clear the form afer submit (update api/store); clear to empty in case
-    // next time opened as a new list form...
     this.clearForm('empty')
   }
 
@@ -159,21 +151,21 @@ const ListTemplateDetailForm = (props) {
   function renderForm() {
     let htmlResult = []
 
-    for (let i = 0; i < 15; i++) {
+    for (let i = 0; i < 50; i++) {
       let key = 'shoppingListItem' + i.toString()
       let selectKey = 'shoppingListItemSelect' + i.toString()
       htmlResult.push(
         <li key={key} >
-          <InputText defVal={this.state.listItemInputs[key].name} placeholderVal="item name" idVal={key} onChangeHandler={this.listItemInputChangeHandler} />
-          <SelectList defVal={this.state.listItemInputs[key].section} idVal={selectKey} options={sectionOptions} onChange={this.onChangeHandlerSelectSection} />
+          <InputText defVal={listItemInputs[key].name} placeholderVal="item name" idVal={key} onChangeHandler={listItemInputChangeHandler} />
+          <SelectList defVal={listItemInputs[key].section} idVal={selectKey} options={sectionOptions} onChange={onChangeHandlerSelectSection} />
         </li>
       )
     }
-    return htmlResult
+    return htmlResult;
   }
 
   function clearForm(clearMode = null) {
-    let formClearMode = clearMode === "empty" ? clearMode : this.state.mode
+    let formClearMode = clearMode === "empty" ? clearMode : {mode};
 
     switch(formClearMode) {
       case "Edit":
