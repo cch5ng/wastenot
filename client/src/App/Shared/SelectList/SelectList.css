@@ -1,0 +1,11 @@
+select {
+  height: 25px;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+select:focus {
+  outline: none !important;
+  border:1px solid #6e614f; 
+  box-shadow: 0 0 10px #c0e585;
+}
