@@ -7,7 +7,14 @@ import SelectList from '../App/Shared/SelectList/SelectList'
 import InputText from '../App/Shared/InputText/InputText'
 import '../App.css';
 
-const inputObj = {name: '', section: 'none'};
+let inputObj = {name: '', section: 'none'};
+//let initListItemInputs = {};
+
+// for (let i = 0; i < 50; i++) {
+//   let key = `templateListItem${i}`;
+//   let name = `list item ${i}`;
+//   initListItemInputs[key] = { name, section: 'none'};
+// }
 
 const initListItemInputs = {
       templateListItem0: inputObj,
@@ -82,35 +89,23 @@ const ListTemplateDetailForm = (props) => {
   //a litte confused about if I want to toggle one form for create vs edit view, how do I reconcile a form field value for prefilling
   //on edit state?
 
-  function listNameInputChangeHandler(ev) {
-    let listName = ev.target.value
-    setListName(listName);
-  }
-
-  //DEBUG
-  function listItemInputChangeHandler(ev) {
-    let name = ev.target.value;
+  function inputChangeHandler(ev) {
+    let name = ev.target.name;
+    let value = ev.target.value;
     let id = ev.target.id;
 
-    let prevListItemInputs = {listItemInputs};
-    let newListItemInputs = { ...prevListItemInputs, [id]: name};
-    setListItemInputs(newListItemInputs);
-
-    // this.setState(prevState => {
-    //   let newInput2 = {}
-    //   newInput2.name = name
-
-    //   let newInput = {}
-    //   newInput[id] = {...prevState.listItemInputs[id], ...newInput2}
-    //   let newState = {...prevState.listItemInputs, ...newInput}
-    //   return {listItemInputs: newState}
-    // })
-  }
-
-  function getInputValue(id) {
-    let curInputs = {listItemInputs};
-    return curInputs[id];
-    //return this.state.listItemInputs[id]
+    if (name === 'listNameInp') {
+      setListName(value);
+    } else {
+      // handle list item inputs
+      let prevListItemInputs = listItemInputs;
+      let newInput2 = {};
+      newInput2.name = value;
+      let newInput = {}
+      newInput[id] = {...prevListItemInputs[id], ...newInput2}
+      let newListItemInputs = { ...prevListItemInputs, ...newInput};
+      setListItemInputs(newListItemInputs);
+    }
   }
 
   //DEBUG and figure out how to handle actions
@@ -127,7 +122,7 @@ const ListTemplateDetailForm = (props) => {
       }
       requestBody = { listId, listName, listItemInputs}
       //this.props.receiveTemplateListCreate(requestBody)
-    } else if (this.state.mode === "Edit") {
+    } else if (this.state.mode === "edit") {
       listId = this.props.templateListId
       requestBody = { listId, listName, listItemInputs}
       //this.props.receiveTemplateListEdit(requestBody)
@@ -168,15 +163,18 @@ const ListTemplateDetailForm = (props) => {
     let htmlResult = [];
     let curInputs = listItemInputs;
 
-    console.log('curInputs', curInputs);
-
     for (let i = 0; i < 50; i++) {
       let key = 'templateListItem' + i.toString();
       let selectKey = 'templateListItemSelect' + i.toString();
+      let curInput = curInputs[key];
       htmlResult.push(
         <li key={key} >
-          <InputText defVal={curInputs[key].name} placeholderVal="item name" idVal={key} onChangeHandler={listItemInputChangeHandler} />
-          <SelectList defVal={curInputs[key].section} idVal={selectKey} options={sectionOptions} onChange={onChangeHandlerSelectSection} />
+          <InputText value={curInput.name} placeholder="item name" 
+            id={key} onChangeHandler={inputChangeHandler} name={key}
+          />
+          <SelectList defVal={curInput.section} idVal={selectKey} 
+            options={sectionOptions} onChange={onChangeHandlerSelectSection} name={selectKey}
+          />
         </li>
       )
     }
@@ -209,6 +207,8 @@ const ListTemplateDetailForm = (props) => {
     }
   }
 
+
+  //TODO refactor button set into one component
   return (
     <div className="main">
       <h3>{title}</h3>
@@ -217,7 +217,7 @@ const ListTemplateDetailForm = (props) => {
         <Button label="Cancel" onClickHandler={clearForm} />
       </div>
       <br />
-      <InputText defVal={listName} placeholderVal="list name" onChangeHandler={listNameInputChangeHandler} />
+      <InputText name="listNameInp" value={listName} placeholder="list name" onChangeHandler={inputChangeHandler} />
       <ul>
         {renderForm()}
       </ul>
