@@ -110,29 +110,6 @@ const ListTemplateDetailForm = (props) => {
     }
   }
 
-  //DEBUG and figure out how to handle actions
-  function formSubmitHandler(ev) {
-    let listItemInputs = {listItemInputs};
-    let listName = {listName};
-    let requestBody;
-    let listId;
-
-    if (mode === "add") {
-      listId = uuidv1();
-      for (let itemKey in listItemInputs) {
-        listItemInputs[itemKey].parentId = listId
-      }
-      requestBody = { listId, listName, listItemInputs}
-      //this.props.receiveTemplateListCreate(requestBody)
-    } else if (this.state.mode === "edit") {
-      listId = this.props.templateListId
-      requestBody = { listId, listName, listItemInputs}
-      //this.props.receiveTemplateListEdit(requestBody)
-    }
-
-    clearForm('empty')
-  }
-
   function reformatSelectId(id) {
     let tempAr = id.split('Select')
     return tempAr.join('')
@@ -152,6 +129,30 @@ const ListTemplateDetailForm = (props) => {
     setListItemInputs(newListItemInputs);
   }
 
+  //DEBUG and figure out how to handle actions
+  //TODO update the backend
+  function formSubmitHandler(ev) {
+    let requestBody;
+    let listId;
+
+    if (mode === "add") {
+      listId = uuidv1();
+      for (let itemKey in listItemInputs) {
+        listItemInputs[itemKey].parentId = listId;
+      }
+      requestBody = { listId, listName, listItemInputs};
+      //this.props.receiveTemplateListCreate(requestBody)
+    } else if (mode === "edit") {
+      listId = props.templateListId;
+      requestBody = { listId, listName, listItemInputs};
+      //this.props.receiveTemplateListEdit(requestBody)
+    }
+
+    console.log('requestBody', requestBody);
+    clearForm('empty');
+  }
+
+  //renders all list items (text inp and select list)
   function renderForm() {
     let htmlResult = [];
     let curInputs = listItemInputs;

@@ -14,7 +14,11 @@ const Header = () => {
           <Link to="/settings/listTemplatesNew">New Template</Link>
         </p>
       </div>
-
+      <div className="header-contact">
+        <p className="nav-link">
+          <Link to="/settings/listTemplates">Templates</Link>
+        </p>
+      </div>
 
     </div>
   )
@@ -29,13 +33,6 @@ export default Header;
         <p className="nav-link">
           <Link to="/listsNew">New List</Link>
         </p>
-      <div className="header-contact">
-        <p className="nav-link">
-          <Link to="/settings/listTemplates">Templates</Link>
-        </p>
-      </div>
-
-
 
 
         <p className="nav-link">
