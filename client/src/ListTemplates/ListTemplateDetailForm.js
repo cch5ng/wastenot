@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
 import uuidv1 from 'uuid/v1'
 
 import Button from '../App/Shared/Button/Button'
@@ -83,7 +83,8 @@ const sectionOptions = [
 
 const ListTemplateDetailForm = (props) => {
 
-  const [mode, setMode] = useState(props.mode === 'edit' ? props.mode : 'create');
+  const [formSubmitted, setFormSubmitted] = useState(false);
+  const [mode, setMode] = useState(props.mode);
   const [title, setTitle] = useState(props.mode === 'edit' ? 'Edit Template List' : 'Add Template List');
   const [listItemInputs, setListItemInputs] = useState(props.mode === 'edit' ? {} : initListItemInputs);
   const [listName, setListName] = useState('');
@@ -148,8 +149,9 @@ const ListTemplateDetailForm = (props) => {
       //this.props.receiveTemplateListEdit(requestBody)
     }
 
-    console.log('requestBody', requestBody);
     clearForm('empty');
+    setFormSubmitted(true);
+    //TODO should redirect to all templates list
   }
 
   //renders all list items (text inp and select list)
@@ -205,6 +207,10 @@ const ListTemplateDetailForm = (props) => {
   //TODO refactor button set into one component
   return (
     <div className="main">
+      {formSubmitted && (
+        <Redirect to="/settings/listTemplates" />
+      )}
+
       <h3>{title}</h3>
       <div>
         <Button classVal="listDetailFormSaveBtn" onClickHandler={formSubmitHandler} label="Save" />
