@@ -3,9 +3,9 @@ import './SelectList.css';
 
 const SelectList = (props) => {
 
-  let {defVal, options, onChange, idVal} = props;
+  let {value, options, onChange, id} = props;
   return (
-    <select  id={idVal} value={defVal} onChange={(ev) => onChange(ev)}>
+    <select  id={id} value={value} onChange={(ev) => onChange(ev)}>
       {options.map((option, idx) => {
         let key = `${option['value']}${idx.toString()}`
         return (<option key={key} value={option['value']} >{option['label']}</option>)
