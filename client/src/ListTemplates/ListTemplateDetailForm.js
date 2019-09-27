@@ -74,9 +74,11 @@ const sectionOptions = [
       {label: 'drinks', value: 'drinks'},
       {label: 'dairy', value: 'dairy'},
       {label: 'frozen', value: 'frozen'},
+      {label: 'meat', value: 'meat'},
       {label: 'prepared', value: 'prepared'},
       {label: 'deli', value: 'deli'},
       {label: 'produce', value: 'produce'},
+      {label: 'bread', value: 'bread'},
 ]
 
 const ListTemplateDetailForm = (props) => {
@@ -141,22 +143,13 @@ const ListTemplateDetailForm = (props) => {
     let id = ev.target.id;
     let reformattedId = reformatSelectId(id);
     let section = ev.target.value;
-
-
-
-
-    //this.setState(prevState => {
-      let newInput2 = {}
-      newInput2.section = section
-      let prevState = listItemInputs
-
-
-      let newInput = {}
-      newInput[reformattedId] = {...prevState.listItemInputs[reformattedId], ...newInput2}
-      let newState = {...prevState.listItemInputs, ...newInput}
-
-      setListItemInputs(newState)
-    //})
+    let newInput2 = {};
+    newInput2.section = section;
+    let prevListItemInputs = listItemInputs;
+    let newInput = {};
+    newInput[reformattedId] = {...prevListItemInputs[reformattedId], ...newInput2};
+    let newListItemInputs = {...prevListItemInputs, ...newInput};
+    setListItemInputs(newListItemInputs);
   }
 
   function renderForm() {
@@ -172,7 +165,7 @@ const ListTemplateDetailForm = (props) => {
           <InputText value={curInput.name} placeholder="item name" 
             id={key} onChangeHandler={inputChangeHandler} name={key}
           />
-          <SelectList defVal={curInput.section} idVal={selectKey} 
+          <SelectList value={curInput.section} id={selectKey} 
             options={sectionOptions} onChange={onChangeHandlerSelectSection} name={selectKey}
           />
         </li>
