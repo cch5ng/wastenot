@@ -5,7 +5,6 @@ import uuidv1 from 'uuid/v1';
 import Button from '../App/Shared/Button/Button';
 import SelectList from '../App/Shared/SelectList/SelectList';
 import InputText from '../App/Shared/InputText/InputText';
-import useListTemplates from '../utils/hooks/useListTemplates';
 import '../App.css';
 
 let inputObj = {name: '', section: 'none'};
@@ -89,7 +88,7 @@ const ListTemplateDetailForm = (props) => {
   const [title, setTitle] = useState(props.mode === 'edit' ? 'Edit Template List' : 'Add Template List');
   const [listItemInputs, setListItemInputs] = useState(props.mode === 'edit' ? {} : initListItemInputs);
   const [listName, setListName] = useState('');
-  const {listTemplates, addList} = useListTemplates();
+  const {listTemplates, updateListTemplates} = props;
 
   //a litte confused about if I want to toggle one form for create vs edit view, how do I reconcile a form field value for prefilling
   //on edit state?

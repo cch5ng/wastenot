@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { IoIosAddCircleOutline } from "react-icons/io";
-import useListTemplates from '../utils/hooks/useListTemplates';
+//import useListTemplates from '../utils/hooks/useListTemplates';
 
 //import {FaPlusSquareO} from 'react-icons/fa';
 
@@ -9,7 +9,9 @@ import useListTemplates from '../utils/hooks/useListTemplates';
 //import '../App.css';
 
 const ListTemplates = (props) => {
-  const {listTemplates, addList} = useListTemplates();
+  //const {listTemplates, addList} = useListTemplates();
+  const {listTemplates, updateListTemplates, removeListTemplates} = props;
+
   console.log('listTemplates', listTemplates);
 
   function objToArray(obj) {
