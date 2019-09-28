@@ -3,12 +3,17 @@ import React, { useState, useEffect } from 'react';
 const useListTemplates = (cb) => {
   const [listTemplates, setListTemplates] = useState({});
 
-  const addList = (list) => {
+  const updateListTemplates = (list) => {
     let prevListTemplates = listTemplates;
     let key = list.listId;
     let newListTemplates = { ...prevListTemplates, [key]: list };
 
     setListTemplates(newListTemplates);
+  }
+
+  //TODO
+  const removeListTemplates = () => {
+
   }
   // useEffect(() => {
   //   function handleStatusChange(status) {
@@ -18,7 +23,8 @@ const useListTemplates = (cb) => {
   //   ChatAPI.subscribeToFriendStatus(friendID, handleStatusChange);
   // });
 
-  return {listTemplates, addList};
+
+  return {listTemplates, updateList, removeListTemplates};
 }
 
 export default useListTemplates;
