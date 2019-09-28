@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Link, Redirect } from 'react-router-dom'
-import uuidv1 from 'uuid/v1'
+import { Link, Redirect } from 'react-router-dom';
+import uuidv1 from 'uuid/v1';
 
-import Button from '../App/Shared/Button/Button'
-import SelectList from '../App/Shared/SelectList/SelectList'
-import InputText from '../App/Shared/InputText/InputText'
+import Button from '../App/Shared/Button/Button';
+import SelectList from '../App/Shared/SelectList/SelectList';
+import InputText from '../App/Shared/InputText/InputText';
+import useListTemplates from '../utils/hooks/useListTemplates';
 import '../App.css';
 
 let inputObj = {name: '', section: 'none'};
@@ -88,6 +89,7 @@ const ListTemplateDetailForm = (props) => {
   const [title, setTitle] = useState(props.mode === 'edit' ? 'Edit Template List' : 'Add Template List');
   const [listItemInputs, setListItemInputs] = useState(props.mode === 'edit' ? {} : initListItemInputs);
   const [listName, setListName] = useState('');
+  const {listTemplates, addList} = useListTemplates();
 
   //a litte confused about if I want to toggle one form for create vs edit view, how do I reconcile a form field value for prefilling
   //on edit state?
@@ -149,6 +151,7 @@ const ListTemplateDetailForm = (props) => {
       //this.props.receiveTemplateListEdit(requestBody)
     }
 
+    addList(requestBody);
     clearForm('empty');
     setFormSubmitted(true);
     //TODO should redirect to all templates list
