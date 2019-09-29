@@ -24,7 +24,7 @@ const useListTemplates = (cb) => {
   // });
 
 
-  return {listTemplates, updateList, removeListTemplates};
+  return {listTemplates, updateListTemplates, removeListTemplates};
 }
 
 export default useListTemplates;
