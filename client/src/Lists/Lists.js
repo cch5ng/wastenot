@@ -7,16 +7,16 @@ const Lists = ({ lists, type, clickHandlerDelete }) => {
   return (
     <ul className="list-group">
       {lists.map(list => {
-        let listLink
-        let editListLink
+        let listLink;
+        let editListLink;
 
         if (list) {
           if (type === "shopping") {
-            listLink = `/lists/${list.listId}`
-            editListLink = `/listEdit/${list.listId}`
+            listLink = `/lists/${list.listId}`;
+            editListLink = `/listEdit/${list.listId}`;
           } else if (type === "template") {
-            listLink = `/settings/listTemplates/${list.listId}`
-            editListLink = `/settings/listTemplatesEdit/${list.listId}`
+            listLink = `/settings/listTemplates/${list.listId}`;
+            editListLink = `/settings/listTemplatesEdit/${list.listId}`;
           }
           return (
             <li key={list.listId}>
@@ -34,4 +34,4 @@ const Lists = ({ lists, type, clickHandlerDelete }) => {
   )
 }
 
-export default Lists
+export default Lists;
