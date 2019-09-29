@@ -15,7 +15,7 @@ const ListTemplates = (props) => {
   console.log('listTemplates', listTemplates);
 
   let listTemplatesAr = []
-  if (props.listTemplates) {
+  if (listTemplates) {
     listTemplatesAr = objToArray(listTemplates)
   }
 
