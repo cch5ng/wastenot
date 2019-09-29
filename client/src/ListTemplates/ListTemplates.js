@@ -4,7 +4,7 @@ import { IoIosAddCircleOutline } from "react-icons/io";
 //import useListTemplates from '../utils/hooks/useListTemplates';
 
 //import {FaPlusSquareO} from 'react-icons/fa';
-import Lists from '../Lists/components/Lists';
+import Lists from '../Lists/Lists';
 import { objToArray } from '../utils/utils';
 //import '../App.css';
 
