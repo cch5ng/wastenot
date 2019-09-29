@@ -150,7 +150,7 @@ const ListTemplateDetailForm = (props) => {
       //this.props.receiveTemplateListEdit(requestBody)
     }
 
-    addList(requestBody);
+    updateListTemplates(requestBody);
     clearForm('empty');
     setFormSubmitted(true);
     //TODO should redirect to all templates list
