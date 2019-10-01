@@ -8,13 +8,6 @@ import InputText from '../App/Shared/InputText/InputText';
 import '../App.css';
 
 let inputObj = {name: '', section: 'none'};
-//let initListItemInputs = {};
-
-// for (let i = 0; i < 50; i++) {
-//   let key = `templateListItem${i}`;
-//   let name = `list item ${i}`;
-//   initListItemInputs[key] = { name, section: 'none'};
-// }
 
 const initListItemInputs = {
       templateListItem0: inputObj,
@@ -82,16 +75,18 @@ const sectionOptions = [
 ]
 
 const ListTemplateDetailForm = (props) => {
-
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [mode, setMode] = useState(props.mode);
   const [title, setTitle] = useState(props.mode === 'edit' ? 'Edit Template List' : 'Add Template List');
-  const [listItemInputs, setListItemInputs] = useState(props.mode === 'edit' ? {} : initListItemInputs);
-  const [listName, setListName] = useState('');
   const {listTemplates, updateListTemplates} = props;
-
-  //a litte confused about if I want to toggle one form for create vs edit view, how do I reconcile a form field value for prefilling
-  //on edit state?
+  let editListItemTemplates;
+  let editListTemplateName;
+  if (props.templateListId) {
+    editListItemTemplates = listTemplates[props.templateListId].listItemInputs;
+    editListTemplateName = listTemplates[props.templateListId].listName;
+  }
+  const [listName, setListName] = useState(props.mode === 'edit'? editListTemplateName : '');
+  const [listItemInputs, setListItemInputs] = useState(props.mode === 'edit' ? editListItemTemplates : initListItemInputs);
 
   function inputChangeHandler(ev) {
     let name = ev.target.name;
@@ -117,7 +112,6 @@ const ListTemplateDetailForm = (props) => {
     return tempAr.join('')
   }
 
-  //DEBUG
   function onChangeHandlerSelectSection(ev) {
     let id = ev.target.id;
     let reformattedId = reformatSelectId(id);
@@ -153,7 +147,6 @@ const ListTemplateDetailForm = (props) => {
     updateListTemplates(requestBody);
     clearForm('empty');
     setFormSubmitted(true);
-    //TODO should redirect to all templates list
   }
 
   //renders all list items (text inp and select list)
@@ -179,6 +172,7 @@ const ListTemplateDetailForm = (props) => {
     return htmlResult;
   }
 
+  //TODO think clicking cancel btn on edit form mode maybe should not clear entire form
   function clearForm(clearMode = null) {
     let formClearMode = clearMode === "empty" ? clearMode : {mode};
 
