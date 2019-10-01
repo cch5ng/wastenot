@@ -9,7 +9,6 @@ import { objToArray } from '../utils/utils';
 //import '../App.css';
 
 const ListTemplates = (props) => {
-  //const {listTemplates, addList} = useListTemplates();
   const {listTemplates, updateListTemplates, removeListTemplates} = props;
 
   console.log('listTemplates', listTemplates);
@@ -22,12 +21,9 @@ const ListTemplates = (props) => {
   return (
     <div className="main">
       <Link to="/settings/listTemplatesNew"><IoIosAddCircleOutline className="list-item-icon-lg" /> New Template List</Link>
-      <Lists lists={listTemplatesAr} type="template" />
+      <Lists lists={listTemplatesAr} type="template" clickHandlerDelete={removeListTemplates} />
     </div>
   )
-
 }
 
 export default ListTemplates;
-
-// <Lists lists={listTemplatesAr} type="template" />
