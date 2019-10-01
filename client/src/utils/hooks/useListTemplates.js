@@ -11,18 +11,16 @@ const useListTemplates = (cb) => {
     setListTemplates(newListTemplates);
   }
 
-  //TODO
-  const removeListTemplates = () => {
+  const removeListTemplates = (ev) => {
+    let listId = ev.target.id;
+    let newListTemplates = {};
 
+    let filteredKeys = Object.keys(listTemplates).filter(k => k !== listId);
+    filteredKeys.forEach(k => {
+      newListTemplates[k] = listTemplates[k];
+    })
+    setListTemplates(newListTemplates);
   }
-  // useEffect(() => {
-  //   function handleStatusChange(status) {
-  //     setIsOnline(status.isOnline);
-  //   }
-
-  //   ChatAPI.subscribeToFriendStatus(friendID, handleStatusChange);
-  // });
-
 
   return {listTemplates, updateListTemplates, removeListTemplates};
 }
