@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 import {
   BrowserRouter as Router, Route } from 'react-router-dom'
 import './App.css';
-import ListTemplates from './ListTemplates/ListTemplates';
-import ListTemplateDetailForm from './ListTemplates/ListTemplateDetailForm';
 import Header from './App/Header/Header';
 //import Footer from './App/Footer/Footer'
+import ListTemplates from './ListTemplates/ListTemplates';
+import ListTemplateDetailForm from './ListTemplates/ListTemplateDetailForm';
+//import ListTemplateDetail from './ListTemplates/ListTemplateDetail';
 import useListTemplates from './utils/hooks/useListTemplates';
 
 function App() {
@@ -27,6 +28,12 @@ function App() {
             listTemplates={listTemplates}
           />
         )} />
+        <Route exact path="/settings/listTemplatesEdit/:templateListId"
+          render={({match}) => (<ListTemplateDetailForm mode="edit" updateListTemplates={updateListTemplates}
+            templateListId={match.params.templateListId} listTemplates={listTemplates}
+          />
+        )} />
+
       </div>
     </Router>
   )
