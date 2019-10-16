@@ -3,6 +3,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
 const path = require('path');
+const listRouter = require('./api/list');
 
 if (process.env.NODE_ENV !== 'production') {
 	const result = dotenv.config()
@@ -24,6 +25,7 @@ app.use(function(req, res, next) {
 });
 
 app.use(bodyParser.json());
+app.use('/api/list', listRouter);
 app.use((err, req, res, next) => {
 	const statusCode = err.statusCode || 500;
 
