@@ -1,15 +1,16 @@
 const pool = require('../../databasePool');
 const uuidv4 = require('uuid/v4');
+const ListItemTable = require('../list_item/table');
 
 class ListTable {
 
 	static storeList({ list }) {
 		const { name, type, listItems } = list;
-		let guid = uuidv4();
+		let list_guid = uuidv4();
 		return new Promise((resolve, reject) => {
 			pool.query(
 				`INSERT INTO list (name, type, guid) VALUES ($1, $2, $3) RETURNING guid`,
-				[name, type, guid],
+				[name, type, list_guid],
 				(error, response) => {
 					if (error) return reject(error);
 					if (response.rows.length) {
@@ -17,28 +18,12 @@ class ListTable {
 
 						Promise.all(
 							listItems.map(({ name }) => {
-								let guid = uuidv4();
-								return ListTable.storeListItem({ name, listId, guid })
+								let list_item_guid = uuidv4();
+								return ListItemTable.storeListItem({ name, list_guid, list_item_guid })
 							})
 						)
-							.then(() => resolve({ list_guid: response.rows[0].guid }))
+							.then(() => resolve({ list_guid }))
 							.catch(err => reject(err))
-					}
-				}
-			)
-		})
-	}
-
-	//REFACTOR, maybe should move to ListItemTable class
-	static storeListItem({ name, listId, guid }) {
-		return new Promise((resolve, reject) => {
-			pool.query(
-				`INSERT INTO list_item (name, list_id, guid) VALUES ($1, $2, $3) RETURNING guid`,
-				[name, listId, guid],
-				(error, response) => {
-					if (error) return reject(error);
-					if (response.rows.length) {
-						resolve();
 					}
 				}
 			)
@@ -58,23 +43,6 @@ class ListTable {
 			)
 		})
 	}
-
-	//probably want to get everything like name plus the list items
-	static getListDetailById({ listGuid }) {
-		return new Promise((resolve, reject) => {
-			pool.query(
-				`SELECT * from list WHERE id = $1`,
-				[listGuid],
-				(error, response) => {
-					if (error) return reject(error);
-					if (response.rows.length) {
-						resolve(response.rows[0]);
-					}
-				}
-			)
-		})
-	}
-
 
 }
 
