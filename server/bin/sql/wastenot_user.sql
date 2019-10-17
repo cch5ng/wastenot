@@ -3,5 +3,6 @@ CREATE TABLE wastenot_user(
 	email VARCHAR(64) UNIQUE,
 	password VARCHAR(64),
 	name VARCHAR(64),
-	created_at TIMESTAMP NOT NULL DEFAULT NOW()
+	created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+	guid VARCHAR(64)
 );
