@@ -4,6 +4,13 @@ const ListTable = require('../list/table');
 
 const router = Router();
 
+router.post('/add', (req, res, next) => {
+	ListTable.storeList(req.body)
+		.then(resp => res.json(resp))
+		.catch(err => next(err));
+		//console.error('error', err));
+});
+
 router.get('/shoppingLists', (req, res, next) => {
 	ListTable.getListsByType({ listType: 'shopping' })
 		.then(lists => res.json(lists))

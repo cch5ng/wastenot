@@ -5,34 +5,35 @@ class ListTable {
 
 	static storeList({ list }) {
 		const { name, type, listItems } = list;
+		let guid = uuidv4();
 		return new Promise((resolve, reject) => {
 			pool.query(
-				`INSERT INTO list (name, type, guid) VALUES ($1, $2, $3)`,
-				[name, type, uuidv4()],
+				`INSERT INTO list (name, type, guid) VALUES ($1, $2, $3) RETURNING guid`,
+				[name, type, guid],
 				(error, response) => {
 					if (error) return reject(error);
-						if (response.rows.length && response.rows[0].guid) {
-							const list_guid = response.rows[0].guid;
-							const listId = response.rows[0].id;
+					if (response.rows.length) {
+						const listId = response.rows[0].id;
 
-							Promise.all(
-								listItems.map(({ name }) => {
-									let guid = uuidv4();
-									return ListItemTable.storeListItem({ name, listId, guid })
-								})
-							)
-								.then(() => resolve({ list_guid }))
-								.catch(err => reject(err))
-						}
+						Promise.all(
+							listItems.map(({ name }) => {
+								let guid = uuidv4();
+								return ListTable.storeListItem({ name, listId, guid })
+							})
+						)
+							.then(() => resolve({ list_guid: response.rows[0].guid }))
+							.catch(err => reject(err))
+					}
 				}
 			)
 		})
 	}
 
+	//REFACTOR, maybe should move to ListItemTable class
 	static storeListItem({ name, listId, guid }) {
 		return new Promise((resolve, reject) => {
 			pool.query(
-				`INSERT INTO list_item (name, list_id, guid) VALUES ($1, $2, $3)`,
+				`INSERT INTO list_item (name, list_id, guid) VALUES ($1, $2, $3) RETURNING guid`,
 				[name, listId, guid],
 				(error, response) => {
 					if (error) return reject(error);
