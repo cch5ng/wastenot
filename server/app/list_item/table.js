@@ -45,7 +45,7 @@ class ListItemTable {
 					if (error) return reject(error);
 					if (response.rows.length) {
 						console.log('response.rows', response.rows)
-						resolve(response.rows[0]);
+						resolve({list_item_guid: response.rows[0].guid});
 					}
 				}
 			)
