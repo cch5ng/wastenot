@@ -44,6 +44,26 @@ class ListTable {
 		})
 	}
 
+	static updateList({ name, type, guid }) {
+		return new Promise((resolve, reject) => {
+			pool.query(
+				`UPDATE list SET name = $1, type = $2 WHERE guid = $3 RETURNING guid`,
+				[name, type, guid],
+				(error, response) => {
+					if (error) return reject(error);
+					resolve({guid});
+				}
+			)
+		})
+	}
+
+	static updateListAndListItems({name, type, guid, listItems}) {
+		return Promise.all(
+			ListTable.updateList({name, type, guid}),
+			ListItemTable.updateListItems(listItems)
+		)
+	}
+
 }
 
 module.exports = ListTable;
