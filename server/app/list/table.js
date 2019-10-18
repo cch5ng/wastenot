@@ -51,17 +51,17 @@ class ListTable {
 				[name, type, guid],
 				(error, response) => {
 					if (error) return reject(error);
-					resolve({guid});
+					resolve({list_guid: guid});
 				}
 			)
 		})
 	}
 
 	static updateListAndListItems({name, type, guid, listItems}) {
-		return Promise.all(
+		return Promise.all([
 			ListTable.updateList({name, type, guid}),
 			ListItemTable.updateListItems(listItems)
-		)
+		])
 	}
 
 }
