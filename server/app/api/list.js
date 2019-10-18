@@ -36,8 +36,6 @@ router.get('/listDetail/:listGuid', (req, res, next) => {
 
 router.put('/listDetail/:listGuid', (req, res, next) => {
 	const { listGuid } = req.params;
-	//what if only want to change one and not all
-	// only want to update the minimum
 	const { name, type, listItems } = req.body;
 	if ((name || type) && listItems.length) {
 		ListTable.updateListAndListItems({name, type, guid: listGuid, listItems})
@@ -59,6 +57,13 @@ router.put('/listDetail/:listGuid', (req, res, next) => {
 			//console.error('error', err));
 	}
 });
+
+router.delete('/listDetail/:listGuid', (req, res, next) => {
+	const { listGuid } = req.params;
+	ListTable.deleteListAndListItems(listGuid)
+		.then(list_guid => res.json(list_guid))
+		.catch(err => next(err))
+})
 
 
 // router.post('/random',

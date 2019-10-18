@@ -64,6 +64,27 @@ class ListTable {
 		])
 	}
 
+	static deleteList(guid) {
+		return new Promise((resolve, reject) => {
+			pool.query(
+				`DELETE from list WHERE guid = $1 RETURNING guid`,
+				[guid],
+				(error, response) => {
+					if (error) return reject(error);
+					if (response.rows.length)
+					resolve({list_guid: response.rows[0].guid});
+				}
+			)
+		})
+	}
+
+	static deleteListAndListItems(guid) {
+		return Promise.all([
+			ListTable.deleteList(guid),
+			ListItemTable.deleteListItems(guid)
+		])
+	}
+
 }
 
 module.exports = ListTable;
