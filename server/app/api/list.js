@@ -44,18 +44,16 @@ router.put('/listDetail/:listGuid', (req, res, next) => {
 			.then(values => res.json(values))
 			.catch(err => next(err));
 			//console.error('error', err));		
-	}
-	if (name || type) {
+	} else if (name || type) {
 		ListTable.updateList({name, type, guid: listGuid})
 			.then(list_guid => res.json(list_guid))
 			.catch(err => next(err));
 			//console.error('error', err));
-	}
-	if (listItems.length) {
+	} else if (listItems.length) {
 		ListItemTable.updateListItems(listItems)
 			.then(list_item_guids => {
-				let list_item_guids_ar = list_item_guids.map(obj => obj.guid);
-				res.json({ list_item_guids: list_item_guids_ar });
+				//let list_item_guids_ar = list_item_guids.map(obj => obj.guid);
+				res.json(list_item_guids);
 			})
 			.catch(err => next(err));
 			//console.error('error', err));
