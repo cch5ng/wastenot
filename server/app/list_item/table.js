@@ -35,6 +35,32 @@ class ListItemTable {
 		})
 	}
 
+	static updateListItem({ name, guid, sort_order }) {
+		//const { guid, name, sort_order } = listItem;
+		return new Promise((resolve, reject) => {
+			pool.query(
+				`UPDATE list_item SET name = $2, sort_order = $3 WHERE guid = $1 RETURNING guid`,
+				[guid, name, sort_order],
+				(error, response) => {
+					if (error) return reject(error);
+					if (response.rows.length) {
+						console.log('response.rows', response.rows)
+						resolve(response.rows[0]);
+					}
+				}
+			)
+		})
+	}
+
+	static updateListItems(listItems) {
+		return Promise.all(
+			listItems.map(listItem => {
+				const { name, guid, sort_order } = listItem;
+				return ListItemTable.updateListItem({ name, guid, sort_order })
+			})
+		)
+	}
+
 }
 
 module.exports = ListItemTable;
