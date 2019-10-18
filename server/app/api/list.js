@@ -34,6 +34,33 @@ router.get('/listDetail/:listGuid', (req, res, next) => {
 		//console.error('error', err));
 });
 
+router.put('/listDetail/:listGuid', (req, res, next) => {
+	const { listGuid } = req.params;
+	//what if only want to change one and not all
+	// only want to update the minimum
+	const { name, type, listItems } = req.body;
+	if ((name || type) && listItems.length) {
+		ListTable.updateListAndListItems({name, type, guid: listGuid, listItems})
+			.then(values => res.json(values))
+			.catch(err => next(err));
+			//console.error('error', err));		
+	}
+	if (name || type) {
+		ListTable.updateList({name, type, guid: listGuid})
+			.then(list_guid => res.json(list_guid))
+			.catch(err => next(err));
+			//console.error('error', err));
+	}
+	if (listItems.length) {
+		ListItemTable.updateListItems(listItems)
+			.then(list_item_guids => {
+				let list_item_guids_ar = list_item_guids.map(obj => obj.guid);
+				res.json({ list_item_guids: list_item_guids_ar });
+			})
+			.catch(err => next(err));
+			//console.error('error', err));
+	}
+});
 
 
 // router.post('/random',
