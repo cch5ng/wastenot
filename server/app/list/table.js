@@ -81,7 +81,7 @@ class ListTable {
 	static deleteListAndListItems(guid) {
 		return Promise.all([
 			ListTable.deleteList(guid),
-			ListItemTable.deleteListItems(guid)
+			ListItemTable.deleteListItemsByListGuid(guid)
 		])
 	}
 
