@@ -64,7 +64,7 @@ class ListItemTable {
 	static deleteListItemByItemGuid(itemGuid) {
 		return new Promise((resolve, reject) => {
 			pool.query(
-				`DELETE from list_item WHERE guid = $1`,
+				`DELETE from list_item WHERE guid = $1 RETURNING guid`,
 				[itemGuid],
 				(error, response) => {
 					if (error) return reject(error);
@@ -76,13 +76,13 @@ class ListItemTable {
 		})
 	}
 
-	static deleteListItemsByItemGuid(itemGuids) {
-		return Promise.all(
-			itemGuids.map(guid => ListItemTable.deleteListItemByItemGuid(guid));
-		)
-	}
+	// static deleteListItemsByItemGuid(itemGuids) {
+	// 	return Promise.all(
+	// 		itemGuids.map(guid => ListItemTable.deleteListItemByItemGuid(guid))
+	// 	)
+	// }
 
-	static deleteListItemsByListGuid(guid) {
+	static deleteListItemByListGuid(guid) {
 		return new Promise((resolve, reject) => {
 			pool.query(
 				`DELETE from list_item WHERE list_guid = $1 RETURNING guid`,
@@ -90,7 +90,7 @@ class ListItemTable {
 				(error, response) => {
 					if (error) return reject(error);
 					if (response.rows.length) {
-						resolve({list_item_guid: response.rows});
+						resolve({list_item_guid: response.rows[0].guid});
 					}
 				}
 			)

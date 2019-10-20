@@ -65,6 +65,13 @@ router.delete('/listDetail/:listGuid', (req, res, next) => {
 		.catch(err => next(err))
 })
 
+router.delete('/listItemDetail/:listItemGuid', (req, res, next) => {
+	const {listItemGuid} = req.params;
+	ListItemTable.deleteListItemByItemGuid(listItemGuid)
+		.then(list_item_guid => res.json(list_item_guid))
+		.catch(err => next(err))
+})
+
 
 // router.post('/random',
 // 	passport.authenticate('jwt', { session: false }),
