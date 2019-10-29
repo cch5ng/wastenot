@@ -3,6 +3,7 @@ import {
   BrowserRouter as Router, Route } from 'react-router-dom';
 import { Security, ImplicitCallback } from '@okta/okta-react';
 
+import Home from './Home';
 import './App.css';
 import Header from './App/Header/Header';
 //import Footer from './App/Footer/Footer'
@@ -50,12 +51,12 @@ function App() {
   )
 }
 
-function Home() {
-  return (
-    <div>
-      <h2>Home</h2>
-    </div>
-  );
-}
+// function Home() {
+//   return (
+//     <div>
+//       <h2>Home</h2>
+//     </div>
+//   );
+// }
 
 export default App;
