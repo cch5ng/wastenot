@@ -13,8 +13,8 @@
   "license": "MIT",
   "babel": {
     "presets": [
-      "@babel/preset-env",
-      "@babel/preset-react"
+        "@babel/preset-env",
+        "@babel/preset-react"
     ]
   },
   "postcss": {
@@ -41,6 +41,7 @@
   "dependencies": {
     "@okta/okta-react": "^1.2.3",
     "classnames": "^2.2.6",
+    "core-js": "3",
     "dotenv": "^8.1.0",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",

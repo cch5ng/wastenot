@@ -15,7 +15,6 @@ module.exports = () => {
   return {
     mode: 'development',
     entry: './src/index.js',
-
     output: {
        path: __dirname + '/dist',
        publicPath: '/',
