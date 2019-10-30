@@ -15,7 +15,6 @@ module.exports = () => {
   return {
     mode: 'development',
     entry: './src/index.js',
-
     output: {
        path: __dirname + '/dist',
        publicPath: '/',
@@ -74,6 +73,7 @@ module.exports = () => {
       hot: true,
       port: 8080, // Defaults to 8080
       open: true, // Open the page in browser    
+      historyApiFallback: true
     }
   }
 };

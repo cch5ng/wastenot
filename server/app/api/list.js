@@ -2,31 +2,32 @@ const { Router } = require('express');
 //const passport = require('passport');
 const ListTable = require('../list/table');
 const ListItemTable = require('../list_item/table');
+const authenticationRequired = require('../authRequired');
 
 const router = Router();
 
-router.post('/add', (req, res, next) => {
+router.post('/add', authenticationRequired, (req, res, next) => {
 	ListTable.storeList(req.body)
 		.then(resp => res.json(resp))
 		.catch(err => next(err));
 		//console.error('error', err));
 });
 
-router.get('/shoppingLists', (req, res, next) => {
+router.get('/shoppingLists', authenticationRequired, (req, res, next) => {
 	ListTable.getListsByType({ listType: 'shopping' })
 		.then(lists => res.json(lists))
 		.catch(err => next(err));
 		//console.error('error', err));
 });
 
-router.get('/templateLists', (req, res, next) => {
+router.get('/templateLists', authenticationRequired, (req, res, next) => {
 	ListTable.getListsByType({ listType: 'template' })
 		.then(lists => res.json(lists))
 		.catch(err => next(err));
 		//console.error('error', err));
 });
 
-router.get('/listDetail/:listGuid', (req, res, next) => {
+router.get('/listDetail/:listGuid', authenticationRequired, (req, res, next) => {
 	const { listGuid } = req.params;
 	ListItemTable.getListItemsByListGuid(listGuid)
 		.then(listItems => res.json(listItems))
@@ -34,7 +35,7 @@ router.get('/listDetail/:listGuid', (req, res, next) => {
 		//console.error('error', err));
 });
 
-router.put('/listDetail/:listGuid', (req, res, next) => {
+router.put('/listDetail/:listGuid', authenticationRequired, (req, res, next) => {
 	const { listGuid } = req.params;
 	const { name, type, listItems } = req.body;
 	if ((name || type) && listItems.length) {
@@ -58,14 +59,14 @@ router.put('/listDetail/:listGuid', (req, res, next) => {
 	}
 });
 
-router.delete('/listDetail/:listGuid', (req, res, next) => {
+router.delete('/listDetail/:listGuid', authenticationRequired, (req, res, next) => {
 	const { listGuid } = req.params;
 	ListTable.deleteListAndListItems(listGuid)
 		.then(list_guid => res.json(list_guid))
 		.catch(err => next(err))
 })
 
-router.delete('/listItemDetail/:listItemGuid', (req, res, next) => {
+router.delete('/listItemDetail/:listItemGuid', authenticationRequired, (req, res, next) => {
 	const {listItemGuid} = req.params;
 	ListItemTable.deleteListItemByItemGuid(listItemGuid)
 		.then(list_item_guid => res.json(list_item_guid))

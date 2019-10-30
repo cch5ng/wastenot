@@ -7,7 +7,7 @@ const listRouter = require('./api/list');
 
 if (process.env.NODE_ENV !== 'production') {
 	const result = dotenv.config()
- 
+
 	if (result.error) {
   	throw result.error
 	}

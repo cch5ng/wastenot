@@ -39,12 +39,15 @@
     "webpack-dev-server": "^3.8.1"
   },
   "dependencies": {
+    "@okta/okta-react": "^1.2.3",
     "classnames": "^2.2.6",
+    "core-js": "3",
     "dotenv": "^8.1.0",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
     "react-icons": "^3.7.0",
     "react-router-dom": "^5.1.0",
+    "regenerator-runtime": "^0.13.3",
     "uuid": "^3.3.3"
   }
 }

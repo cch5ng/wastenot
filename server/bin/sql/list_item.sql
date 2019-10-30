@@ -3,6 +3,6 @@ CREATE TABLE list_item(
 	name VARCHAR(64),
 	sort_order INTEGER,
 	list_guid VARCHAR(64),
-	guid VARCHAR(64),
+	guid VARCHAR(64) UNIQUE,
 	FOREIGN KEY (list_guid) REFERENCES list(guid)
 );
