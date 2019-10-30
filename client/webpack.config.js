@@ -73,6 +73,7 @@ module.exports = () => {
       hot: true,
       port: 8080, // Defaults to 8080
       open: true, // Open the page in browser    
+      historyApiFallback: true
     }
   }
 };
