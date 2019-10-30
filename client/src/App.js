@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {
   BrowserRouter as Router, Route } from 'react-router-dom';
-import { Security, ImplicitCallback } from '@okta/okta-react';
+import { Security, SecureRoute, ImplicitCallback } from '@okta/okta-react';
 
 import Home from './Home';
 import './App.css';
@@ -11,13 +11,7 @@ import ListTemplates from './ListTemplates/ListTemplates';
 import ListTemplateDetailForm from './ListTemplates/ListTemplateDetailForm';
 //import ListTemplateDetail from './ListTemplates/ListTemplateDetail';
 import useListTemplates from './utils/hooks/useListTemplates';
-
-const config = {
-  issuer: `https://${process.env.OKTA_DOMAIN}/oauth2/default`,
-  redirectUri: window.location.origin + '/implicit/callback',
-  clientId: `${process.env.OKTA_CLIENT_ID}`,
-  pkce: true
-}
+import config from './config';
 
 function App() {
   //global state
@@ -25,7 +19,8 @@ function App() {
 
   return (
     <Router>
-      <Security {...config}>
+      <Security {...config.oidc}>
+
         <div className="App">
           <Header />
             <Route path='/' exact component={Home}/>
@@ -46,6 +41,7 @@ function App() {
               />
             )} />
         </div>
+
       </Security>
     </Router>
   )
