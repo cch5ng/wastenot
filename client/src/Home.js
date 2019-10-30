@@ -35,7 +35,7 @@ export default withAuth(class Home extends Component {
   }
 
   render() {
-    if (this.state.authenticated === null) return null;
+    //if (this.state.authenticated === null) return null;
     return this.state.authenticated ?
       <button onClick={this.logout}>Logout</button> :
       <button onClick={this.login}>Login</button>;
