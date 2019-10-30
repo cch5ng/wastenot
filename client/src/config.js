@@ -15,10 +15,3 @@ export default {
     messagesUrl: 'http://localhost:3000/api/',
   },
 };
-
-//const config = {
-//  issuer: `https://${process.env.OKTA_DOMAIN}/oauth2/default`,
-  //redirectUri: window.location.origin + '/implicit/callback',
-//  clientId: `${process.env.OKTA_CLIENT_ID}`,
-  //pkce: true
-// }
