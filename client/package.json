@@ -13,8 +13,8 @@
   "license": "MIT",
   "babel": {
     "presets": [
-        "@babel/preset-env",
-        "@babel/preset-react"
+      "@babel/preset-env",
+      "@babel/preset-react"
     ]
   },
   "postcss": {
@@ -47,6 +47,7 @@
     "react-dom": "^16.9.0",
     "react-icons": "^3.7.0",
     "react-router-dom": "^5.1.0",
+    "regenerator-runtime": "^0.13.3",
     "uuid": "^3.3.3"
   }
 }
