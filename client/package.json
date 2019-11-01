@@ -46,7 +46,9 @@
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
     "react-icons": "^3.7.0",
+    "react-redux": "^7.1.1",
     "react-router-dom": "^5.1.0",
+    "redux": "^4.0.4",
     "regenerator-runtime": "^0.13.3",
     "uuid": "^3.3.3"
   }
