@@ -1,22 +1,32 @@
-import React, { Component } from 'react';
+import React, { Component, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 import { IoIosAddCircleOutline } from "react-icons/io";
 //import useListTemplates from '../utils/hooks/useListTemplates';
 
 //import {FaPlusSquareO} from 'react-icons/fa';
 import Lists from '../Lists/Lists';
 import { objToArray } from '../utils/utils';
+import http_requests from '../utils/http_requests';
 //import '../App.css';
 
 const ListTemplates = (props) => {
   const {listTemplates, updateListTemplates, removeListTemplates} = props;
 
-  console.log('listTemplates', listTemplates);
-
   let listTemplatesAr = []
   if (listTemplates) {
     listTemplatesAr = objToArray(listTemplates)
   }
+
+  useEffect(() => {
+    //TODO
+    //fetch list template and update hook state
+    http_requests.Lists.getAllTemplateLists()
+      .then(json => updateListTemplates(json))
+      .catch(err => console.error('fetch error', err))
+  });
+
+  console.log('props', props);
 
   return (
     <div className="main">
@@ -26,4 +36,12 @@ const ListTemplates = (props) => {
   )
 }
 
-export default ListTemplates;
+const mapStateToProps = state => ({ auth: state.auth });
+
+export default connect(
+  mapStateToProps,
+  null
+)(ListTemplates);
+
+
+//export default ListTemplates;
