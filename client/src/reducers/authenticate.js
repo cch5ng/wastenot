@@ -1,6 +1,6 @@
-import { SET_AUTH, REMOVE_AUTH, SET_TOKEN, REMOVE_TOKEN } from '../actions/auth';
+import { SET_AUTH, REMOVE_AUTH, SET_TOKEN, REMOVE_TOKEN } from '../actions/authenticate';
 
-const auth = (state = { isLoggedIn: false, token: null }, action) => {
+const authenticate = (state = { isLoggedIn: false, token: null }, action) => {
   switch (action.type) {
     case 'SET_AUTH':
       return {
@@ -28,4 +28,4 @@ const auth = (state = { isLoggedIn: false, token: null }, action) => {
   }
 }
 
-export default auth;
+export default authenticate;
