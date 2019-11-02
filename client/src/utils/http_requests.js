@@ -1,6 +1,6 @@
 const API_ROOT = process.env.API_ROOT;
 //URL MIDDLE
-const API_LIST_MIDDLE = '/api/list';
+const API_LIST_MIDDLE = '/list';
 //URL SUFFIXES
 const CREATE_LIST_SUFFIX = '/add';
 const GET_SHOPPING_LISTS_SUFFIX = '/shoppingLists';
@@ -35,9 +35,9 @@ const Lists = {
   getAllShoppingLists: () => {
     return requests.get(`${API_ROOT}${API_LIST_MIDDLE}${GET_SHOPPING_LISTS_SUFFIX}`);
   },
-  // getAllTemplateLists: () => {
-//return requests.get(`${API_ROOT}${API_LIST_MIDDLE}${GET_TEMPLATE_LISTS_SUFFIX}`);
-  // },
+  getAllTemplateLists: () => {
+    return requests.get(`${API_ROOT}${API_LIST_MIDDLE}${GET_TEMPLATE_LISTS_SUFFIX}`);
+  },
 };
 
 export default {
