@@ -21,7 +21,8 @@ const ListTemplates = (props) => {
   useEffect(() => {
     //TODO
     //fetch list template and update hook state
-    http_requests.Lists.getAllTemplateLists()
+    let token = this.props.authenticate && this.props.authenticate.token ? this.props.authenticate.token : null;
+    http_requests.Lists.getAllTemplateLists(token)
       .then(json => updateListTemplates(json))
       .catch(err => console.error('fetch error', err))
   });
@@ -36,7 +37,7 @@ const ListTemplates = (props) => {
   )
 }
 
-const mapStateToProps = state => ({ auth: state.auth });
+const mapStateToProps = state => ({ authenticate: state.authenticate });
 
 export default connect(
   mapStateToProps,
