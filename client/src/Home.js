@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { withAuth } from '@okta/okta-react';
-import { setAuthenticated, setNotAuthenticated, setToken } from './actions/auth';
+import { setAuthenticated, setNotAuthenticated, setToken } from './actions/authenticate';
 
 class Home extends Component {
   constructor(props) {
@@ -49,23 +49,25 @@ class Home extends Component {
 
   async logout() {
     // Redirect to '/' after logout
+    this.props.setNotAuthenticated();
     this.props.auth.logout('/');
   }
 
   render() {
     if (this.props.auth) {
-      console.log('auth', this.props.auth);
+      console.log('authenticate', this.props.authenticate);
     }
 
     //change this to checking redux
-    return (this.props.auth && this.props.auth.isAuthenticated) ?
+
+    return (this.props.authenticate.isLoggedIn) ?
       <button onClick={this.logout}>Logout</button> :
       <button onClick={this.login}>Login</button>;
   }
 }
 
 const mapStateToProps = state => ({
-  auth: state.auth,
+  authenticate: state.authenticate,
 })
 
 const mapDispatchToProps = dispatch => ({
