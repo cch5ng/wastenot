@@ -8,19 +8,24 @@ const GET_TEMPLATE_LISTS_SUFFIX = '/templateLists';
 const LIST_DETAIL_SUFFIX = '/listDetail';
 
 const requests = {
-  get: url => {
+  get: (url, token) => {
     return new Promise((resolve, reject) => {
-      fetch(url)
+      fetch(url, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      })
         .then(resp => resolve(resp.json()))
         .catch(err => reject(err));
       //console.error('fetch error', err));
     });
   },
-  post: (url, body) => {
+  post: (url, token, body) => {
     return new Promise((resolve, reject) => {
       fetch(url, {
         method: 'POST',
         headers: {
+          'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(body),
@@ -32,11 +37,11 @@ const requests = {
 };
 
 const Lists = {
-  getAllShoppingLists: () => {
-    return requests.get(`${API_ROOT}${API_LIST_MIDDLE}${GET_SHOPPING_LISTS_SUFFIX}`);
+  getAllShoppingLists: (token) => {
+    return requests.get(`${API_ROOT}${API_LIST_MIDDLE}${GET_SHOPPING_LISTS_SUFFIX}`, token);
   },
-  getAllTemplateLists: () => {
-    return requests.get(`${API_ROOT}${API_LIST_MIDDLE}${GET_TEMPLATE_LISTS_SUFFIX}`);
+  getAllTemplateLists: (token) => {
+    return requests.get(`${API_ROOT}${API_LIST_MIDDLE}${GET_TEMPLATE_LISTS_SUFFIX}`, token);
   },
 };
 
