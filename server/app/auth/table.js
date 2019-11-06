@@ -3,8 +3,7 @@ const uuidv4 = require('uuid/v4');
 
 class AuthTable {
 
-  static storeAccount(body) {
-    const { email, password } = body;
+  static storeAccount({ email, password }) {
     let user_guid = uuidv4();
     return new Promise((resolve, reject) => {
       pool.query(
