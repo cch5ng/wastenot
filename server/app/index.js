@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
 const path = require('path');
 const listRouter = require('./api/list');
+const authRouter = require('./api/auth');
 
 if (process.env.NODE_ENV !== 'production') {
 	const result = dotenv.config()
@@ -19,13 +20,14 @@ app.use(function(req, res, next) {
   let allowed;
   allowed = process.env.NODE_ENV === 'production' ? process.env.CLIENT_ROOT_PROD : process.env.CLIENT_ROOT;
 
-  res.header("Access-Control-Allow-Origin", "*"); // "*"
+  res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
 
 app.use(bodyParser.json());
 app.use('/api/list', listRouter);
+app.use('/api/auth', authRouter);
 app.use((err, req, res, next) => {
 	const statusCode = err.statusCode || 500;
 
