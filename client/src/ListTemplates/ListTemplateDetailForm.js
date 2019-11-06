@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Link, Redirect } from 'react-router-dom';
+import { connect } from 'react-redux';
 import uuidv1 from 'uuid/v1';
 
 import Button from '../App/Shared/Button/Button';
 import SelectList from '../App/Shared/SelectList/SelectList';
 import InputText from '../App/Shared/InputText/InputText';
 import '../App.css';
+import http_requests from '../utils/http_requests';
 
 let inputObj = {name: '', section: 'none'};
 
@@ -130,6 +132,8 @@ const ListTemplateDetailForm = (props) => {
   function formSubmitHandler(ev) {
     let requestBody;
     let listId;
+    let token = props.authenticate.token;
+    let list = {};
 
     if (mode === "add") {
       listId = uuidv1();
@@ -137,6 +141,11 @@ const ListTemplateDetailForm = (props) => {
         listItemInputs[itemKey].parentId = listId;
       }
       requestBody = { listId, listName, listItemInputs};
+      list.name = listName;
+      list.type = 'templates';
+      list.listItems = listItemInputs;
+      http_requests.Lists.postTemplateList(token, list)
+
       //this.props.receiveTemplateListCreate(requestBody)
     } else if (mode === "edit") {
       listId = props.templateListId;
@@ -145,6 +154,7 @@ const ListTemplateDetailForm = (props) => {
     }
 
     updateListTemplates(requestBody);
+
     clearForm('empty');
     setFormSubmitted(true);
   }
@@ -223,7 +233,13 @@ const ListTemplateDetailForm = (props) => {
       </div>
     </div>
   )
-
 }
 
-export default ListTemplateDetailForm;
+const mapStateToProps = state => ({ authenticate: state.authenticate });
+
+export default connect(
+  mapStateToProps,
+  null
+)(ListTemplateDetailForm);
+
+//export default ListTemplateDetailForm;
