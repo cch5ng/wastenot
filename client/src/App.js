@@ -20,7 +20,6 @@ function App() {
   return (
     <Router>
       <Security {...config.oidc}>
-
         <div className="App">
           <Header />
             <Route path='/' exact component={Home}/>
@@ -41,7 +40,6 @@ function App() {
               />
             )} />
         </div>
-
       </Security>
     </Router>
   )
