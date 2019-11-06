@@ -43,6 +43,9 @@ const Lists = {
   getAllTemplateLists: (token) => {
     return requests.get(`${API_ROOT}${API_LIST_MIDDLE}${GET_TEMPLATE_LISTS_SUFFIX}`, token);
   },
+  postTemplateList: (token, list) => {
+    return requests.post(`${API_ROOT}${API_LIST_MIDDLE}${CREATE_LIST_SUFFIX}`, token, list)
+  }
 };
 
 export default {
