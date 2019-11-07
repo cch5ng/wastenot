@@ -9,10 +9,18 @@ router.post('/register', (req, res, next) => {
   let emailHash = hash(email);
   let passwordHash = hash(password);
 
-  AuthTable.storeAccount({ emailHash, passwordHash })
-    .then(resp => res.json(resp))
+  AuthTable.getAccount({ emailHash })
+    .then(({ account }) => {
+      if (!account) {
+        AuthTable.storeAccount({ emailHash, passwordHash })
+      } else {
+        let error = new Error('This user already exists.');
+        error.statusode = 409;
+        throw error;
+      }
+    })
+    .then(() => res.json({ message: 'success!'}))
     .catch(err => next(err));
-    //console.error('error', err));
 });
 
 module.exports = router;
