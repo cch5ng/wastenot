@@ -19,6 +19,19 @@ class AuthTable {
       )
     })
   }
+
+  static getAccount({ emailHash }) {
+    return new Promise((resolve, reject) => {
+      pool.query(
+        `SELECT guid from wastenot_user WHERE "emailHash"=$1`,
+        [emailHash],
+        (error, response) => {
+          if (error) return reject(error);
+          resolve({ account: response.rows[0] })
+        }
+      )
+    })
+  }
 }
 
 module.exports = AuthTable;
