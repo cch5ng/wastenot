@@ -1,14 +1,14 @@
 const pool = require('../../databasePool');
 const uuidv4 = require('uuid/v4');
+const { hash } = require('./helper');
 
 class AuthTable {
-
-  static storeAccount({ email, password }) {
-    let user_guid = uuidv4();
+  static storeAccount({ emailHash, passwordHash }) {
+    let guid = uuidv4();
     return new Promise((resolve, reject) => {
       pool.query(
-        `INSERT INTO wastenot_user (email, password, guid) VALUES ($1, $2, $3) RETURNING guid`,
-        [email, password, user_guid],
+        `INSERT INTO wastenot_user ("emailHash", "passwordHash", guid) VALUES ($1, $2, $3) RETURNING guid`,
+        [emailHash, passwordHash, guid],
         (error, response) => {
           if (error) return reject(error);
           if (response.rows.length) {
@@ -19,8 +19,6 @@ class AuthTable {
       )
     })
   }
-
-
 }
 
 module.exports = AuthTable;
