@@ -42,9 +42,4 @@ class Session {
   }
 }
 
-const foo = new Session({ email: 'foo@f.com '});
-const fooStr = foo.toString();
-console.log('Session.parse(fooStr)', Session.parse(fooStr));
-console.log('Session.verify(fooStr)', Session.verify(fooStr));
-
 module.exports = Session;
