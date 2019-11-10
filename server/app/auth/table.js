@@ -32,6 +32,19 @@ class AuthTable {
       )
     })
   }
+
+  static updateSessionId({ sessionId, emailHash }) {
+    return new Promise((resolve, reject) => {
+      pool.query(
+        `UPDATE wastenot_user SET "sessionId"=$1  WHERE "emailHash"=$2 RETURNING guid`,
+        [sessionId, emailHash],
+        (error, response) => {
+          if (error) return reject(error);
+          resolve();
+        }
+      )
+    })
+  }
 }
 
 module.exports = AuthTable;
