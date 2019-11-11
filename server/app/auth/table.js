@@ -34,9 +34,10 @@ class AuthTable {
   }
 
   static updateSessionId({ sessionId, emailHash }) {
+    console.log('gets here');
     return new Promise((resolve, reject) => {
       pool.query(
-        `UPDATE wastenot_user SET "sessionId"=$1  WHERE "emailHash"=$2 RETURNING guid`,
+        `UPDATE wastenot_user SET "sessionId"=$1 WHERE "emailHash"=$2`,
         [sessionId, emailHash],
         (error, response) => {
           if (error) return reject(error);
