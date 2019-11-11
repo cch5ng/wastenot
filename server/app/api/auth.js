@@ -21,8 +21,11 @@ router.post('/register', (req, res, next) => {
       }
     })
     .then(() => {
-      setSession({ email, res});
-      res.json({ message: 'success!'})
+      // adding return keyword allows the catch to then be shared across all then calls
+      return setSession({ email, res});
+    })
+    .then(({ message }) => {
+      res.json({ message }) //reusing the message returned from setSession
     })
     .catch(err => next(err));
 });
