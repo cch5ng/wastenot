@@ -4,11 +4,12 @@ const { hash } = require('../auth/helper');
 
 const setSession = ({ email, res, sessionId }) => {
   return new Promise((resolve, reject) => {
-    const session, sessionStr;
+    let session;
+    let sessionStr;
 
     //case user already has sessionId saved in db
-    if (session) {
-      sessionStr = Session.sessionStr({ email, id: sessionId });
+    if (sessionId) {
+      sessionStr = Session.sessionString({ email, id: sessionId });
       setSessionCookie({ sessionStr, res });
       resolve({ message: 'session restored'});
     } else {
