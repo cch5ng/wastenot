@@ -23,7 +23,7 @@ class AuthTable {
   static getAccount({ emailHash }) {
     return new Promise((resolve, reject) => {
       pool.query(
-        `SELECT guid from wastenot_user WHERE "emailHash"=$1`,
+        `SELECT id, "emailHash", "passwordHash" from wastenot_user WHERE "emailHash"=$1`,
         [emailHash],
         (error, response) => {
           if (error) return reject(error);
