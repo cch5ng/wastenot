@@ -16,7 +16,7 @@ router.post('/register', (req, res, next) => {
         AuthTable.storeAccount({ emailHash, passwordHash })
       } else {
         let error = new Error('This user already exists.');
-        error.statusode = 409;
+        error.statusCode = 409;
         throw error;
       }
     })
@@ -29,5 +29,27 @@ router.post('/register', (req, res, next) => {
     })
     .catch(err => next(err));
 });
+
+// create POST request handler for /login
+router.post('/login', (req, res, next) => {
+  let { email,  password } = req.body;
+  let emailHash = hash(email);
+
+  AuthTable.getAccount({ emailHash })
+    .then(({ account }) => {
+      if (account && account.passwordHash === hash(password)) {
+        return setSession({ email, res })
+      } else {
+        let error = new Error('Login was unsuccessful. Check the email and password and try again.');
+        error.statusCode = 409;
+        throw error;
+      }
+    })
+    .then(({ message }) => {
+      res.json({ message }) //reusing the message returned from setSession
+    })
+    .catch(err => next(err));
+
+})
 
 module.exports = router;
