@@ -23,7 +23,7 @@ class AuthTable {
   static getAccount({ emailHash }) {
     return new Promise((resolve, reject) => {
       pool.query(
-        `SELECT id, passwordHash", "sessionId" from wastenot_user WHERE "emailHash"=$1`,
+        `SELECT id, "passwordHash", "sessionId" from wastenot_user WHERE "emailHash"=$1`,
         [emailHash],
         (error, response) => {
           if (error) return reject(error);
@@ -34,7 +34,6 @@ class AuthTable {
   }
 
   static updateSessionId({ sessionId, emailHash }) {
-    console.log('gets here');
     return new Promise((resolve, reject) => {
       pool.query(
         `UPDATE wastenot_user SET "sessionId"=$1 WHERE "emailHash"=$2`,
