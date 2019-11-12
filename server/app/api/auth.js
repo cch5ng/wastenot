@@ -38,7 +38,8 @@ router.post('/login', (req, res, next) => {
   AuthTable.getAccount({ emailHash })
     .then(({ account }) => {
       if (account && account.passwordHash === hash(password)) {
-        return setSession({ email, res })
+        const { sessionId } = account;
+        return setSession({ email, res, sessionId })
       } else {
         let error = new Error('Login was unsuccessful. Check the email and password and try again.');
         error.statusCode = 409;
