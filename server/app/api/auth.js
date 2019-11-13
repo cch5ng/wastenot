@@ -1,5 +1,6 @@
 const { Router } = require('express');
 const AuthTable = require('../auth/table');
+const Session = require('../auth/Session');
 const { hash } = require('../auth/helper');
 const { setSession } = require('./helper');
 
@@ -48,6 +49,17 @@ router.post('/login', (req, res, next) => {
     })
     .then(({ message }) => {
       res.json({ message }) //reusing the message returned from setSession
+    })
+    .catch(err => next(err));
+})
+
+router.get('/logout', (req, res, next) => {
+  const { email } = Session.parse(req.cookies.sessionStr);
+  let emailHash = hash(email);
+  AuthTable.updateSessionId({ sessionId: null, emailHash })
+    .then(() => {
+      res.clearCookie('sessionStr');
+      res.json({ message: 'Successful logout'})
     })
     .catch(err => next(err));
 
