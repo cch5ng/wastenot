@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 const dotenv = require('dotenv');
 const path = require('path');
 const listRouter = require('./api/list');
@@ -26,6 +27,7 @@ app.use(function(req, res, next) {
 });
 
 app.use(bodyParser.json());
+app.use(cookieParser());
 app.use('/api/list', listRouter);
 app.use('/api/auth', authRouter);
 app.use((err, req, res, next) => {
