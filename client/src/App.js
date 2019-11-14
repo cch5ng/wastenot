@@ -4,6 +4,7 @@ import {
 import { Security, SecureRoute, ImplicitCallback } from '@okta/okta-react';
 
 import Home from './Home';
+import Root from './Root';
 import './App.css';
 import Header from './App/Header/Header';
 //import Footer from './App/Footer/Footer'
@@ -22,7 +23,7 @@ function App() {
       <Security {...config.oidc}>
         <div className="App">
           <Header />
-            <Route path='/' exact component={Home}/>
+            <Route path='/' exact component={Root}/>
             <Route path='/implicit/callback' component={ImplicitCallback}/>
             <Route exact path="/settings/listTemplates" 
               render={(props) => (<ListTemplates {...props} updateListTemplates={updateListTemplates}
