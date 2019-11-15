@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { fetchAuthRegister, fetchAuthLogin } from '../actions/authenticate';
 
 class AuthForm extends Component {
 
@@ -14,13 +15,17 @@ class AuthForm extends Component {
   }
 
   logInBtnClick = (ev) => {
+    const { email, password } = this.state;
     ev.preventDefault();
-    console.log('state', this.state)
+    this.props.fetchAuthLogin(email, password);
+    //console.log('state', this.state)
   }
 
   signInBtnClick = (ev) => {
+    const { email, password } = this.state;
     ev.preventDefault();
-    console.log('state', this.state)
+    this.props.fetchAuthRegister(email, password);
+    //console.log('state', this.state)
   }
 
   render() {
@@ -49,7 +54,23 @@ class AuthForm extends Component {
       </div>
     )
   }
-
 }
 
-export default AuthForm;
+const mapDispatchToProps = dispatch => {
+  return {
+    fetchAuthRegister: (email, password) => {
+      dispatch(fetchAuthRegister(email, password)
+    },
+    fetchAuthLogin: (email, password) => {
+      dispatch(fetchAuthLogin(email, password)
+    }
+  }
+}
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(AuthForm);
+
+
+//export default AuthForm;

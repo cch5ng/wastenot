@@ -1,4 +1,53 @@
+import http_requests from '../utils/http_requests';
+
 // action types
+export const AUTH_FETCH = 'AUTH_FETCH';
+export const AUTH_FETCH_ERR = 'AUTH_FETCH_ERR';
+export const AUTH_FETCH_SUCCESS = 'AUTH_FETCH_SUCCESS';
+
+
+//sync
+export function fetchAuth() {
+  return {
+    type: AUTH_FETCH
+  }
+}
+
+export function fetchAuthErr(err) {
+  return {
+    type: AUTH_FETCH_ERR,
+    message: err
+  }
+}
+
+export function fetchAuthSuccess(json) {
+  return {
+    type: AUTH_FETCH_SUCCESS,
+    message: json.message
+  }
+}
+
+//async
+export function fetchAuthRegister(email, password) {
+  fetchAuth();
+  http_requests.Auth.postRegister(email, password)
+    .then(resp => resp.json())
+    .then(json => fetchAuthSuccess(json))
+    .catch(err => fetchAuthErr(err))
+}
+
+export function fetchAuthLogin(email, password) {
+  fetchAuth();
+  http_requests.Auth.postLogin(email, password)
+    .then(resp => resp.json())
+    .then(json => fetchAuthSuccess(json))
+    .catch(err => fetchAuthErr(err))
+}
+
+
+
+///////// OLD
+
 export const SET_AUTH = 'SET_AUTH';
 export const REMOVE_AUTH = 'REMOVE_AUTH';
 
