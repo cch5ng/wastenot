@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { fetchAuthRegister, fetchAuthLogin } from '../actions/authenticate';
+import { connect } from 'react-redux';
+import { register, fetchAuthLogin } from '../actions/authenticate';
 
 class AuthForm extends Component {
 
@@ -17,18 +18,17 @@ class AuthForm extends Component {
   logInBtnClick = (ev) => {
     const { email, password } = this.state;
     ev.preventDefault();
-    this.props.fetchAuthLogin(email, password);
-    //console.log('state', this.state)
+    //this.props.fetchAuthLogin(email, password);
   }
 
   signInBtnClick = (ev) => {
     const { email, password } = this.state;
     ev.preventDefault();
-    this.props.fetchAuthRegister(email, password);
-    //console.log('state', this.state)
+    this.props.register({ email, password });
   }
 
   render() {
+    console.log('this.props.authenticate', this.props.authenticate)
     return (
       <div>
         <h1>AuthForm</h1>
@@ -56,21 +56,8 @@ class AuthForm extends Component {
   }
 }
 
-const mapDispatchToProps = dispatch => {
-  return {
-    fetchAuthRegister: (email, password) => {
-      dispatch(fetchAuthRegister(email, password)
-    },
-    fetchAuthLogin: (email, password) => {
-      dispatch(fetchAuthLogin(email, password)
-    }
-  }
-}
+const mapStateToProps = state => ({ authenticate: state.authenticate });
 
 export default connect(
-  null,
-  mapDispatchToProps
-)(AuthForm);
-
-
-//export default AuthForm;
+  mapStateToProps,
+  { register, fetchAuthLogin})(AuthForm);
