@@ -7,35 +7,58 @@ export const AUTH_FETCH_SUCCESS = 'AUTH_FETCH_SUCCESS';
 
 
 //sync
-export function fetchAuth() {
-  return {
-    type: AUTH_FETCH
-  }
-}
+// export function fetchAuth() {
+//   return {
+//     type: AUTH_FETCH
+//   }
+// }
 
-export function fetchAuthErr(err) {
-  return {
-    type: AUTH_FETCH_ERR,
-    message: err
-  }
-}
+// export function fetchAuthErr(err) {
+//   return {
+//     type: AUTH_FETCH_ERR,
+//     message: err
+//   }
+// }
 
-export function fetchAuthSuccess(json) {
-  return {
-    type: AUTH_FETCH_SUCCESS,
-    message: json.message
-  }
-}
+// export function fetchAuthSuccess(json) {
+//   return {
+//     type: AUTH_FETCH_SUCCESS,
+//     message: json.message
+//   }
+// }
 
 //async
-export function fetchAuthRegister(email, password) {
-  fetchAuth();
+export const register = ({ email, password }) => dispatch => {
+  dispatch({ type: AUTH_FETCH });
   http_requests.Auth.postRegister(email, password)
-    .then(resp => resp.json())
-    .then(json => fetchAuthSuccess(json))
-    .catch(err => fetchAuthErr(err))
+    .then(resp => {
+      console.log('gets to resp line')
+      console.log('type resp', typeof resp)
+      console.log('len resp', resp.length)
+//      return resp.json()
+//    })
+//    .then(json => {
+      console.log('gets to first json')
+      if (resp.error) {
+        dispatch({
+          type: AUTH_FETCH_ERR,
+          message: resp.message
+        })
+      } else {
+        console.log('gets to dispatch fetch success')
+        dispatch({
+          type: AUTH_FETCH_SUCCESS,
+          message: resp.message
+        })
+      }
+    })
+    .catch(err => dispatch({
+      type: AUTH_FETCH_ERR,
+      message: err.message
+    }))
 }
 
+//TODO refactor
 export function fetchAuthLogin(email, password) {
   fetchAuth();
   http_requests.Auth.postLogin(email, password)
