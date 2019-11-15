@@ -26,6 +26,7 @@ app.use(function(req, res, next) {
   next();
 });
 
+//app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use('/api/list', listRouter);
