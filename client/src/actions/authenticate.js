@@ -32,20 +32,13 @@ export const register = ({ email, password }) => dispatch => {
   dispatch({ type: AUTH_FETCH });
   http_requests.Auth.postRegister(email, password)
     .then(resp => {
-      console.log('gets to resp line')
-      console.log('type resp', typeof resp)
-      console.log('len resp', resp.length)
-//      return resp.json()
-//    })
-//    .then(json => {
-      console.log('gets to first json')
-      if (resp.error) {
+      console.log('resp', resp);
+      if (resp.type === 'error') {
         dispatch({
           type: AUTH_FETCH_ERR,
           message: resp.message
         })
       } else {
-        console.log('gets to dispatch fetch success')
         dispatch({
           type: AUTH_FETCH_SUCCESS,
           message: resp.message
