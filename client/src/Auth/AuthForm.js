@@ -27,12 +27,24 @@ class AuthForm extends Component {
     this.props.register({ email, password });
   }
 
+  get Error() {
+    if (this.props.authenticate.status === 'error') {
+      return (
+        <div>
+          <p>{this.props.authenticate.message}</p>
+        </div>
+      )
+    }
+  }
+
   render() {
     console.log('this.props.authenticate', this.props.authenticate)
     return (
       <div>
         <h1>AuthForm</h1>
         <form>
+          {this.Error}
+
           <input type="text"
             name="email"
             value={this.state.email}
