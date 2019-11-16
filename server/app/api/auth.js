@@ -28,7 +28,7 @@ router.post('/register', (req, res, next) => {
     .then(({ message }) => {
       res.json({ message }) //reusing the message returned from setSession
     })
-    .catch(err => next(err));
+    .catch(error => next(error));
 });
 
 // create POST request handler for /login
