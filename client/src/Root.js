@@ -6,11 +6,7 @@ import AuthForm from './Auth/AuthForm';
 class Root extends Component {
 
   render() {
-    let isLoggedIn = this.props.authenticate.isLoggedIn;
-    console.log('isLoggedIn', isLoggedIn)
-    return (
-      {isLoggedIn} === true ? <Home /> : <AuthForm />
-    )
+    return this.props.authenticate.isLoggedIn ? <Home /> : <AuthForm />
   }
 }
 
