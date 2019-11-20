@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { register, fetchAuthLogin } from '../actions/authenticate';
+import { register, fetchAuthLogin, logout } from '../actions/authenticate';
 
 class AuthForm extends Component {
 
@@ -18,7 +18,11 @@ class AuthForm extends Component {
   logInBtnClick = (ev) => {
     const { email, password } = this.state;
     ev.preventDefault();
-    //this.props.fetchAuthLogin(email, password);
+  }
+
+  logOutBtnClick = (ev) => {
+    ev.preventDefault();
+    this.props.logout();
   }
 
   signInBtnClick = (ev) => {
@@ -62,6 +66,8 @@ class AuthForm extends Component {
           <button onClick={this.logInBtnClick}>Log In</button>
           <span> or </span>
           <button onClick={this.signInBtnClick}>Sign Up</button>
+          <span> or </span>
+          <button onClick={this.logOutBtnClick}>Log Out</button>
         </form>
       </div>
     )
@@ -70,6 +76,13 @@ class AuthForm extends Component {
 
 const mapStateToProps = state => ({ authenticate: state.authenticate });
 
+const mapDispatchToProps = dispatch => {
+  return {
+    register: ({ email, password }) => dispatch(register({ email, password })),
+    logout: () => dispatch(logout())
+  }
+}
+
 export default connect(
   mapStateToProps,
-  { register, fetchAuthLogin})(AuthForm);
+  mapDispatchToProps)(AuthForm);
