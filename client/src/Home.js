@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { withAuth } from '@okta/okta-react';
-import { setAuthenticated, setNotAuthenticated, setToken } from './actions/authenticate';
+import { logout } from './actions/authenticate';
 
 class Home extends Component {
   constructor(props) {
@@ -49,8 +49,7 @@ class Home extends Component {
 
   async logout() {
     // Redirect to '/' after logout
-    this.props.setNotAuthenticated();
-    this.props.auth.logout('/');
+    this.props.logout();
   }
 
   render() {
@@ -71,9 +70,10 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  setAuthenticated: () => dispatch(setAuthenticated()),
-  setNotAuthenticated: () => dispatch(setNotAuthenticated()),
-  setToken: (token) => dispatch(setToken(token))
+  logout: () => dispatch(logout())
+  // setAuthenticated: () => dispatch(setAuthenticated()),
+  // setNotAuthenticated: () => dispatch(setNotAuthenticated()),
+  // setToken: (token) => dispatch(setToken(token))
 })
 
 // const enhance = compose(
