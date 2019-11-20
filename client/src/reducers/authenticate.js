@@ -1,5 +1,6 @@
-import { AUTH_FETCH, AUTH_FETCH_ERR, AUTH_FETCH_SUCCESS
- } from '../actions/authenticate';
+import { AUTH_FETCH, AUTH_FETCH_ERR, AUTH_FETCH_SUCCESS,
+  LOGOUT_FETCH_SUCCESS, LOGOUT_FETCH, LOGOUT_FETCH_ERR
+} from '../actions/authenticate';
 
 const authenticate = (state = { isLoggedIn: false }, action) => {
   switch (action.type) {
@@ -10,23 +11,31 @@ const authenticate = (state = { isLoggedIn: false }, action) => {
     //   }
 
     case 'AUTH_FETCH':
+    case 'LOGOUT_FETCH':
       return {
         ...state,
         status: 'fetching'
       }
     case 'AUTH_FETCH_ERR':
+    case 'LOGOUT_FETCH_ERR':
       return {
         ...state,
         status: 'error',
         message: action.message
       }
     case 'AUTH_FETCH_SUCCESS':
-      console.log('gets here reducers')
       return {
         ...state,
         status: 'success',
         message: action.message,
         isLoggedIn: true
+      }
+    case 'LOGOUT_FETCH_SUCCESS':
+      return {
+        ...state,
+        status: 'success',
+        message: action.message,
+        isLoggedIn: false
       }
     default:
       return state
