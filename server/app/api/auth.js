@@ -55,8 +55,7 @@ router.post('/login', (req, res, next) => {
 
 router.post('/logout', (req, res, next) => {
   let { cookie } = req.body;
-  console.log('cookie', cookie)
-  const { email } = Session.parse(cookie.cookie); //req.cookies.sessionStr
+  const { email } = Session.parse(cookie.cookie);
   let emailHash = hash(email);
   AuthTable.updateSessionId({ sessionId: null, emailHash })
     .then(() => {
@@ -64,7 +63,22 @@ router.post('/logout', (req, res, next) => {
       res.json({ message: 'Successful logout'})
     })
     .catch(err => next(err));
+})
 
+router.post('/authenticated', (req, res, next) => {
+  let { cookie } = req.body;
+  const { email, id } = Session.parse(cookie.cookie);
+  let emailHash = hash(email);
+
+  AuthTable.isAuthenticated( { emailHash, sessionId: id })
+    .then(json => {
+      if (json) {
+        res.json({...json, type: "success", message: "user is authenticated"});
+      } else {
+        res.json({ type: "error", message: "user not authenticated" })
+      }
+    })
+    .catch(err => next(err));
 })
 
 module.exports = router;
