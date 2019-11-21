@@ -20,6 +20,10 @@ export const register = ({ email, password }) => dispatch => {
           message: resp.message
         })
       } else {
+        if (resp.cookie && storageAvailable('sessionStorage')) {
+          let cookieAr = resp.cookie.split('=');
+          sessionStorage.setItem(cookieAr[0], cookieAr[1]);
+        }
         dispatch({
           type: AUTH_FETCH_SUCCESS,
           message: resp.message
@@ -33,8 +37,14 @@ export const register = ({ email, password }) => dispatch => {
 }
 
 export const logout = () => dispatch => {
+  let cookie;
+  const cookieKey = 'sessionStr';
+  let cookieVal = sessionStorage.getItem(cookieKey);
+  cookie = `${cookieKey}=${cookieVal}`
+  // = document.cookie;
+
   dispatch({ type: LOGOUT_FETCH });
-  http_requests.Auth.getLogout()
+  http_requests.Auth.postLogout({ cookie })
     .then(resp => {
       if (resp.type === 'error') {
         dispatch({
@@ -42,17 +52,45 @@ export const logout = () => dispatch => {
           message: resp.message
         })
       } else {
+        sessionStorage.removeItem(`${cookieKey}`);
         dispatch({
           type: LOGOUT_FETCH_SUCCESS,
           message: resp.message
         })
-        
+
       }
     })
     .catch(err => dispatch({
       type: LOGOUT_FETCH_ERR,
       message: err.message
     }))
+}
+
+//helper
+
+function storageAvailable(type) {
+    var storage;
+    try {
+        storage = window[type];
+        var x = '__storage_test__';
+        storage.setItem(x, x);
+        storage.removeItem(x);
+        return true;
+    }
+    catch(e) {
+        return e instanceof DOMException && (
+            // everything except Firefox
+            e.code === 22 ||
+            // Firefox
+            e.code === 1014 ||
+            // test name field too, because code might not be present
+            // everything except Firefox
+            e.name === 'QuotaExceededError' ||
+            // Firefox
+            e.name === 'NS_ERROR_DOM_QUOTA_REACHED') &&
+            // acknowledge QuotaExceededError only if there's something already stored
+            (storage && storage.length !== 0);
+    }
 }
 
 //TODO refactor
@@ -68,62 +106,37 @@ export const logout = () => dispatch => {
 
 ///////// OLD
 
-export const SET_AUTH = 'SET_AUTH';
-export const REMOVE_AUTH = 'REMOVE_AUTH';
+// export const SET_AUTH = 'SET_AUTH';
+// export const REMOVE_AUTH = 'REMOVE_AUTH';
 
-export function setAuthenticated() {
-  return {
-    type: SET_AUTH,
-    retrieving: false,
-  };
-}
-
-export function setNotAuthenticated() {
-  return {
-    type: REMOVE_AUTH,
-    retrieving: false,
-  };
-}
-
-export const SET_TOKEN = 'SET_TOKEN';
-export const REMOVE_TOKEN = 'REMOVE_TOKEN';
-
-export function setToken(token) {
-  return {
-    type: SET_TOKEN,
-    token,
-    retrieving: false,
-  };
-}
-
-export function removeToken() {
-  return {
-    type: REMOVE_TOKEN,
-    retrieving: false,
-  };
-}
-
-
-
-  //move to action
-// export const checkAuthentication = (fn) => (dispatch, fn) => {
-//   dispatch(requestAuthentication());
-//   //const authenticated = await fn(); //this.props.auth.isAuthenticated();
-//   fn()
-//     .then(authenticated => {
-//       console.log('authenticated', authenticated);
-//       dispatch(receiveAuthentication(authenticated));
-//     })
-//     .catch(err => console.error('err', err))
-
-//   //if (authenticated !== this.state.authenticated) {
-//     //this.setState({ authenticated });
-//   //}
+// export function setAuthenticated() {
+//   return {
+//     type: SET_AUTH,
+//     retrieving: false,
+//   };
 // }
 
-// export const fetchQuestions = () => dispatch => {
-//   dispatch(requestAllQuestions());
-//   return http_requests.Questions.getAll()
-//     .then(json => dispatch(receiveAllQuestions(json)))
-//     .catch(err => console.error('fetch error', err));
-// };
+// export function setNotAuthenticated() {
+//   return {
+//     type: REMOVE_AUTH,
+//     retrieving: false,
+//   };
+// }
+
+// export const SET_TOKEN = 'SET_TOKEN';
+// export const REMOVE_TOKEN = 'REMOVE_TOKEN';
+
+// export function setToken(token) {
+//   return {
+//     type: SET_TOKEN,
+//     token,
+//     retrieving: false,
+//   };
+// }
+
+// export function removeToken() {
+//   return {
+//     type: REMOVE_TOKEN,
+//     retrieving: false,
+//   };
+// }
