@@ -25,8 +25,8 @@ router.post('/register', (req, res, next) => {
       // adding return keyword allows the catch to then be shared across all then calls
       return setSession({ email, res});
     })
-    .then(({ message }) => {
-      res.json({ message }) //reusing the message returned from setSession
+    .then(({ message, cookie }) => {
+      res.json({ message, cookie }) //reusing the message returned from setSession
     })
     .catch(error => next(error));
 });
@@ -47,14 +47,16 @@ router.post('/login', (req, res, next) => {
         throw error;
       }
     })
-    .then(({ message }) => {
-      res.json({ message }) //reusing the message returned from setSession
+    .then(({ message, cookie }) => {
+      res.json({ message, cookie }) //reusing the message returned from setSession
     })
     .catch(err => next(err));
 })
 
-router.get('/logout', (req, res, next) => {
-  const { email } = Session.parse(req.cookies.sessionStr);
+router.post('/logout', (req, res, next) => {
+  let { cookie } = req.body;
+  console.log('cookie', cookie)
+  const { email } = Session.parse(cookie.cookie); //req.cookies.sessionStr
   let emailHash = hash(email);
   AuthTable.updateSessionId({ sessionId: null, emailHash })
     .then(() => {
