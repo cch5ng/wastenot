@@ -5,9 +5,10 @@ export const AUTH_FETCH = 'AUTH_FETCH';
 export const AUTH_FETCH_ERR = 'AUTH_FETCH_ERR';
 export const AUTH_FETCH_SUCCESS = 'AUTH_FETCH_SUCCESS';
 
+// in udemy tutoral, just reused AUTH_FETCH and AUTH_FETCH_ERR for login and logout
 export const LOGIN_FETCH = 'LOGIN_FETCH';
 export const LOGIN_FETCH_ERR = 'LOGIN_FETCH_ERR';
-export const LOGIN_FETCH_SUCCESS = 'LOGIN_FETCH_SUCCESS';
+//export const LOGIN_FETCH_SUCCESS = 'LOGIN_FETCH_SUCCESS';
 
 export const LOGOUT_FETCH = 'LOGOUT_FETCH';
 export const LOGOUT_FETCH_ERR = 'LOGOUT_FETCH_ERR';
@@ -55,7 +56,7 @@ export const login = ({ email, password }) => dispatch => {
           sessionStorage.setItem(cookieAr[0], cookieAr[1]);
         }
         dispatch({
-          type: LOGIN_FETCH_SUCCESS,
+          type: AUTH_FETCH_SUCCESS,
           message: resp.message
         })
       }
@@ -87,6 +88,34 @@ export const logout = () => dispatch => {
           message: resp.message
         })
 
+      }
+    })
+    .catch(err => dispatch({
+      type: LOGOUT_FETCH_ERR,
+      message: err.message
+    }))
+}
+
+export const isAuthenticated = () => dispatch => {
+  let cookie;
+  const cookieKey = 'sessionStr';
+  let cookieVal = sessionStorage.getItem(cookieKey);
+  cookie = `${cookieKey}=${cookieVal}`;
+
+  dispatch({ type: AUTH_FETCH });
+  http_requests.Auth.postAuthenticated({ cookie: cookieVal })
+    .then(resp => {
+      if (resp.type === 'error') {
+        dispatch({
+          type: AUTH_FETCH_ERR,
+          message: resp.message
+        })
+      } else {
+        //TODO
+        dispatch({
+          type: AUTH_FETCH_SUCCESS,
+          message: resp.message
+        })
       }
     })
     .catch(err => dispatch({
