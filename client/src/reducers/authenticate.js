@@ -1,16 +1,15 @@
 import { AUTH_FETCH, AUTH_FETCH_ERR, AUTH_FETCH_SUCCESS,
   LOGOUT_FETCH_SUCCESS, LOGOUT_FETCH, LOGOUT_FETCH_ERR,
-  LOGIN_FETCH_SUCCESS, LOGIN_FETCH, LOGIN_FETCH_ERR
+  LOGIN_FETCH, LOGIN_FETCH_ERR
 } from '../actions/authenticate';
+
+//can refactor and remove redundant types
+//LOGOUT_FETCH_SUCCESS, LOGOUT_FETCH, LOGOUT_FETCH_ERR,
+//LOGIN_FETCH, LOGIN_FETCH_ERR
+//affects actions too
 
 const authenticate = (state = { isLoggedIn: false }, action) => {
   switch (action.type) {
-    // case 'REMOVE_TOKEN':
-    //   return {
-    //     ...state,
-    //     token: null
-    //   }
-
     case 'AUTH_FETCH':
     case 'LOGOUT_FETCH':
     case 'LOGIN_FETCH':
@@ -27,7 +26,6 @@ const authenticate = (state = { isLoggedIn: false }, action) => {
         message: action.message
       }
     case 'AUTH_FETCH_SUCCESS':
-    case 'LOGIN_FETCH_SUCCESS':
       return {
         ...state,
         status: 'success',
