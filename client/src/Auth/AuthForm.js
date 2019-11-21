@@ -1,12 +1,23 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { register, logout, login } from '../actions/authenticate';
+import { Redirect } from 'react-router-dom';
+import { register, logout, login, isAuthenticated } from '../actions/authenticate';
 
 class AuthForm extends Component {
 
   state = {
     email: '',
     password: ''
+  }
+
+  componentDidMount() {
+    //TODO refactor into helper, get cookieString
+    let cookie;
+    const cookieKey = 'sessionStr';
+    let cookieVal = sessionStorage.getItem(cookieKey);
+    if (cookieVal) {
+      this.props.isAuthenticated();
+    }
   }
 
   updateInput = ev => {
@@ -80,7 +91,8 @@ const mapDispatchToProps = dispatch => {
   return {
     register: ({ email, password }) => dispatch(register({ email, password })),
     logout: () => dispatch(logout()),
-    login: ({ email, password }) => dispatch(login({ email, password }))
+    login: ({ email, password }) => dispatch(login({ email, password })),
+    isAuthenticated: () => dispatch(isAuthenticated())
   }
 }
 
