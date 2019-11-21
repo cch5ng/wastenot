@@ -5,6 +5,10 @@ export const AUTH_FETCH = 'AUTH_FETCH';
 export const AUTH_FETCH_ERR = 'AUTH_FETCH_ERR';
 export const AUTH_FETCH_SUCCESS = 'AUTH_FETCH_SUCCESS';
 
+export const LOGIN_FETCH = 'LOGIN_FETCH';
+export const LOGIN_FETCH_ERR = 'LOGIN_FETCH_ERR';
+export const LOGIN_FETCH_SUCCESS = 'LOGIN_FETCH_SUCCESS';
+
 export const LOGOUT_FETCH = 'LOGOUT_FETCH';
 export const LOGOUT_FETCH_ERR = 'LOGOUT_FETCH_ERR';
 export const LOGOUT_FETCH_SUCCESS = 'LOGOUT_FETCH_SUCCESS';
@@ -36,12 +40,37 @@ export const register = ({ email, password }) => dispatch => {
     }))
 }
 
+export const login = ({ email, password }) => dispatch => {
+  dispatch({ type: LOGIN_FETCH });
+  http_requests.Auth.postLogin(email, password)
+    .then(resp => {
+      if (resp.type === 'error') {
+        dispatch({
+          type: LOGIN_FETCH_ERR,
+          message: resp.message
+        })
+      } else {
+        if (resp.cookie && storageAvailable('sessionStorage')) {
+          let cookieAr = resp.cookie.split('=');
+          sessionStorage.setItem(cookieAr[0], cookieAr[1]);
+        }
+        dispatch({
+          type: LOGIN_FETCH_SUCCESS,
+          message: resp.message
+        })
+      }
+    })
+    .catch(err => dispatch({
+      type: LOGIN_FETCH_ERR,
+      message: err.message
+    }))
+}
+
 export const logout = () => dispatch => {
   let cookie;
   const cookieKey = 'sessionStr';
   let cookieVal = sessionStorage.getItem(cookieKey);
-  cookie = `${cookieKey}=${cookieVal}`
-  // = document.cookie;
+  cookie = `${cookieKey}=${cookieVal}`;
 
   dispatch({ type: LOGOUT_FETCH });
   http_requests.Auth.postLogout({ cookie })
@@ -100,43 +129,4 @@ function storageAvailable(type) {
 //     .then(resp => resp.json())
 //     .then(json => fetchAuthSuccess(json))
 //     .catch(err => fetchAuthErr(err))
-// }
-
-
-
-///////// OLD
-
-// export const SET_AUTH = 'SET_AUTH';
-// export const REMOVE_AUTH = 'REMOVE_AUTH';
-
-// export function setAuthenticated() {
-//   return {
-//     type: SET_AUTH,
-//     retrieving: false,
-//   };
-// }
-
-// export function setNotAuthenticated() {
-//   return {
-//     type: REMOVE_AUTH,
-//     retrieving: false,
-//   };
-// }
-
-// export const SET_TOKEN = 'SET_TOKEN';
-// export const REMOVE_TOKEN = 'REMOVE_TOKEN';
-
-// export function setToken(token) {
-//   return {
-//     type: SET_TOKEN,
-//     token,
-//     retrieving: false,
-//   };
-// }
-
-// export function removeToken() {
-//   return {
-//     type: REMOVE_TOKEN,
-//     retrieving: false,
-//   };
 // }
