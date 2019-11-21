@@ -42,7 +42,6 @@ class AuthForm extends Component {
   }
 
   render() {
-    console.log('this.props.authenticate', this.props.authenticate)
     return (
       <div>
         <h1>AuthForm</h1>
