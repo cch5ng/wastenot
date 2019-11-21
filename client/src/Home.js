@@ -16,31 +16,11 @@ class Home extends Component {
   }
 
     //change this to calling an action
-  async componentDidMount() {
-    const authenticated = await this.props.auth.isAuthenticated();
-    if (this.props.auth && authenticated !== this.props.auth.isAuthenticated) {
-      if (authenticated) {
-        this.props.setAuthenticated();
-        const token = this.props.auth.getAccessToken();
-        this.props.setToken(token);
-      } else {
-        this.props.setNotAuthenticated();
-      }
-    }
-  }
+  // async componentDidMount() {
+  // }
 
-  async componentDidUpdate() {
-    // const authenticated = await this.props.auth.isAuthenticated();
-    // if (this.props.auth && authenticated !== this.props.auth.isAuthenticated) {
-    //   if (authenticated) {
-    //     this.props.setAuthenticated();
-    //     const token = this.props.auth.getAccessToken();
-    //     this.props.setToken(token);
-    //   } else {
-    //     this.props.setNotAuthenticated();
-    //   }
-    // }
-  }
+  // async componentDidUpdate() {
+  // }
 
   async login() {
     // Redirect to '/' after login
