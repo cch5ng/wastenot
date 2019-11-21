@@ -45,6 +45,18 @@ class AuthTable {
       )
     })
   }
+
+  static isAuthenticated({ sessionId, emailHash }) {
+    return new Promise((resolve, reject) => {
+      pool.query(
+        `SELECT id, "emailHash", "sessionId" from wastenot_user WHERE ("emailHash"=$2 AND "sessionId"=$1)`,
+        [sessionId, emailHash],
+        (error, response) => {
+          if (error) return reject(error);
+          resolve({ account: response.rows[0] })
+        })
+    })
+  }
 }
 
 module.exports = AuthTable;
