@@ -27,12 +27,13 @@ const requests = {
         headers: {
           'Content-Type': 'application/json',
         },
+        credentials: 'same-origin',
         body: JSON.stringify(body),
       })
         .then(resp => resolve(resp.json()))
         .catch(err => reject(err));
     });
-  },
+  }
 };
 
 const Lists = {
@@ -54,8 +55,8 @@ const Auth = {
   postLogin: (email, password) => {
     return requests.post(`${API_ROOT}${API_AUTH_MIDDLE}${AUTH_LOGIN_SUFFIX}`, {email, password});
   },
-  getLogout: () => {
-    return requests.get(`${API_ROOT}${API_AUTH_MIDDLE}${AUTH_LOGOUT_SUFFIX}`);
+  postLogout: (cookie) => {
+    return requests.post(`${API_ROOT}${API_AUTH_MIDDLE}${AUTH_LOGOUT_SUFFIX}`, { cookie });
   }
 }
 
