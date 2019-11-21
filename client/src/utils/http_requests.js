@@ -10,6 +10,7 @@ const LIST_DETAIL_SUFFIX = '/listDetail';
 const AUTH_REGISTER_SUFFIX = '/register';
 const AUTH_LOGIN_SUFFIX = '/login';
 const AUTH_LOGOUT_SUFFIX = '/logout';
+const AUTH_AUTHENTICATED_SUFFIX = '/authenticated';
 
 const requests = {
   get: (url) => {
@@ -57,6 +58,9 @@ const Auth = {
   },
   postLogout: (cookie) => {
     return requests.post(`${API_ROOT}${API_AUTH_MIDDLE}${AUTH_LOGOUT_SUFFIX}`, { cookie });
+  },
+  postAuthenticated: (cookie) => {
+    return requests.post(`${API_ROOT}${API_AUTH_MIDDLE}${AUTH_AUTHENTICATED_SUFFIX}`, { cookie });
   }
 }
 
