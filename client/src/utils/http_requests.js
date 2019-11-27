@@ -58,7 +58,8 @@ const Auth = {
   },
   postLogout: (cookie) => {
     return requests.post(`${API_ROOT}${API_AUTH_MIDDLE}${AUTH_LOGOUT_SUFFIX}`, { cookie });
-  },
+  }
+  ,
   postAuthenticated: (cookie) => {
     return requests.post(`${API_ROOT}${API_AUTH_MIDDLE}${AUTH_AUTHENTICATED_SUFFIX}`, { cookie });
   }
