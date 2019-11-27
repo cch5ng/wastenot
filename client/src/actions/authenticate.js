@@ -111,7 +111,6 @@ export const isAuthenticated = () => dispatch => {
           message: resp.message
         })
       } else {
-        //TODO
         dispatch({
           type: AUTH_FETCH_SUCCESS,
           message: resp.message
