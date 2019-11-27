@@ -67,18 +67,30 @@ router.post('/logout', (req, res, next) => {
 
 router.post('/authenticated', (req, res, next) => {
   let { cookie } = req.body;
-  const { email, id } = Session.parse(cookie.cookie);
-  let emailHash = hash(email);
+  let error;
 
-  AuthTable.isAuthenticated( { emailHash, sessionId: id })
-    .then(json => {
-      if (json) {
-        res.json({...json, type: "success", message: "user is authenticated"});
-      } else {
-        res.json({ type: "error", message: "user not authenticated" })
-      }
-    })
-    .catch(err => next(err));
+  if (cookie) {
+    const { email, id } = Session.parse(cookie.cookie);
+    let emailHash = hash(email);
+
+    AuthTable.getAccount( { emailHash })
+      .then(({ account }) => {
+        const authenticated = account.sessionId === id;
+        if (authenticated) {
+          res.json({ authenticated, message: 'user authenticated' })
+        } else {
+          error = new Error('Invalid session');
+          error.statusCode = 400;
+          return next(error);
+        }
+
+      })
+      .catch(err => next(err));
+  } else  if (!cookie || !Session.verify()) {
+    error = new Error('Invalid session');
+    error.statusCode = 400;
+    return next(error);
+  }
 })
 
 module.exports = router;
