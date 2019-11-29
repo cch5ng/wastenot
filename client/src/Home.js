@@ -3,7 +3,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-import { withAuth } from '@okta/okta-react';
 import { logout } from './actions/authenticate';
 
 class Home extends Component {
@@ -56,16 +55,7 @@ const mapDispatchToProps = dispatch => ({
   // setToken: (token) => dispatch(setToken(token))
 })
 
-// const enhance = compose(
-//   // These are both single-argument HOCs
-//   withAuth,
-//   connect(
-//     mapStateToProps,
-//     mapDispatchToProps
-//   )(Home)
-// )
-
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(withAuth(Home));
+)(Home);
