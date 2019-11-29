@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {
   BrowserRouter as Router, Route } from 'react-router-dom';
-import { Security, SecureRoute, ImplicitCallback } from '@okta/okta-react';
+//import { Security, SecureRoute, ImplicitCallback } from '@okta/okta-react';
 
 import Home from './Home';
 import Root from './Root';
@@ -20,28 +20,25 @@ function App() {
 
   return (
     <Router>
-      <Security {...config.oidc}>
-        <div className="App">
-          <Header />
-            <Route path='/' exact component={Root}/>
-            <Route path='/implicit/callback' component={ImplicitCallback}/>
-            <Route exact path="/settings/listTemplates" 
-              render={(props) => (<ListTemplates {...props} updateListTemplates={updateListTemplates}
-                removeListTemplates={removeListTemplates} listTemplates={listTemplates}
-              />
-            )} />
-            <Route exact path="/settings/listTemplatesNew"
-              render={(props) => (<ListTemplateDetailForm {...props} mode="add" updateListTemplates={updateListTemplates}
-                listTemplates={listTemplates}
-              />
-            )} />
-            <Route exact path="/settings/listTemplatesEdit/:templateListId"
-              render={({match}) => (<ListTemplateDetailForm mode="edit" updateListTemplates={updateListTemplates}
-                templateListId={match.params.templateListId} listTemplates={listTemplates}
-              />
-            )} />
-        </div>
-      </Security>
+      <div className="App">
+        <Header />
+          <Route path='/' exact component={Root}/>
+          <Route exact path="/settings/listTemplates" 
+            render={(props) => (<ListTemplates {...props} updateListTemplates={updateListTemplates}
+              removeListTemplates={removeListTemplates} listTemplates={listTemplates}
+            />
+          )} />
+          <Route exact path="/settings/listTemplatesNew"
+            render={(props) => (<ListTemplateDetailForm {...props} mode="add" updateListTemplates={updateListTemplates}
+              listTemplates={listTemplates}
+            />
+          )} />
+          <Route exact path="/settings/listTemplatesEdit/:templateListId"
+            render={({match}) => (<ListTemplateDetailForm mode="edit" updateListTemplates={updateListTemplates}
+              templateListId={match.params.templateListId} listTemplates={listTemplates}
+            />
+          )} />
+      </div>
     </Router>
   )
 }
