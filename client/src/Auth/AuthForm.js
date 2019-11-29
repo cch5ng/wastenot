@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import { register, logout, login, isAuthenticated } from '../actions/authenticate';
+import { getCookieStr } from '../utils/utils';
 
 class AuthForm extends Component {
 
@@ -13,8 +14,10 @@ class AuthForm extends Component {
   componentDidMount() {
     //TODO refactor into helper, get cookieString
     let cookie;
-    const cookieKey = 'sessionStr';
-    let cookieVal = sessionStorage.getItem(cookieKey);
+    //const cookieKey = 'sessionStr';
+    let cookieVal = getCookieStr();
+
+    //sessionStorage.getItem(cookieKey);
     if (cookieVal) {
       this.props.isAuthenticated();
     }
