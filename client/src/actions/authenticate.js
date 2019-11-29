@@ -1,4 +1,5 @@
 import http_requests from '../utils/http_requests';
+import { getCookieStr } from '../utils/utils';
 
 // action types
 export const AUTH_FETCH = 'AUTH_FETCH';
@@ -98,8 +99,9 @@ export const logout = () => dispatch => {
 
 export const isAuthenticated = () => dispatch => {
   let cookie;
-  const cookieKey = 'sessionStr';
-  let cookieVal = sessionStorage.getItem(cookieKey);
+  let cookieVal = getCookieStr();
+  console.log('cookieVal', cookieVal)
+
   cookie = `${cookieKey}=${cookieVal}`;
 
   dispatch({ type: AUTH_FETCH });
