@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import {
   BrowserRouter as Router, Route } from 'react-router-dom';
-//import { Security, SecureRoute, ImplicitCallback } from '@okta/okta-react';
-
 import Home from './Home';
 import Root from './Root';
 import './App.css';
@@ -15,7 +13,7 @@ import useListTemplates from './utils/hooks/useListTemplates';
 import config from './config';
 
 function App() {
-  //global state
+
   const {listTemplates, updateListTemplates, removeListTemplates} = useListTemplates();
 
   return (
