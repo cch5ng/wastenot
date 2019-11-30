@@ -15,9 +15,11 @@ export const LOGOUT_FETCH = 'LOGOUT_FETCH';
 export const LOGOUT_FETCH_ERR = 'LOGOUT_FETCH_ERR';
 export const LOGOUT_FETCH_SUCCESS = 'LOGOUT_FETCH_SUCCESS';
 
+export const REG_FETCH = 'REG_FETCH';
+
 //async
 export const register = ({ email, password }) => dispatch => {
-  dispatch({ type: AUTH_FETCH });
+  dispatch({ type: REG_FETCH });
   http_requests.Auth.postRegister(email, password)
     .then(resp => {
       if (resp.type === 'error') {
@@ -74,7 +76,7 @@ export const logout = () => dispatch => {
   let cookieVal = sessionStorage.getItem(cookieKey);
   cookie = `${cookieKey}=${cookieVal}`;
 
-  dispatch({ type: LOGOUT_FETCH });
+  dispatch({ type: AUTH_FETCH });
   http_requests.Auth.postLogout({ cookie })
     .then(resp => {
       if (resp.type === 'error') {
@@ -99,31 +101,39 @@ export const logout = () => dispatch => {
 
 export const isAuthenticated = () => dispatch => {
   let cookie;
+  const cookieKey = 'sessionStr';
   let cookieVal = getCookieStr();
-  console.log('cookieVal', cookieVal)
-
   cookie = `${cookieKey}=${cookieVal}`;
 
-  dispatch({ type: AUTH_FETCH });
-  http_requests.Auth.postAuthenticated({ cookie: cookieVal })
-    .then(resp => {
-      if (resp.type === 'error') {
-        dispatch({
-          type: AUTH_FETCH_ERR,
-          message: resp.message
-        })
-      } else {
-        dispatch({
-          type: AUTH_FETCH_SUCCESS,
-          message: resp.message
-        })
-      }
-    })
-    .catch(err => dispatch({
-      type: LOGOUT_FETCH_ERR,
-      message: err.message
-    }))
+  if (cookieVal) {
+    dispatch({ type: AUTH_FETCH });
+    //returning fetch because of the logic in index.js
+    http_requests.Auth.postAuthenticated({ cookie: cookieVal })
+      .then(resp => {
+        if ((resp && resp.type === 'error') || !resp) {
+          dispatch({
+            type: AUTH_FETCH_ERR,
+            message: resp.message
+          })
+        } else if (resp) {
+          dispatch({
+            type: AUTH_FETCH_SUCCESS,
+            message: resp.message
+          })
+        }
+      })
+      .catch(err => dispatch({
+        type: LOGOUT_FETCH_ERR,
+        message: err.message
+      }))
+    } else {
+      dispatch({
+        type: AUTH_FETCH_ERR,
+        message: 'invalid authentication'
+      })
+    }
 }
+
 
 //helper
 //https://developer.mozilla.org/en-US/docs/Web/API/Web_Storage_API/Using_the_Web_Storage_API
