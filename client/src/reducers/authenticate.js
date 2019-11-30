@@ -1,6 +1,6 @@
 import { AUTH_FETCH, AUTH_FETCH_ERR, AUTH_FETCH_SUCCESS,
   LOGOUT_FETCH_SUCCESS, LOGOUT_FETCH, LOGOUT_FETCH_ERR,
-  LOGIN_FETCH, LOGIN_FETCH_ERR
+  LOGIN_FETCH, LOGIN_FETCH_ERR, REG_FETCH
 } from '../actions/authenticate';
 
 //can refactor and remove redundant types
@@ -8,14 +8,19 @@ import { AUTH_FETCH, AUTH_FETCH_ERR, AUTH_FETCH_SUCCESS,
 //LOGIN_FETCH, LOGIN_FETCH_ERR
 //affects actions too
 
-const authenticate = (state = { isLoggedIn: false }, action) => {
+const authenticate = (state = { isLoggedIn: false, hasButtonClicked: false }, action) => {
   switch (action.type) {
     case 'AUTH_FETCH':
-    case 'LOGOUT_FETCH':
-    case 'LOGIN_FETCH':
       return {
         ...state,
         status: 'fetching'
+      }
+    case 'LOGIN_FETCH':
+    case 'REG_FETCH':
+      return {
+        ...state,
+        status: 'fetching',
+        hasButtonClicked: true
       }
     case 'AUTH_FETCH_ERR':
     case 'LOGOUT_FETCH_ERR':
