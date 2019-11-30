@@ -9,16 +9,12 @@ class Home extends Component {
   constructor(props) {
     super(props);
     this.state = { authenticated: null };
-    //this.checkAuthentication = this.checkAuthentication.bind(this);
     this.login = this.login.bind(this);
     this.logout = this.logout.bind(this);
   }
 
     //change this to calling an action
   // async componentDidMount() {
-  // }
-
-  // async componentDidUpdate() {
   // }
 
   async login() {
@@ -32,12 +28,6 @@ class Home extends Component {
   }
 
   render() {
-    if (this.props.auth) {
-      console.log('authenticate', this.props.authenticate);
-    }
-
-    //change this to checking redux
-
     return (this.props.authenticate.isLoggedIn) ?
       <button onClick={this.logout}>Logout</button> :
       <button onClick={this.login}>Login</button>;
@@ -50,9 +40,6 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   logout: () => dispatch(logout())
-  // setAuthenticated: () => dispatch(setAuthenticated()),
-  // setNotAuthenticated: () => dispatch(setNotAuthenticated()),
-  // setToken: (token) => dispatch(setToken(token))
 })
 
 export default connect(
