@@ -7,3 +7,9 @@ export function objToArray(obj) {
 
   return resultAr;
 }
+
+export function getCookieStr() {
+  const cookieKey = 'sessionStr';
+  let cookieVal = sessionStorage.getItem(cookieKey);
+  return cookieVal;
+}

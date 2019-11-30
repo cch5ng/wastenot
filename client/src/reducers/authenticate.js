@@ -1,27 +1,48 @@
-import { SET_AUTH, REMOVE_AUTH, SET_TOKEN, REMOVE_TOKEN } from '../actions/authenticate';
+import { AUTH_FETCH, AUTH_FETCH_ERR, AUTH_FETCH_SUCCESS,
+  LOGOUT_FETCH_SUCCESS, LOGOUT_FETCH, LOGOUT_FETCH_ERR,
+  LOGIN_FETCH, LOGIN_FETCH_ERR, REG_FETCH
+} from '../actions/authenticate';
 
-const authenticate = (state = { isLoggedIn: false, token: null }, action) => {
+//can refactor and remove redundant types
+//LOGOUT_FETCH_SUCCESS, LOGOUT_FETCH, LOGOUT_FETCH_ERR,
+//LOGIN_FETCH, LOGIN_FETCH_ERR
+//affects actions too
+
+const authenticate = (state = { isLoggedIn: false, hasButtonClicked: false }, action) => {
   switch (action.type) {
-    case 'SET_AUTH':
+    case 'AUTH_FETCH':
       return {
         ...state,
+        status: 'fetching'
+      }
+    case 'LOGIN_FETCH':
+    case 'REG_FETCH':
+      return {
+        ...state,
+        status: 'fetching',
+        hasButtonClicked: true
+      }
+    case 'AUTH_FETCH_ERR':
+    case 'LOGOUT_FETCH_ERR':
+    case 'LOGIN_FETCH_ERR':
+      return {
+        ...state,
+        status: 'error',
+        message: action.message
+      }
+    case 'AUTH_FETCH_SUCCESS':
+      return {
+        ...state,
+        status: 'success',
+        message: action.message,
         isLoggedIn: true
       }
-    case 'REMOVE_AUTH':
+    case 'LOGOUT_FETCH_SUCCESS':
       return {
         ...state,
-        isLoggedIn: false,
-        token: null
-      }
-    case 'SET_TOKEN':
-      return {
-        ...state,
-        token: action.token
-      }
-    case 'REMOVE_TOKEN':
-      return {
-        ...state,
-        token: null
+        status: 'success',
+        message: action.message,
+        isLoggedIn: false
       }
     default:
       return state

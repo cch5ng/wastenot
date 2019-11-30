@@ -25,10 +25,10 @@ router.post('/register', (req, res, next) => {
       // adding return keyword allows the catch to then be shared across all then calls
       return setSession({ email, res});
     })
-    .then(({ message }) => {
-      res.json({ message }) //reusing the message returned from setSession
+    .then(({ message, cookie }) => {
+      res.json({ message, cookie }) //reusing the message returned from setSession
     })
-    .catch(err => next(err));
+    .catch(error => next(error));
 });
 
 // create POST request handler for /login
@@ -47,14 +47,15 @@ router.post('/login', (req, res, next) => {
         throw error;
       }
     })
-    .then(({ message }) => {
-      res.json({ message }) //reusing the message returned from setSession
+    .then(({ message, cookie }) => {
+      res.json({ message, cookie }) //reusing the message returned from setSession
     })
     .catch(err => next(err));
 })
 
-router.get('/logout', (req, res, next) => {
-  const { email } = Session.parse(req.cookies.sessionStr);
+router.post('/logout', (req, res, next) => {
+  let { cookie } = req.body;
+  const { email } = Session.parse(cookie.cookie);
   let emailHash = hash(email);
   AuthTable.updateSessionId({ sessionId: null, emailHash })
     .then(() => {
@@ -62,7 +63,34 @@ router.get('/logout', (req, res, next) => {
       res.json({ message: 'Successful logout'})
     })
     .catch(err => next(err));
+})
 
+router.post('/authenticated', (req, res, next) => {
+  let { cookie } = req.body;
+  let error;
+
+  if (cookie) {
+    const { email, id } = Session.parse(cookie.cookie);
+    let emailHash = hash(email);
+
+    AuthTable.getAccount( { emailHash })
+      .then(({ account }) => {
+        const authenticated = account.sessionId === id;
+        if (authenticated) {
+          res.json({ authenticated, message: 'user authenticated' })
+        } else {
+          error = new Error('Invalid session');
+          error.statusCode = 400;
+          return next(error);
+        }
+
+      })
+      .catch(err => next(err));
+  } else  if (!cookie || !Session.verify()) {
+    error = new Error('Invalid session');
+    error.statusCode = 400;
+    return next(error);
+  }
 })
 
 module.exports = router;

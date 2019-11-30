@@ -6,12 +6,13 @@ const setSession = ({ email, res, sessionId }) => {
   return new Promise((resolve, reject) => {
     let session;
     let sessionStr;
+    let cookie;
 
     //case user already has sessionId saved in db
     if (sessionId) {
       sessionStr = Session.sessionString({ email, id: sessionId });
-      setSessionCookie({ sessionStr, res });
-      resolve({ message: 'session restored'});
+      cookie = setSessionCookie({ sessionStr, res });
+      resolve({ ...cookie, message: 'session restored' });
     } else {
       //case no user sessionId found in db
       session = new Session({ email });
@@ -22,8 +23,8 @@ const setSession = ({ email, res, sessionId }) => {
         emailHash: hash(email)
       })
         .then(() => {
-          setSessionCookie({ sessionStr, res });
-          resolve({ message: 'session created' });
+          cookie = setSessionCookie({ sessionStr, res });
+          resolve({ ...cookie, message: 'session created' });
         })
         .catch(err => reject(err))
     }
@@ -31,11 +32,15 @@ const setSession = ({ email, res, sessionId }) => {
 }
 
 const setSessionCookie = ({ sessionStr, res }) => {
-  res.cookie('sessionStr', sessionStr, {
-    expire: Date.now() + 3600000,
-    httpOnly: true
-    //secure: true
-  });
+  return {cookie: `sessionStr=${sessionStr}`}
 }
 
 module.exports = { setSession }
+
+  //TODO test whether is this required?
+  // res.cookie('sessionStr', sessionStr, {
+  //   expire: Date.now() + 3600000,
+  //   httpOnly: true
+  //   //secure: true
+  // });
+  //res.setHeader('Set-Cookie', [`sessionStr=${sessionStr}`]);

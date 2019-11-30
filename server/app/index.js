@@ -22,10 +22,13 @@ app.use(function(req, res, next) {
   allowed = process.env.NODE_ENV === 'production' ? process.env.CLIENT_ROOT_PROD : process.env.CLIENT_ROOT;
 
   res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept, Cookie");
+  res.header('Access-Control-Allow-Credentials', true);
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,UPDATE,OPTIONS');
   next();
 });
 
+//app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use('/api/list', listRouter);
