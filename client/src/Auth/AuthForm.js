@@ -12,15 +12,6 @@ class AuthForm extends Component {
   }
 
   componentDidMount() {
-    //TODO refactor into helper, get cookieString
-    let cookie;
-    //const cookieKey = 'sessionStr';
-    let cookieVal = getCookieStr();
-
-    //sessionStorage.getItem(cookieKey);
-    if (cookieVal) {
-      this.props.isAuthenticated();
-    }
   }
 
   updateInput = ev => {
@@ -47,7 +38,7 @@ class AuthForm extends Component {
   }
 
   get Error() {
-    if (this.props.authenticate.status === 'error') {
+    if (this.props.authenticate.status === 'error' && this.props.authenticate.hasButtonClicked === true) {
       return (
         <div>
           <p>{this.props.authenticate.message}</p>
