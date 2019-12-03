@@ -1,4 +1,5 @@
-import { SHOPPING_LISTS_FETCH, SHOPPING_LISTS_FETCH_ERR, SHOPPING_LISTS_FETCH_SUCCESS
+import { SHOPPING_LISTS_FETCH, SHOPPING_LISTS_FETCH_ERR, SHOPPING_LISTS_FETCH_SUCCESS,
+  TEMPLATE_LISTS_FETCH, TEMPLATE_LISTS_FETCH_ERR, TEMPLATE_LISTS_FETCH_SUCCESS
   //RECEIVE_ADD_TEMPLATE_LIST, RECEIVE_TEMPLATE_LISTS, RECEIVE_EDIT_TEMPLATE_LIST, RECEIVE_DELETE_TEMPLATE_LIST, REQUEST_TEMPLATE_LISTS, REQUEST_ADD_TEMPLATE_LIST, REQUEST_EDIT_TEMPLATE_LIST, REQUEST_DELETE_TEMPLATE_LIST
 } from '../actions/listTemplates';
 
@@ -202,18 +203,18 @@ const initialState = {
 const listTemplates = (state = initialState, action) => {
   let listObj = {}
   switch(action.type) {
-    case SHOPPING_LISTS_FETCH:
+    case TEMPLATE_LISTS_FETCH:
       return {
         ...state,
         status: 'fetching'
       }
-    case SHOPPING_LISTS_FETCH_ERR:
+    case TEMPLATE_LISTS_FETCH_ERR:
       return {
         ...state,
         status: 'error',
         message: action.message
       }
-    case SHOPPING_LISTS_FETCH_SUCCESS:
+    case TEMPLATE_LISTS_FETCH_SUCCESS:
       return {
         ...state,
         status: 'success',

@@ -2,12 +2,15 @@ import http_requests from '../utils/http_requests';
 import { getCookieStr } from '../utils/utils';
 
 // action types
+export const TEMPLATE_LISTS_FETCH = 'TEMPLATE_LISTS_FETCH';
+export const TEMPLATE_LISTS_FETCH_ERR = 'TEMPLATE_LISTS_FETCH_ERR';
+export const TEMPLATE_LISTS_FETCH_SUCCESS = 'TEMPLATE_LISTS_FETCH_SUCCESS';
+
+
+// action types
 export const SHOPPING_LISTS_FETCH = 'SHOPPING_LISTS_FETCH';
 export const SHOPPING_LISTS_FETCH_ERR = 'SHOPPING_LISTS_FETCH_ERR';
 export const SHOPPING_LISTS_FETCH_SUCCESS = 'SHOPPING_LISTS_FETCH_SUCCESS';
-
-
-
 
 // export const REQUEST_TEMPLATE_LISTS = 'REQUEST_TEMPLATE_LISTS'
 // export const RECEIVE_TEMPLATE_LISTS = 'RECEIVE_TEMPLATE_LISTS'
@@ -29,7 +32,7 @@ export const SHOPPING_LISTS_FETCH_SUCCESS = 'SHOPPING_LISTS_FETCH_SUCCESS';
 
 //async action for getting posts
 export const fetchLists = () => dispatch => {
-  dispatch({ type: SHOPPING_LISTS_FETCH });
+  dispatch({ type: TEMPLATE_LISTS_FETCH });
 
   let cookieStr = getCookieStr();
   if (cookieStr) {
@@ -37,24 +40,24 @@ export const fetchLists = () => dispatch => {
       .then(resp => {
         if (resp.type === 'error') {
           dispatch({
-            type: SHOPPING_LISTS_FETCH_ERR,
+            type: TEMPLATE_LISTS_FETCH_ERR,
             message: resp.message
           })
         } else {
           dispatch({
-            type: SHOPPING_LISTS_FETCH_SUCCESS,
+            type: TEMPLATE_LISTS_FETCH_SUCCESS,
             message: resp.message,
-            shoppingLists: resp.shoppingLists
+            shoppingLists: resp.templateLists
           })
         }
       })
       .catch(err => dispatch({
-        type: SHOPPING_LISTS_FETCH_ERR,
+        type: TEMPLATE_LISTS_FETCH_ERR,
         message: err.message
       }))
   } else {
     dispatch({
-      type: SHOPPING_LISTS_FETCH_ERR,
+      type: TEMPLATE_LISTS_FETCH_ERR,
       message: 'User is not logged in.'
     })
   }
