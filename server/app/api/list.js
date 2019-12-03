@@ -15,11 +15,24 @@ router.post('/add', (req, res, next) => {
     //console.error('error', err));
 });
 
-router.get('/shoppingLists', (req, res, next) => {
-  ListTable.getListsByType({ listType: 'shopping' })
-    .then(lists => res.json(lists))
-    .catch(err => next(err));
-    //console.error('error', err));
+router.post('/shoppingLists', (req, res, next) => {
+  let cookieStr = req.body.cookieStr;
+  let { email, id } = Session.parse(cookieStr);
+  let emailHash = hash(email);
+
+  AuthTable.isAuthenticated({ sessionId: id, emailHash })
+    .then(resp => {
+      if (resp) {
+        ListTable.getListsByType({ listType: 'shopping', emailHash })
+          .then(lists => res.json(lists))
+          .catch(err => next(err));
+      } else {
+        let error = new Error('Invalid session');
+        error.statusCode = 409;
+        next(error);
+      }
+    })
+    .catch(error => next(error));
 });
 
 router.post('/templateLists', (req, res, next) => {
@@ -40,7 +53,6 @@ router.post('/templateLists', (req, res, next) => {
       }
     })
     .catch(error => next(error));
-    //console.error('error', err));
 });
 
 router.get('/listDetail/:listGuid', (req, res, next) => {

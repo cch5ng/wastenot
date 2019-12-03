@@ -43,7 +43,7 @@ const requests = {
 
 const Lists = {
   getAllShoppingLists: () => {
-    return requests.get(`${API_ROOT}${API_LIST_MIDDLE}${GET_SHOPPING_LISTS_SUFFIX}`, token);
+    return requests.post(`${API_ROOT}${API_LIST_MIDDLE}${GET_SHOPPING_LISTS_SUFFIX}`, { cookieStr });
   },
   getAllTemplateLists: () => {
     return requests.post(`${API_ROOT}${API_LIST_MIDDLE}${GET_TEMPLATE_LISTS_SUFFIX}`, { cookieStr });
