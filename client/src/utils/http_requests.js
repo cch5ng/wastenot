@@ -1,3 +1,5 @@
+import { getCookieStr } from './utils';
+
 const API_ROOT = process.env.API_ROOT;
 //URL MIDDLE
 const API_LIST_MIDDLE = '/list';
@@ -11,6 +13,8 @@ const AUTH_REGISTER_SUFFIX = '/register';
 const AUTH_LOGIN_SUFFIX = '/login';
 const AUTH_LOGOUT_SUFFIX = '/logout';
 const AUTH_AUTHENTICATED_SUFFIX = '/authenticated';
+
+let cookieStr = getCookieStr();
 
 const requests = {
   get: (url) => {
@@ -42,7 +46,7 @@ const Lists = {
     return requests.get(`${API_ROOT}${API_LIST_MIDDLE}${GET_SHOPPING_LISTS_SUFFIX}`, token);
   },
   getAllTemplateLists: () => {
-    return requests.get(`${API_ROOT}${API_LIST_MIDDLE}${GET_TEMPLATE_LISTS_SUFFIX}`, token);
+    return requests.post(`${API_ROOT}${API_LIST_MIDDLE}${GET_TEMPLATE_LISTS_SUFFIX}`, { cookieStr });
   },
   postTemplateList: (list) => {
     return requests.post(`${API_ROOT}${API_LIST_MIDDLE}${CREATE_LIST_SUFFIX}`, token, list)
