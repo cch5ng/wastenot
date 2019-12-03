@@ -2,6 +2,9 @@ const { Router } = require('express');
 //const passport = require('passport');
 const ListTable = require('../list/table');
 const ListItemTable = require('../list_item/table');
+const { hash } = require('../auth/helper');
+const AuthTable = require('../auth/table');
+const Session = require('../auth/Session');
 
 const router = Router();
 
@@ -19,10 +22,24 @@ router.get('/shoppingLists', (req, res, next) => {
     //console.error('error', err));
 });
 
-router.get('/templateLists', (req, res, next) => {
-  ListTable.getListsByType({ listType: 'template' })
-    .then(lists => res.json(lists))
-    .catch(err => next(err));
+router.post('/templateLists', (req, res, next) => {
+  let cookieStr = req.body.cookieStr;
+  let { email, id } = Session.parse(cookieStr);
+  let emailHash = hash(email);
+
+  AuthTable.isAuthenticated({ sessionId: id, emailHash })
+    .then(resp => {
+      if (resp) {
+        ListTable.getListsByType({ listType: 'template', emailHash })
+          .then(lists => res.json(lists))
+          .catch(err => next(err));
+      } else {
+        let error = new Error('Invalid session');
+        error.statusCode = 409;
+        next(error);
+      }
+    })
+    .catch(error => next(error));
     //console.error('error', err));
 });
 
