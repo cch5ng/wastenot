@@ -30,15 +30,19 @@ class ListTable {
 		})
 	}
 
-	static getListsByType({ listType }) {
+	static getListsByType({ listType, emailHash }) {
 		return new Promise((resolve, reject) => {
 			pool.query(
-				`SELECT * from list WHERE type = $1`,
-				[listType],
+				`SELECT list.name, list.guid FROM list, wastenot_user WHERE list.type = $1 AND "emailHash" = $2 AND wastenot_user.id = list.owner_id`,
+				[listType, emailHash],
 				(error, response) => {
 					if (error) return reject(error);
-					console.log('response.rows', response.rows);
-					resolve(response.rows);
+					let message = '';
+					let key = `${listType}Lists`;
+					if (response.rows.length === 0) {
+						message = 'No lists were found.'
+					}
+					resolve({[key]: response.rows, message});
 				}
 			)
 		})
