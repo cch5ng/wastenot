@@ -15,3 +15,13 @@ export function getCookieStr() {
   }
   return null;
 }
+
+//assumes array of objects where each object has an id key
+export function arrayToObj(ar) {
+  let obj = {};
+  ar.reduce((accum, cur) => {
+    let key = cur.guid;
+    accum[key] = cur;
+  }, obj);
+  return obj;
+}
