@@ -1,36 +1,21 @@
 import http_requests from '../utils/http_requests';
-import { getCookieStr } from '../utils/utils';
+import { getCookieStr, arrayToObj } from '../utils/utils';
 
 // action types
 export const TEMPLATE_LISTS_FETCH = 'TEMPLATE_LISTS_FETCH';
 export const TEMPLATE_LISTS_FETCH_ERR = 'TEMPLATE_LISTS_FETCH_ERR';
 export const TEMPLATE_LISTS_FETCH_SUCCESS = 'TEMPLATE_LISTS_FETCH_SUCCESS';
 
+export const TEMPLATE_LISTS_ADD_FETCH = 'TEMPLATE_LISTS_ADD_FETCH';
+export const TEMPLATE_LISTS_ADD_FETCH_ERR = 'TEMPLATE_LISTS_ADD_FETCH_ERR';
+export const TEMPLATE_LISTS_ADD_FETCH_SUCCESS = 'TEMPLATE_LISTS_ADD_FETCH_SUCCESS';
 
 // action types
 export const SHOPPING_LISTS_FETCH = 'SHOPPING_LISTS_FETCH';
 export const SHOPPING_LISTS_FETCH_ERR = 'SHOPPING_LISTS_FETCH_ERR';
 export const SHOPPING_LISTS_FETCH_SUCCESS = 'SHOPPING_LISTS_FETCH_SUCCESS';
 
-// export const REQUEST_TEMPLATE_LISTS = 'REQUEST_TEMPLATE_LISTS'
-// export const RECEIVE_TEMPLATE_LISTS = 'RECEIVE_TEMPLATE_LISTS'
-
-// export function requestTemplateLists() {
-//   return {
-//     type: REQUEST_TEMPLATE_LISTS,
-//     retrieving: true
-//   }
-// }
-
-// export function receiveTemplateLists(lists) {
-//   return {
-//     type: RECEIVE_TEMPLATE_LISTS,
-//     lists,
-//     retrieving: false
-//   }
-// }
-
-//async action for getting posts
+//async action for getting all template lists
 export const fetchLists = () => dispatch => {
   dispatch({ type: TEMPLATE_LISTS_FETCH });
 
@@ -44,10 +29,11 @@ export const fetchLists = () => dispatch => {
             message: resp.message
           })
         } else {
+          let listTemplatesObj = arrayToObj(resp.listTemplates)
           dispatch({
             type: TEMPLATE_LISTS_FETCH_SUCCESS,
             message: resp.message,
-            shoppingLists: resp.templateLists
+            listTemplates: listTemplatesObj
           })
         }
       })
@@ -63,23 +49,38 @@ export const fetchLists = () => dispatch => {
   }
 }
 
-  // return fetch(API_GET_POSTS, INIT_GET_CATEGORIES)
-  //   .then(response => response.json())
-  //   // use json.posts to make the data more shallow
-  //   .then(json => {
-  //     dispatch(receivePosts(json))
-  //     // need make multiple calls to get the comments list per postId
-  //     let allIds = []
-  //     json.forEach(post => {
-  //       allIds.push(post.id)
-  //     })
-  //     allIds.forEach(postId => {
-  //       dispatch(fetchComments(postId))
-  //     }) 
-  //   })
-  //   .catch(function(err) {
-  //     console.log('fetch err: ' + err.message)
-  //   })
+//async action for creating a template list
+export const fetchTemplateListAdd = (list) => dispatch => {
+  dispatch({ type: TEMPLATE_LISTS_ADD_FETCH });
+
+  let cookieStr = getCookieStr();
+  if (cookieStr) {
+    http_requests.Lists.postTemplateList(list)
+      .then(resp => {
+        if (resp.type === 'error') {
+          dispatch({
+            type: TEMPLATE_LISTS_ADD_FETCH_ERR,
+            message: resp.message
+          })
+        } else {
+          dispatch({
+            type: TEMPLATE_LISTS_ADD_FETCH_SUCCESS,
+            message: resp.message,
+            listTemplate: resp.listTemplate
+          })
+        }
+      })
+      .catch(err => dispatch({
+        type: TEMPLATE_LISTS_ADD_FETCH_ERR,
+        message: err.message
+      }))
+  } else {
+    dispatch({
+      type: TEMPLATE_LISTS_FETCH_ERR,
+      message: 'User is not logged in.'
+    })
+  }
+}
 
 // export const REQUEST_ADD_TEMPLATE_LIST = 'REQUEST_ADD_TEMPLATE_LIST'
 // export const RECEIVE_ADD_TEMPLATE_LIST = 'RECEIVE_ADD_TEMPLATE_LIST'
