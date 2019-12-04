@@ -1,6 +1,6 @@
 import { SHOPPING_LISTS_FETCH, SHOPPING_LISTS_FETCH_ERR, SHOPPING_LISTS_FETCH_SUCCESS,
-  TEMPLATE_LISTS_FETCH, TEMPLATE_LISTS_FETCH_ERR, TEMPLATE_LISTS_FETCH_SUCCESS
-  //RECEIVE_ADD_TEMPLATE_LIST, RECEIVE_TEMPLATE_LISTS, RECEIVE_EDIT_TEMPLATE_LIST, RECEIVE_DELETE_TEMPLATE_LIST, REQUEST_TEMPLATE_LISTS, REQUEST_ADD_TEMPLATE_LIST, REQUEST_EDIT_TEMPLATE_LIST, REQUEST_DELETE_TEMPLATE_LIST
+  TEMPLATE_LISTS_FETCH, TEMPLATE_LISTS_FETCH_ERR, TEMPLATE_LISTS_FETCH_SUCCESS,
+  TEMPLATE_LISTS_ADD_FETCH, TEMPLATE_LISTS_ADD_FETCH_ERR, TEMPLATE_LISTS_ADD_FETCH_SUCCESS
 } from '../actions/listTemplates';
 
 const initialState = {
@@ -204,11 +204,13 @@ const listTemplates = (state = initialState, action) => {
   let listObj = {}
   switch(action.type) {
     case TEMPLATE_LISTS_FETCH:
+    case TEMPLATE_LISTS_ADD_FETCH:
       return {
         ...state,
         status: 'fetching'
       }
     case TEMPLATE_LISTS_FETCH_ERR:
+    case TEMPLATE_LISTS_ADD_FETCH_ERR:
       return {
         ...state,
         status: 'error',
@@ -219,23 +221,15 @@ const listTemplates = (state = initialState, action) => {
         ...state,
         status: 'success',
         message: action.message,
-        shoppingLists: action.shoppingLists
+        listTemplates: action.listTemplates
       }
-    // case RECEIVE_ADD_TEMPLATE_LIST:
-    // case RECEIVE_EDIT_TEMPLATE_LIST:
-    //   return {
-    //     ...state,
-    //     listTemplates: {...state.listTemplates, ...action.normListObj}
-    //   }
-    // case RECEIVE_LISTS:
-    //   let categoriesObj = action.lists.reduce(list => {
-    //     listObj[list.id] = list
-    //     return listObj
-    //   }, {})
-    //   return {
-    //     ...state,
-    //     lists: listObj
-    //   }
+    case TEMPLATE_LISTS_ADD_FETCH_SUCCESS:
+      return {
+        ...state,
+        status: 'success',
+        message: action.message,
+        listTemplates: {...state.listTemplates, ...action.listTemplate}
+      }
     // case RECEIVE_DELETE_LIST:
     //   listObj[action.list.id] = null
     //   return {
