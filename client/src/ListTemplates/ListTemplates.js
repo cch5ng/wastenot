@@ -40,19 +40,13 @@ class ListTemplates extends Component {
   //   listTemplatesAr = objToArray(listTemplates)
   // }
 
-  // useEffect(() => {
-  //   //TODO
-  //   //fetch list template and update hook state
-  //   let token = props.authenticate && props.authenticate.token ? props.authenticate.token : null;
-  //   http_requests.Lists.getAllTemplateLists(token)
-  //     .then(json => updateListTemplates(json))
-  //     .catch(err => console.error('fetch error', err))
-  // });
-
   // console.log('props', props);
 
   render() {
-    let listTemplatesAr = []
+    let listTemplatesAr = [];
+    if (this.props.listTemplates && this.props.listTemplates.listTemplates) {
+      listTemplatesAr = objToArray(this.props.listTemplates.listTemplates);
+    }
 
     return (
       <div className="main">
@@ -64,7 +58,7 @@ class ListTemplates extends Component {
 }
 
 
-const mapStateToProps = state => ({ authenticate: state.authenticate });
+const mapStateToProps = state => ({ authenticate: state.authenticate, listTemplates: state.listTemplates });
 
 const mapDispatchToProps = dispatch => {
   return {
