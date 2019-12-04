@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Component } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import uuidv1 from 'uuid/v1';
@@ -8,9 +8,12 @@ import SelectList from '../App/Shared/SelectList/SelectList';
 import InputText from '../App/Shared/InputText/InputText';
 import '../App.css';
 import http_requests from '../utils/http_requests';
+import { fetchTemplateListAdd } from '../actions/listTemplates';
+import { objToArray } from '../utils/utils';
 
 let inputObj = {name: '', section: 'none'};
 
+const listType = 'template';
 const initListItemInputs = {
       templateListItem0: inputObj,
       templateListItem1: inputObj,
@@ -97,6 +100,7 @@ const ListTemplateDetailForm = (props) => {
 
     if (name === 'listNameInp') {
       setListName(value);
+      console.log('listName', value)
     } else {
       // handle list item inputs
       let prevListItemInputs = listItemInputs;
@@ -132,7 +136,6 @@ const ListTemplateDetailForm = (props) => {
   function formSubmitHandler(ev) {
     let requestBody;
     let listId;
-    let token = props.authenticate.token;
     let list = {};
 
     if (mode === "add") {
@@ -140,20 +143,19 @@ const ListTemplateDetailForm = (props) => {
       for (let itemKey in listItemInputs) {
         listItemInputs[itemKey].parentId = listId;
       }
-      requestBody = { listId, listName, listItemInputs};
-      list.name = listName;
-      list.type = 'templates';
-      list.listItems = listItemInputs;
-      http_requests.Lists.postTemplateList(token, list)
 
-      //this.props.receiveTemplateListCreate(requestBody)
+      list.name = listName;
+      list.type = listType;
+      list.listItems = objToArray(listItemInputs);
+
+      props.fetchTemplateListAdd(list);
     } else if (mode === "edit") {
       listId = props.templateListId;
-      requestBody = { listId, listName, listItemInputs};
+      //TODO refactor
       //this.props.receiveTemplateListEdit(requestBody)
     }
 
-    updateListTemplates(requestBody);
+    //updateListTemplates(requestBody);
 
     clearForm('empty');
     setFormSubmitted(true);
@@ -228,7 +230,7 @@ const ListTemplateDetailForm = (props) => {
         {renderForm()}
       </ul>
       <div>
-        <Button classVal="listDetailFormSaveBtn" onClickHandler={formSubmitHandler}label="Save" />
+        <Button classVal="listDetailFormSaveBtn" onClickHandler={formSubmitHandler} label="Save" />
         <Button label="Cancel" onClickHandler={clearForm} />
       </div>
     </div>
@@ -237,9 +239,13 @@ const ListTemplateDetailForm = (props) => {
 
 const mapStateToProps = state => ({ authenticate: state.authenticate });
 
+const mapDispatchToProps = dispatch => {
+  return {
+    fetchTemplateListAdd: (list) => dispatch(fetchTemplateListAdd(list)),
+  }
+}
+
 export default connect(
   mapStateToProps,
-  null
+  mapDispatchToProps
 )(ListTemplateDetailForm);
-
-//export default ListTemplateDetailForm;
