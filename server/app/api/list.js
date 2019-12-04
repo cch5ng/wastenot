@@ -9,9 +9,24 @@ const Session = require('../auth/Session');
 const router = Router();
 
 router.post('/add', (req, res, next) => {
-  ListTable.storeList(req.body)
-    .then(resp => res.json(resp))
-    .catch(err => next(err));
+  let cookieStr = req.body.cookieStr;
+  let {name, type, listItems} = req.body;
+  let { email, id } = Session.parse(cookieStr);
+  let emailHash = hash(email);
+
+  AuthTable.isAuthenticated({ sessionId: id, emailHash })
+    .then(resp => {
+      if (resp) {
+        ListTable.storeList({name, type, listItems, owner_id: resp.account.id})
+          .then(resp => res.json(resp))
+          .catch(err => next(err));
+       } else {
+         let error = new Error('User is not logged in.');
+         error.statusCode = 401;
+         next(error);
+       }
+     })
+     .catch(error => next(error));
     //console.error('error', err));
 });
 
@@ -27,8 +42,8 @@ router.post('/shoppingLists', (req, res, next) => {
           .then(lists => res.json(lists))
           .catch(err => next(err));
       } else {
-        let error = new Error('Invalid session');
-        error.statusCode = 409;
+        let error = new Error('User is not logged in.');
+        error.statusCode = 401;
         next(error);
       }
     })
@@ -43,12 +58,12 @@ router.post('/templateLists', (req, res, next) => {
   AuthTable.isAuthenticated({ sessionId: id, emailHash })
     .then(resp => {
       if (resp) {
-        ListTable.getListsByType({ listType: 'template', emailHash })
+        ListTable.getListsByType({ listType: 'template', owner_id: resp.account.id })
           .then(lists => res.json(lists))
           .catch(err => next(err));
       } else {
-        let error = new Error('Invalid session');
-        error.statusCode = 409;
+        let error = new Error('User is not logged in.');
+        error.statusCode = 401;
         next(error);
       }
     })
