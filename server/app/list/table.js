@@ -4,13 +4,13 @@ const ListItemTable = require('../list_item/table');
 
 class ListTable {
 
-	static storeList({ list }) {
-		const { name, type, listItems } = list;
+	static storeList({ name, type, listItems, owner_id }) {
+		//const {  } = list;
 		let list_guid = uuidv4();
 		return new Promise((resolve, reject) => {
 			pool.query(
-				`INSERT INTO list (name, type, guid) VALUES ($1, $2, $3) RETURNING guid`,
-				[name, type, list_guid],
+				`INSERT INTO list (name, type, guid, owner_id) VALUES ($1, $2, $3, $4) RETURNING guid`,
+				[name, type, list_guid, owner_id],
 				(error, response) => {
 					if (error) return reject(error);
 					if (response.rows.length) {
@@ -22,7 +22,9 @@ class ListTable {
 								return ListItemTable.storeListItem({ name, list_guid, list_item_guid })
 							})
 						)
-							.then(() => resolve({ list_guid }))
+							.then(() => resolve(
+								{ message: `templateList with guid, ${list_guid}, was added`,
+									listTemplate: {[list_guid]: { name, type, listItems } } }))
 							.catch(err => reject(err))
 					}
 				}
@@ -30,15 +32,15 @@ class ListTable {
 		})
 	}
 
-	static getListsByType({ listType, emailHash }) {
+	static getListsByType({ listType, owner_id }) {
 		return new Promise((resolve, reject) => {
 			pool.query(
-				`SELECT list.name, list.guid FROM list, wastenot_user WHERE list.type = $1 AND "emailHash" = $2 AND wastenot_user.id = list.owner_id`,
-				[listType, emailHash],
+				`SELECT name, guid FROM list WHERE type = $1 AND "owner_id" = $2`,
+				[listType, owner_id],
 				(error, response) => {
 					if (error) return reject(error);
 					let message = '';
-					let key = `${listType}Lists`;
+					let key = listType === 'template' ? 'listTemplates' : 'shoppingLists';
 					if (response.rows.length === 0) {
 						message = 'No lists were found.'
 					}
