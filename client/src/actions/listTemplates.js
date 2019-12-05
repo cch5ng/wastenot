@@ -97,12 +97,14 @@ export const fetchTemplateListDelete = (guid) => dispatch => {
             type: TEMPLATE_LISTS_FETCH_ERR,
             message: resp.message
           })
-        } else {
+        } else if (resp.guid && resp.guid === guid) {
           dispatch({
             type: TEMPLATE_LISTS_DELETE_FETCH_SUCCESS,
             message: resp.message,
             guid: resp.guid
           })
+        } else if (!resp.guid) {
+          throw { message: 'The list was not deleted. Please try again later.' };
         }
       })
       .catch(err => dispatch({
