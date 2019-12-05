@@ -89,9 +89,10 @@ class ListTable {
     return ListItemTable.deleteListItemByListGuid(guid)
       .then(resp => {
         if (resp) {
-          ListTable.deleteList(guid)
+          return ListTable.deleteList(guid);
         }
       })
+      .catch(err => console.error('error', err))
     //])
   }
 
