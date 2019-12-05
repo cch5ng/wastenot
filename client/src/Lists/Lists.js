@@ -12,13 +12,13 @@ const Lists = ({ lists, type, clickHandlerDelete }) => {
           if (type === "shopping") {
             editListLink = `/listEdit/${list.guid}`;
           } else if (type === "template") {
-            editListLink = `/settings/listTemplatesEdit/${list.guidd}`;
+            editListLink = `/settings/listTemplatesEdit/${list.guid}`;
           }
           return (
             <li key={list.listId}>
               <Link to={editListLink}><span className="list-name">{list.name}</span></Link>
               <Link to={editListLink}><IoMdCreate className="list-item-icon" /></Link>
-              <IoIosRemoveCircleOutline className="list-item-icon" id={list.listId} onClick={(ev) => (clickHandlerDelete(ev))} />
+              <IoIosRemoveCircleOutline className="list-item-icon" id={list.guid} onClick={(ev) => (clickHandlerDelete(ev))} />
             </li>
           )
         }
