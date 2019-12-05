@@ -105,7 +105,7 @@ router.put('/listDetail/:listGuid', (req, res, next) => {
 router.delete('/listDetail/:listGuid', (req, res, next) => {
   const { listGuid } = req.params;
   ListTable.deleteListAndListItems(listGuid)
-    .then(list_guid => res.json(list_guid))
+    .then(resp => res.json(resp))
     .catch(err => next(err))
 })
 
