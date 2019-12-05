@@ -38,6 +38,16 @@ const requests = {
         .then(resp => resolve(resp.json()))
         .catch(err => reject(err));
     });
+  },
+  delete: (url) => {
+    return new Promise((resolve, reject) => {
+      fetch(url, {
+        method: 'DELETE',
+        credentials: 'same-origin'
+      })
+        .then(resp => resolve(resp.json()))
+        .catch(err => reject(err));
+    });
   }
 };
 
@@ -49,7 +59,10 @@ const Lists = {
     return requests.post(`${API_ROOT}${API_LIST_MIDDLE}${GET_TEMPLATE_LISTS_SUFFIX}`, { cookieStr });
   },
   postTemplateList: (list) => {
-    return requests.post(`${API_ROOT}${API_LIST_MIDDLE}${CREATE_LIST_SUFFIX}`, { ...list, cookieStr }) //token, list
+    return requests.post(`${API_ROOT}${API_LIST_MIDDLE}${CREATE_LIST_SUFFIX}`, { ...list, cookieStr });
+  },
+  deleteTemplateList: (guid) => {
+    return requests.delete(`${API_ROOT}${API_LIST_MIDDLE}${LIST_DETAIL_SUFFIX}/${guid}`);
   }
 };
 
