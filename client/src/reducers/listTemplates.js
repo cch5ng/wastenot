@@ -234,7 +234,7 @@ const listTemplates = (state = initialState, action) => {
     case TEMPLATE_LISTS_DELETE_FETCH_SUCCESS:
       let listTemplatesToUpdate = {...state.listTemplates};
       let key = action.guid;
-      delete listTemplatesToUpdate.key;
+      delete listTemplatesToUpdate[key];
       return {
         ...state,
         status: 'success',
