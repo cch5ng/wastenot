@@ -1,6 +1,7 @@
 import { SHOPPING_LISTS_FETCH, SHOPPING_LISTS_FETCH_ERR, SHOPPING_LISTS_FETCH_SUCCESS,
   TEMPLATE_LISTS_FETCH, TEMPLATE_LISTS_FETCH_ERR, TEMPLATE_LISTS_FETCH_SUCCESS,
-  TEMPLATE_LISTS_ADD_FETCH, TEMPLATE_LISTS_ADD_FETCH_ERR, TEMPLATE_LISTS_ADD_FETCH_SUCCESS
+  TEMPLATE_LISTS_ADD_FETCH, TEMPLATE_LISTS_ADD_FETCH_ERR, TEMPLATE_LISTS_ADD_FETCH_SUCCESS,
+  TEMPLATE_LISTS_DELETE_FETCH_SUCCESS
 } from '../actions/listTemplates';
 
 const initialState = {
@@ -230,16 +231,17 @@ const listTemplates = (state = initialState, action) => {
         message: action.message,
         listTemplates: {...state.listTemplates, ...action.listTemplate}
       }
-    // case RECEIVE_DELETE_LIST:
-    //   listObj[action.list.id] = null
-    //   return {
-    //     ...state,
-    //     lists: {...state.lists, ...listObj}
-    //   }
-    // case REQUEST_LISTS:
-    // case REQUEST_ADD_LIST:
+    case TEMPLATE_LISTS_DELETE_FETCH_SUCCESS:
+      let listTemplatesToUpdate = {...state.listTemplates};
+      let key = action.guid;
+      delete listTemplatesToUpdate.key;
+      return {
+        ...state,
+        status: 'success',
+        message: action.message,
+        listTemplates: listTemplatesToUpdate
+      }
     // case REQUEST_EDIT_LIST:
-    // case REQUEST_DELETE_LIST:
     default:
       return state
   }

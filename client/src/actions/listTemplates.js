@@ -10,6 +10,8 @@ export const TEMPLATE_LISTS_ADD_FETCH = 'TEMPLATE_LISTS_ADD_FETCH';
 export const TEMPLATE_LISTS_ADD_FETCH_ERR = 'TEMPLATE_LISTS_ADD_FETCH_ERR';
 export const TEMPLATE_LISTS_ADD_FETCH_SUCCESS = 'TEMPLATE_LISTS_ADD_FETCH_SUCCESS';
 
+export const TEMPLATE_LISTS_DELETE_FETCH_SUCCESS = 'TEMPLATE_LISTS_DELETE_FETCH_SUCCESS';
+
 // action types
 export const SHOPPING_LISTS_FETCH = 'SHOPPING_LISTS_FETCH';
 export const SHOPPING_LISTS_FETCH_ERR = 'SHOPPING_LISTS_FETCH_ERR';
@@ -81,6 +83,42 @@ export const fetchTemplateListAdd = (list) => dispatch => {
     })
   }
 }
+
+//async action for deleting a template list
+export const fetchTemplateListDelete = (guid) => dispatch => {
+  dispatch({ type: TEMPLATE_LISTS_FETCH });
+
+  let cookieStr = getCookieStr();
+  if (cookieStr) {
+    http_requests.Lists.deleteTemplateList(guid)
+      .then(resp => {
+        if (resp.type === 'error') {
+          dispatch({
+            type: TEMPLATE_LISTS_FETCH_ERR,
+            message: resp.message
+          })
+        } else {
+          dispatch({
+            type: TEMPLATE_LISTS_DELETE_FETCH_SUCCESS,
+            message: resp.message,
+            guid: resp.guid
+          })
+        }
+      })
+      .catch(err => dispatch({
+        type: TEMPLATE_LISTS_FETCH_ERR,
+        message: err.message
+      }))
+  } else {
+    dispatch({
+      type: TEMPLATE_LISTS_FETCH_ERR,
+      message: 'User is not logged in.'
+    })
+  }
+}
+
+
+
 
 // export const REQUEST_ADD_TEMPLATE_LIST = 'REQUEST_ADD_TEMPLATE_LIST'
 // export const RECEIVE_ADD_TEMPLATE_LIST = 'RECEIVE_ADD_TEMPLATE_LIST'
