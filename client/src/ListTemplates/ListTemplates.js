@@ -8,8 +8,8 @@ import { IoIosAddCircleOutline } from "react-icons/io";
 import Lists from '../Lists/Lists';
 import { objToArray } from '../utils/utils';
 import http_requests from '../utils/http_requests';
-import { fetchLists } from '../actions/listTemplates';
-//import '../App.css';
+import { fetchLists, fetchTemplateListDelete } from '../actions/listTemplates';
+import '../App.css';
 
 class ListTemplates extends Component {
 
@@ -22,8 +22,14 @@ class ListTemplates extends Component {
   }
 
   removeListTemplates = (ev) => {
-    let listId = ev.target.id;
+    let listGuid = ev.target.id;
     let newListTemplates = {};
+
+    console.log('listGuid', listGuid)
+
+    //update store
+    //update BE
+    this.props.fetchTemplateListDelete(listGuid)
 
     //TODO refactor based on redux store for listTemplates
     //let filteredKeys = Object.keys(listTemplates).filter(k => k !== listId);
@@ -63,6 +69,7 @@ const mapStateToProps = state => ({ authenticate: state.authenticate, listTempla
 const mapDispatchToProps = dispatch => {
   return {
     fetchLists: () => dispatch(fetchLists()),
+    fetchTemplateListDelete: (guid) => dispatch(fetchTemplateListDelete(guid))
   }
 }
 
