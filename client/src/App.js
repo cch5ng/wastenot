@@ -28,12 +28,11 @@ function App() {
           )} />
           <Route exact path="/settings/listTemplatesNew"
             render={(props) => (<ListTemplateDetailForm {...props} mode="add" updateListTemplates={updateListTemplates}
-              listTemplates={listTemplates}
             />
           )} />
-          <Route exact path="/settings/listTemplatesEdit/:templateListId"
+          <Route exact path="/settings/listTemplatesEdit/:listTemplateGuid"
             render={({match}) => (<ListTemplateDetailForm mode="edit" updateListTemplates={updateListTemplates}
-              templateListId={match.params.templateListId} listTemplates={listTemplates}
+              listTemplateGuid={match.params.listTemplateGuid}
             />
           )} />
       </div>
@@ -42,3 +41,6 @@ function App() {
 }
 
 export default App;
+
+//              listTemplates={listTemplates}
+// listTemplates={listTemplates}
