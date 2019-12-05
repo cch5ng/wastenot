@@ -8,7 +8,7 @@ import SelectList from '../App/Shared/SelectList/SelectList';
 import InputText from '../App/Shared/InputText/InputText';
 import '../App.css';
 import http_requests from '../utils/http_requests';
-import { fetchTemplateListAdd } from '../actions/listTemplates';
+import { fetchTemplateListAdd, fetchListTemplate } from '../actions/listTemplates';
 import { objToArray } from '../utils/utils';
 
 let inputObj = {name: '', section: 'none'};
@@ -83,15 +83,21 @@ const ListTemplateDetailForm = (props) => {
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [mode, setMode] = useState(props.mode);
   const [title, setTitle] = useState(props.mode === 'edit' ? 'Edit Template List' : 'Add Template List');
-  const {listTemplates, updateListTemplates} = props;
+  //const {listTemplates, updateListTemplates} = props;
   let editListItemTemplates;
   let editListTemplateName;
-  if (props.templateListId) {
-    editListItemTemplates = listTemplates[props.templateListId].listItemInputs;
-    editListTemplateName = listTemplates[props.templateListId].listName;
+  let listGuid;
+  let curListTemplate;
+
+  const [listName, setListName] = useState('');
+  const [listItemInputs, setListItemInputs] = useState(initListItemInputs);
+
+  if (mode === "edit" && props.listTemplates && props.listTemplates.listTemplates) {
+    listGuid = props.listTemplateGuid;
+    curListTemplate = props.listTemplates.listTemplates[listGuid];
+    setListName(curListTemplate.name);
+    setListItemInputs(curListTemplate.listItems);
   }
-  const [listName, setListName] = useState(props.mode === 'edit'? editListTemplateName : '');
-  const [listItemInputs, setListItemInputs] = useState(props.mode === 'edit' ? editListItemTemplates : initListItemInputs);
 
   function inputChangeHandler(ev) {
     let name = ev.target.name;
@@ -134,13 +140,13 @@ const ListTemplateDetailForm = (props) => {
   //TODO update the backend
   function formSubmitHandler(ev) {
     let requestBody;
-    let listId;
+    let listGuid;
     let list = {};
 
-    if (mode === "add") {
-      listId = uuidv1();
+    if (mode === 'add') {
+      listGuid = uuidv1();
       for (let itemKey in listItemInputs) {
-        listItemInputs[itemKey].parentId = listId;
+        listItemInputs[itemKey].parentId = listGuid;
       }
 
       list.name = listName;
@@ -148,9 +154,21 @@ const ListTemplateDetailForm = (props) => {
       list.listItems = objToArray(listItemInputs);
 
       props.fetchTemplateListAdd(list);
-    } else if (mode === "edit") {
-      listId = props.templateListId;
+    } else if (mode === 'edit') {
+      listGuid = props.listTemplateGuid;
+
       //TODO refactor
+      for (let itemKey in listItemInputs) {
+        listItemInputs[itemKey].parentId = listGuid;
+      }
+
+      list.name = listName;
+      list.type = listType;
+      list.listItems = objToArray(listItemInputs);
+      list.guid = listGuid;
+
+      props.fetchTemplateListEdit(list)
+
       //this.props.receiveTemplateListEdit(requestBody)
     }
 
@@ -159,6 +177,12 @@ const ListTemplateDetailForm = (props) => {
     clearForm('empty');
     setFormSubmitted(true);
   }
+
+  useEffect(() => {
+    if (mode === 'edit') {
+      props.fetchListTemplate(props.listTemplateGuid);
+    }
+  });
 
   //renders all list items (text inp and select list)
   function renderForm() {
@@ -241,6 +265,7 @@ const mapStateToProps = state => ({ authenticate: state.authenticate });
 const mapDispatchToProps = dispatch => {
   return {
     fetchTemplateListAdd: (list) => dispatch(fetchTemplateListAdd(list)),
+    fetchListTemplate: (guid) => dispatch(fetchListTemplate(guid))
   }
 }
 
