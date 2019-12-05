@@ -10,7 +10,9 @@ export const TEMPLATE_LISTS_ADD_FETCH = 'TEMPLATE_LISTS_ADD_FETCH';
 export const TEMPLATE_LISTS_ADD_FETCH_ERR = 'TEMPLATE_LISTS_ADD_FETCH_ERR';
 export const TEMPLATE_LISTS_ADD_FETCH_SUCCESS = 'TEMPLATE_LISTS_ADD_FETCH_SUCCESS';
 
+export const TEMPLATE_LISTS_EDIT_FETCH_SUCCESS = 'TEMPLATE_LISTS_EDIT_FETCH_SUCCESS';
 export const TEMPLATE_LISTS_DELETE_FETCH_SUCCESS = 'TEMPLATE_LISTS_DELETE_FETCH_SUCCESS';
+export const TEMPLATE_LIST_FETCH_SUCCESS = 'TEMPLATE_LIST_FETCH_SUCCESS';
 
 // action types
 export const SHOPPING_LISTS_FETCH = 'SHOPPING_LISTS_FETCH';
@@ -51,7 +53,39 @@ export const fetchLists = () => dispatch => {
   }
 }
 
-//async action for creating a template list
+//async action for getting single template list by guid
+export const fetchListTemplate = (guid) => dispatch => {
+  dispatch({ type: TEMPLATE_LISTS_FETCH });
+
+  let cookieStr = getCookieStr();
+  if (cookieStr) {
+    http_requests.Lists.getTemplateList(guid)
+      .then(resp => {
+        if (resp.type === 'error') {
+          dispatch({
+            type: TEMPLATE_LISTS_FETCH_ERR,
+            message: resp.message
+          })
+        } else {
+          dispatch({
+            type: TEMPLATE_LIST_FETCH_SUCCESS,
+            message: resp.message,
+            listTemplate: listTemplate
+          })
+        }
+      })
+      .catch(err => dispatch({
+        type: TEMPLATE_LISTS_FETCH_ERR,
+        message: err.message
+      }))
+  } else {
+    dispatch({
+      type: TEMPLATE_LISTS_FETCH_ERR,
+      message: 'User is not logged in.'
+    })
+  }
+}
+
 export const fetchTemplateListAdd = (list) => dispatch => {
   dispatch({ type: TEMPLATE_LISTS_ADD_FETCH });
 
@@ -84,7 +118,40 @@ export const fetchTemplateListAdd = (list) => dispatch => {
   }
 }
 
-//async action for deleting a template list
+//update a list template
+export const fetchTemplateListEdit = (list) => dispatch => {
+  dispatch({ type: TEMPLATE_LISTS_FETCH });
+
+  let cookieStr = getCookieStr();
+  if (cookieStr) {
+    http_requests.Lists.putTemplateList(list)
+      .then(resp => {
+        if (resp.type === 'error') {
+          dispatch({
+            type: TEMPLATE_LISTS_FETCH_ERR,
+            message: resp.message
+          })
+        } else {
+          dispatch({
+            type: TEMPLATE_LISTS_EDIT_FETCH_SUCCESS,
+            message: resp.message,
+            listTemplate: resp.listTemplate
+          })
+        }
+      })
+      .catch(err => dispatch({
+        type: TEMPLATE_LISTS_FETCH_ERR,
+        message: err.message
+      }))
+  } else {
+    dispatch({
+      type: TEMPLATE_LISTS_FETCH_ERR,
+      message: 'User is not logged in.'
+    })
+  }
+}
+
+
 export const fetchTemplateListDelete = (guid) => dispatch => {
   dispatch({ type: TEMPLATE_LISTS_FETCH });
 
