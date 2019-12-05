@@ -2,9 +2,6 @@ import React, { Component, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { IoIosAddCircleOutline } from "react-icons/io";
-//import useListTemplates from '../utils/hooks/useListTemplates';
-
-//import {FaPlusSquareO} from 'react-icons/fa';
 import Lists from '../Lists/Lists';
 import { objToArray } from '../utils/utils';
 import http_requests from '../utils/http_requests';
@@ -12,41 +9,15 @@ import { fetchLists, fetchTemplateListDelete } from '../actions/listTemplates';
 import '../App.css';
 
 class ListTemplates extends Component {
-
-  state = {
-
-  }
-
   componentDidMount() {
     this.props.fetchLists();
   }
 
   removeListTemplates = (ev) => {
     let listGuid = ev.target.id;
-    let newListTemplates = {};
 
-    console.log('listGuid', listGuid)
-
-    //update store
-    //update BE
     this.props.fetchTemplateListDelete(listGuid)
-
-    //TODO refactor based on redux store for listTemplates
-    //let filteredKeys = Object.keys(listTemplates).filter(k => k !== listId);
-    //filteredKeys.forEach(k => {
-    //  newListTemplates[k] = listTemplates[k];
-    //})
-    //TODO update redux and update BE
-    //setListTemplates(newListTemplates);
   }
-
-  // const {listTemplates, updateListTemplates, removeListTemplates} = props;
-
-  // if (listTemplates) {
-  //   listTemplatesAr = objToArray(listTemplates)
-  // }
-
-  // console.log('props', props);
 
   render() {
     let listTemplatesAr = [];
@@ -62,7 +33,6 @@ class ListTemplates extends Component {
     )
   }
 }
-
 
 const mapStateToProps = state => ({ authenticate: state.authenticate, listTemplates: state.listTemplates });
 
