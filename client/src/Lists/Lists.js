@@ -15,7 +15,7 @@ const Lists = ({ lists, type, clickHandlerDelete }) => {
             editListLink = `/settings/listTemplatesEdit/${list.guid}`;
           }
           return (
-            <li key={list.listId}>
+            <li key={list.guid}>
               <Link to={editListLink}><span className="list-name">{list.name}</span></Link>
               <Link to={editListLink}><IoMdCreate className="list-item-icon" /></Link>
               <IoIosRemoveCircleOutline className="list-item-icon" id={list.guid} onClick={(ev) => (clickHandlerDelete(ev))} />
