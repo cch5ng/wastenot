@@ -100,7 +100,6 @@ const ListTemplateDetailForm = (props) => {
 
     if (name === 'listNameInp') {
       setListName(value);
-      console.log('listName', value)
     } else {
       // handle list item inputs
       let prevListItemInputs = listItemInputs;
