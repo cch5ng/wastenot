@@ -80,8 +80,18 @@ router.post('/listDetail/:listGuid', (req, res, next) => {
   AuthTable.isAuthenticated({ sessionId: id, emailHash })
     .then(resp => {
       if (resp) {
-        ListItemTable.getListItemsByListGuid(listGuid)
-          .then(listItems => res.json(listItems))
+        Promise.all([
+          ListItemTable.getListItemsByListGuid({ listGuid }),
+          ListTable.getListByGuid({guid: listGuid})
+        ])
+          .then(response => {
+            let listTemplate = {};
+            response.forEach(obj => {
+              listTemplate = {...listTemplate, ...obj}
+            })
+            listTemplate.guid = listGuid;
+            res.json({ listTemplate, message: 'list was successfully retrieved' });
+          })
           .catch(err => next(err));
       } else {
         let error = new Error('User is not logged in.');
