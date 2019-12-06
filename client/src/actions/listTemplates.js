@@ -70,7 +70,7 @@ export const fetchListTemplate = (guid) => dispatch => {
           dispatch({
             type: TEMPLATE_LIST_FETCH_SUCCESS,
             message: resp.message,
-            listTemplate: listTemplate
+            listTemplate: resp.listTemplate
           })
         }
       })
