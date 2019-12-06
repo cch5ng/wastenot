@@ -92,13 +92,6 @@ const ListTemplateDetailForm = (props) => {
   const [listName, setListName] = useState('');
   const [listItemInputs, setListItemInputs] = useState(initListItemInputs);
 
-  if (mode === "edit" && props.listTemplates && props.listTemplates.listTemplates) {
-    listGuid = props.listTemplateGuid;
-    curListTemplate = props.listTemplates.listTemplates[listGuid];
-    setListName(curListTemplate.name);
-    setListItemInputs(curListTemplate.listItems);
-  }
-
   function inputChangeHandler(ev) {
     let name = ev.target.name;
     let value = ev.target.value;
@@ -178,31 +171,28 @@ const ListTemplateDetailForm = (props) => {
     setFormSubmitted(true);
   }
 
-  useEffect(() => {
-    if (mode === 'edit') {
-      props.fetchListTemplate(props.listTemplateGuid);
-    }
-  });
-
   //renders all list items (text inp and select list)
   function renderForm() {
     let htmlResult = [];
-    let curInputs = listItemInputs;
+    if (props.listTemplates && props.listTemplates.curListTemplate) {
+      //let curInputs = listItemInputs;
 
-    for (let i = 0; i < 50; i++) {
-      let key = 'templateListItem' + i.toString();
-      let selectKey = 'templateListItemSelect' + i.toString();
-      let curInput = curInputs[key];
-      htmlResult.push(
-        <li key={key} >
-          <InputText value={curInput.name} placeholder="item name" 
-            id={key} onChangeHandler={inputChangeHandler} name={key}
-          />
-          <SelectList value={curInput.section} id={selectKey} 
-            options={sectionOptions} onChange={onChangeHandlerSelectSection} name={selectKey}
-          />
-        </li>
-      )
+      for (let i = 0; i < 50; i++) {
+        let key = 'templateListItem' + i.toString();
+        let selectKey = 'templateListItemSelect' + i.toString();
+        console.log('listItemInputs', listItemInputs)
+        let curInput = listItemInputs[key];
+        htmlResult.push(
+          <li key={key} >
+            <InputText value={curInput.name} placeholder="item name" 
+              id={key} onChangeHandler={inputChangeHandler} name={key}
+            />
+            <SelectList value={curInput.section} id={selectKey} 
+              options={sectionOptions} onChange={onChangeHandlerSelectSection} name={selectKey}
+            />
+          </li>
+        )
+      }
     }
     return htmlResult;
   }
@@ -234,8 +224,23 @@ const ListTemplateDetailForm = (props) => {
     }
   }
 
+  useEffect(() => {
+    if (mode === 'edit') {
+      props.fetchListTemplate(props.listTemplateGuid);
+    }
+  }, []);
 
   //TODO refactor button set into one component
+  if (mode === "edit" && props.listTemplates && props.listTemplates.curListTemplate) {
+    listGuid = props.listTemplateGuid;
+    //curListTemplate = props.listTemplates.listTemplates[listGuid];
+    let {name, listItems} = props.listTemplates.curListTemplate;
+    console.log('name', name)
+    console.log('listItems', listItems)
+    setListName(name);
+    setListItemInputs(listItems);
+  }
+
   return (
     <div className="main">
       {formSubmitted && (
@@ -260,7 +265,7 @@ const ListTemplateDetailForm = (props) => {
   )
 }
 
-const mapStateToProps = state => ({ authenticate: state.authenticate });
+const mapStateToProps = state => ({ authenticate: state.authenticate, listTemplates: state.listTemplates });
 
 const mapDispatchToProps = dispatch => {
   return {
