@@ -20,15 +20,15 @@ class ListItemTable {
 	}
 
 	//probably want to get everything like name plus the list items
-	static getListItemsByListGuid(listGuid) {
+	static getListItemsByListGuid({ listGuid }) {
 		return new Promise((resolve, reject) => {
 			pool.query(
-				`SELECT guid, name, sort_order, list_guid from list_item WHERE list_guid = $1`,
+				`SELECT list_item.guid, list_item.name, list_item.sort_order, list_item.list_guid from list_item WHERE list_guid = $1`,
 				[listGuid],
 				(error, response) => {
 					if (error) return reject(error);
 					if (response.rows.length) {
-						resolve(response.rows);
+						resolve({listItems: response.rows});
 					}
 				}
 			)
