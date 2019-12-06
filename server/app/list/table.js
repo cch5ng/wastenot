@@ -50,6 +50,24 @@ class ListTable {
     })
   }
 
+  static getListByGuid({ guid }) {
+    return new Promise((resolve, reject) => {
+      pool.query(
+        `SELECT name FROM list WHERE guid = $1`,
+        [guid],
+        (error, response) => {
+          if (error) return reject(error);
+          let message = '';
+          if (response.rows.length === 0) {
+            message = 'No list was found.'
+          }
+          resolve({name: response.rows[0].name});
+        }
+      )
+    })
+  }
+
+
   static updateList({ name, type, guid }) {
     return new Promise((resolve, reject) => {
       pool.query(
