@@ -202,7 +202,7 @@ const initialState = {
   }
 }
 
-const listTemplates = (state = initialState, action) => {
+const listTemplates = (state = { listTemplates: {} }, action) => {
   let listObj = {}
   switch(action.type) {
     case TEMPLATE_LISTS_FETCH:
