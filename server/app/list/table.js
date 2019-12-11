@@ -52,18 +52,25 @@ class ListTable {
 
   static getListByGuid({ guid }) {
     return new Promise((resolve, reject) => {
-      pool.query(
-        `SELECT name FROM list WHERE guid = $1`,
-        [guid],
-        (error, response) => {
-          if (error) return reject(error);
-          let message = '';
-          if (response.rows.length === 0) {
-            message = 'No list was found.'
+      if (guid) {
+        pool.query(
+          `SELECT name FROM list WHERE guid = $1`,
+          [guid],
+          (error, response) => {
+            if (error) return reject(error);
+            let message = '';
+            if (response.rows.length === 0) {
+              message = 'No list was found.'
+            }
+            resolve({name: response.rows[0].name, guid});
           }
-          resolve({name: response.rows[0].name});
-        }
-      )
+        )
+      } else {
+        let err = new Error;
+        err.statusCode = 400;
+        err.message = 'Missing list guid';
+        return reject(err)
+      }
     })
   }
 
