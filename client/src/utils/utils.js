@@ -19,9 +19,11 @@ export function getCookieStr() {
 //assumes array of objects where each object has an id key
 export function arrayToObj(ar) {
   let obj = {};
-  ar.reduce((accum, cur) => {
-    let key = cur.guid;
-    accum[key] = cur;
-  }, obj);
+
+  ar.forEach(curObj => {
+    let key = curObj.guid;
+    obj[key] = curObj;
+  })
+
   return obj;
 }
