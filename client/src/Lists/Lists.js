@@ -7,7 +7,6 @@ const Lists = ({ lists, type, clickHandlerDelete }) => {
     <ul className="list-group">
       {lists.map(list => {
         let editListLink;
-
         if (list) {
           if (type === "shopping") {
             editListLink = `/listEdit/${list.guid}`;
