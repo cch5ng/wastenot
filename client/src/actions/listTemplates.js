@@ -33,7 +33,7 @@ export const fetchLists = () => dispatch => {
             message: resp.message
           })
         } else {
-          let listTemplatesObj = arrayToObj(resp.listTemplates)
+          let listTemplatesObj = arrayToObj(resp.listTemplates);
           dispatch({
             type: TEMPLATE_LISTS_FETCH_SUCCESS,
             message: resp.message,
@@ -185,52 +185,6 @@ export const fetchTemplateListDelete = (guid) => dispatch => {
     })
   }
 }
-
-
-
-
-// export const REQUEST_ADD_TEMPLATE_LIST = 'REQUEST_ADD_TEMPLATE_LIST'
-// export const RECEIVE_ADD_TEMPLATE_LIST = 'RECEIVE_ADD_TEMPLATE_LIST'
-
-// export function requestTemplateListCreate() {
-//   return {
-//     type: REQUEST_ADD_TEMPLATE_LIST,
-//     retrieving: true
-//   }
-// }
-
-// export function receiveTemplateListCreate(listObj) {
-
-//   let normListObj = {}
-//   let listId = listObj.listId
-//   normListObj[listId] = listObj
-
-//   return {
-//     type: RECEIVE_ADD_TEMPLATE_LIST,
-//     normListObj,
-//     retrieving: false
-//   }
-// }
-
-// async action for getting posts
-// export const fetchListCreate = (postData) => dispatch => {
-//   dispatch(requestPostCreate())
-//   let INIT_CREATE_POST = {method: 'POST',
-//                           headers: {
-//                             'Authorization': 'mAuth',
-//                             "Content-Type": 'application/json'
-//                           },
-//                           body: JSON.stringify(postData)
-//                         }
-
-//   return fetch(API_GET_POSTS, INIT_CREATE_POST)
-//     .then(response => response.json())
-//     // use json.posts to make the data more shallow
-//     .then(json => dispatch(receivePostCreate(json)))
-//     .catch(function(err) {
-//       console.log('fetch err: ' + err.message)
-//     })
-// }
 
 /////
 
