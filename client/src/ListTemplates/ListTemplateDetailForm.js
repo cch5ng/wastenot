@@ -9,7 +9,7 @@ import InputText from '../App/Shared/InputText/InputText';
 import '../App.css';
 import http_requests from '../utils/http_requests';
 import { fetchTemplateListAdd, fetchListTemplate } from '../actions/listTemplates';
-import { objToArray } from '../utils/utils';
+import { objToArray, getCookieStr } from '../utils/utils';
 
 let inputObj = {name: '', section: 'none'};
 
@@ -174,14 +174,16 @@ const ListTemplateDetailForm = (props) => {
   //renders all list items (text inp and select list)
   function renderForm() {
     let htmlResult = [];
-    if (props.listTemplates && props.listTemplates.curListTemplate) {
-      //let curInputs = listItemInputs;
 
+    if (listItemInputs.length) {
       for (let i = 0; i < 50; i++) {
         let key = 'templateListItem' + i.toString();
         let selectKey = 'templateListItemSelect' + i.toString();
         console.log('listItemInputs', listItemInputs)
-        let curInput = listItemInputs[key];
+        console.log('listItemInputs[key]', listItemInputs[key])
+
+        let curInput = listItemInputs[i];
+        //console.log('curInput', curInput)
         htmlResult.push(
           <li key={key} >
             <InputText value={curInput.name} placeholder="item name" 
@@ -193,8 +195,10 @@ const ListTemplateDetailForm = (props) => {
           </li>
         )
       }
+      return htmlResult;
     }
-    return htmlResult;
+
+    return null;
   }
 
   //TODO think clicking cancel btn on edit form mode maybe should not clear entire form
@@ -226,20 +230,31 @@ const ListTemplateDetailForm = (props) => {
 
   useEffect(() => {
     if (mode === 'edit') {
-      props.fetchListTemplate(props.listTemplateGuid);
+      //refactor to use hook state instead
+        //let cookieStr = getCookieStr();
+      if (getCookieStr()) {
+        http_requests.Lists.getTemplateList(props.listTemplateGuid)
+          .then(resp => {
+            if (resp && resp.type !== 'error') {
+              setListName(resp.listTemplate.name);
+              setListItemInputs(resp.listTemplate.listItems || []);
+            }
+          })
+      }
+      //props.fetchListTemplate(props.listTemplateGuid);
     }
   }, []);
 
   //TODO refactor button set into one component
-  if (mode === "edit" && props.listTemplates && props.listTemplates.curListTemplate) {
-    listGuid = props.listTemplateGuid;
-    //curListTemplate = props.listTemplates.listTemplates[listGuid];
-    let {name, listItems} = props.listTemplates.curListTemplate;
-    console.log('name', name)
-    console.log('listItems', listItems)
-    setListName(name);
-    setListItemInputs(listItems);
-  }
+  // if (mode === "edit" && props.listTemplates && props.listTemplates.curListTemplate) {
+  //   listGuid = props.listTemplateGuid;
+  //   //curListTemplate = props.listTemplates.listTemplates[listGuid];
+  //   let {name, listItems} = props.listTemplates.curListTemplate;
+  //   console.log('name', name)
+  //   console.log('listItems', listItems)
+  //   setListName(name);
+  //   setListItemInputs(listItems);
+  // }
 
   return (
     <div className="main">
