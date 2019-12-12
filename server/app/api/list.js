@@ -27,7 +27,6 @@ router.post('/add', (req, res, next) => {
        }
      })
      .catch(error => next(error));
-    //console.error('error', err));
 });
 
 router.post('/shoppingLists', (req, res, next) => {
@@ -109,24 +108,38 @@ router.put('/listDetail/:listGuid', (req, res, next) => {
   let { email, id } = Session.parse(cookieStr);
   let emailHash = hash(email);
 
+
   AuthTable.isAuthenticated({ sessionId: id, emailHash })
     .then(resp => {
       if (resp) {
         if ((name || type) && listItems.length) {
           ListTable.updateListAndListItems({name, type, guid: listGuid, listItems})
-            .then(values => res.json(values))
+            .then(values => {
+              if (values.length) {
+                res.json({ message: `list with guid, ${listGuid} was updated`,
+                            type: 'success'
+                })
+              }
+            })
             .catch(err => next(err));
-            //console.error('error', err));   
         } else if (name || type) {
           ListTable.updateList({name, type, guid: listGuid})
-            .then(list_guid => res.json(list_guid))
+            .then(list_guid => {
+              if (list_guid) {
+                res.json({ message: `list with guid, ${listGuid} was updated`,
+                            type: 'success'
+              })
+              }
+            })
             .catch(err => next(err));
-            //console.error('error', err));
         } else if (listItems.length) {
           ListItemTable.updateListItems(listItems)
             .then(list_item_guids => {
-              //let list_item_guids_ar = list_item_guids.map(obj => obj.guid);
-              res.json(list_item_guids);
+              if (list_item_guids.length) {
+                res.json({ message: `list with guid, ${listGuid} was updated`,
+                            type: 'success'
+                })
+              }
             })
             .catch(err => next(err));
         }
@@ -166,14 +179,5 @@ router.delete('/listItemDetail/:listItemGuid', (req, res, next) => {
     .then(list_item_guid => res.json(list_item_guid))
     .catch(err => next(err))
 })
-
-
-// router.post('/random',
-//  passport.authenticate('jwt', { session: false }),
-//  (req, res, next) => {
-//  QuestionTable.getRandomQuestionsByCategoryCounts(req.body)
-//    .then(testLists => res.json(testLists))
-//    .catch(err => console.error('error', err))
-// })
 
 module.exports = router;
