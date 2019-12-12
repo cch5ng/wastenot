@@ -8,14 +8,6 @@ export function objToArray(obj) {
   return resultAr;
 }
 
-export function getCookieStr() {
-  const cookieKey = 'sessionStr';
-  if (sessionStorage.getItem(cookieKey)) {
-    return sessionStorage.getItem(cookieKey);
-  }
-  return null;
-}
-
 //assumes array of objects where each object has an id key
 export function arrayToObj(ar) {
   let obj = {};
@@ -26,4 +18,12 @@ export function arrayToObj(ar) {
   })
 
   return obj;
+}
+
+export function getCookieStr() {
+  const cookieKey = 'sessionStr';
+  if (sessionStorage.getItem(cookieKey)) {
+    return sessionStorage.getItem(cookieKey);
+  }
+  return null;
 }
