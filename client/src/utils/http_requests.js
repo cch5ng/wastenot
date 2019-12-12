@@ -39,6 +39,20 @@ const requests = {
         .catch(err => reject(err));
     });
   },
+  put: (url, body) => {
+    return new Promise((resolve, reject) => {
+      fetch(url, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'same-origin',
+        body: JSON.stringify(body),
+      })
+        .then(resp => resolve(resp.json()))
+        .catch(err => reject(err));
+    });
+  },
   delete: (url) => {
     return new Promise((resolve, reject) => {
       fetch(url, {
@@ -65,7 +79,7 @@ const Lists = {
     return requests.post(`${API_ROOT}${API_LIST_MIDDLE}${CREATE_LIST_SUFFIX}`, { ...list, cookieStr });
   },
   putTemplateList: (list) => {
-    return requests.post(`${API_ROOT}${API_LIST_MIDDLE}${LIST_DETAIL_SUFFIX}/${list.guid}`, { ...list, cookieStr });
+    return requests.put(`${API_ROOT}${API_LIST_MIDDLE}${LIST_DETAIL_SUFFIX}/${list.guid}`, { ...list, cookieStr });
   },
   deleteTemplateList: (guid) => {
     return requests.delete(`${API_ROOT}${API_LIST_MIDDLE}${LIST_DETAIL_SUFFIX}/${guid}`);
