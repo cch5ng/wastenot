@@ -8,63 +8,18 @@ import SelectList from '../App/Shared/SelectList/SelectList';
 import InputText from '../App/Shared/InputText/InputText';
 import '../App.css';
 import http_requests from '../utils/http_requests';
-import { fetchTemplateListAdd, fetchListTemplate } from '../actions/listTemplates';
-import { objToArray, getCookieStr } from '../utils/utils';
+import { fetchTemplateListAdd, fetchListTemplate, fetchTemplateListEdit } from '../actions/listTemplates';
+import { objToArray, getCookieStr, arrayToObj } from '../utils/utils';
 
 let inputObj = {name: '', section: 'none'};
+const keyBase = 'templateListItem';
 
 const listType = 'template';
-const initListItemInputs = {
-      templateListItem0: inputObj,
-      templateListItem1: inputObj,
-      templateListItem2: inputObj,
-      templateListItem3: inputObj,
-      templateListItem4: inputObj,
-      templateListItem5: inputObj,
-      templateListItem6: inputObj,
-      templateListItem7: inputObj,
-      templateListItem8: inputObj,
-      templateListItem9: inputObj,
-      templateListItem10: inputObj,
-      templateListItem11: inputObj,
-      templateListItem12: inputObj,
-      templateListItem13: inputObj,
-      templateListItem14: inputObj,
-      templateListItem15: inputObj,
-      templateListItem16: inputObj,
-      templateListItem17: inputObj,
-      templateListItem18: inputObj,
-      templateListItem19: inputObj,
-      templateListItem20: inputObj,
-      templateListItem21: inputObj,
-      templateListItem22: inputObj,
-      templateListItem23: inputObj,
-      templateListItem24: inputObj,
-      templateListItem25: inputObj,
-      templateListItem26: inputObj,
-      templateListItem27: inputObj,
-      templateListItem28: inputObj,
-      templateListItem29: inputObj,
-      templateListItem30: inputObj,
-      templateListItem31: inputObj,
-      templateListItem32: inputObj,
-      templateListItem33: inputObj,
-      templateListItem34: inputObj,
-      templateListItem35: inputObj,
-      templateListItem36: inputObj,
-      templateListItem37: inputObj,
-      templateListItem38: inputObj,
-      templateListItem39: inputObj,
-      templateListItem40: inputObj,
-      templateListItem41: inputObj,
-      templateListItem42: inputObj,
-      templateListItem43: inputObj,
-      templateListItem44: inputObj,
-      templateListItem45: inputObj,
-      templateListItem46: inputObj,
-      templateListItem47: inputObj,
-      templateListItem48: inputObj,
-      templateListItem49: inputObj
+const initListItemInputs = {};
+
+for (let i = 0; i < 50; i++) {
+  let key = `${keyBase}${i}`;
+  initListItemInputs[key] = inputObj;
 }
 
 const sectionOptions = [
@@ -138,21 +93,22 @@ const ListTemplateDetailForm = (props) => {
 
     if (mode === 'add') {
       listGuid = uuidv1();
-      for (let itemKey in listItemInputs) {
-        listItemInputs[itemKey].parentId = listGuid;
+      for (let tempId in listItemInputs) {
+        listItemInputs[tempId].parentId = listGuid;
       }
+      // listItemInputs.forEach(listItem => {
+      //   listItem.parentId = listGuid;
+      // })
 
       list.name = listName;
       list.type = listType;
       list.listItems = objToArray(listItemInputs);
-
       props.fetchTemplateListAdd(list);
     } else if (mode === 'edit') {
       listGuid = props.listTemplateGuid;
 
-      //TODO refactor
-      for (let itemKey in listItemInputs) {
-        listItemInputs[itemKey].parentId = listGuid;
+      for (let tempId in listItemInputs) {
+        listItemInputs[tempId].parentId = listGuid;
       }
 
       list.name = listName;
@@ -161,8 +117,6 @@ const ListTemplateDetailForm = (props) => {
       list.guid = listGuid;
 
       props.fetchTemplateListEdit(list)
-
-      //this.props.receiveTemplateListEdit(requestBody)
     }
 
     //updateListTemplates(requestBody);
@@ -175,21 +129,19 @@ const ListTemplateDetailForm = (props) => {
   function renderForm() {
     let htmlResult = [];
 
-    if (listItemInputs.length) {
+    if (Object.keys(listItemInputs).length) {
       for (let i = 0; i < 50; i++) {
-        let key = 'templateListItem' + i.toString();
+        let key = mode === 'add' ? 'templateListItem' + i.toString() : Object.keys(listItemInputs)[i];
+        //TODO fix later when I handle select value/id pairs
         let selectKey = 'templateListItemSelect' + i.toString();
-        console.log('listItemInputs', listItemInputs)
-        console.log('listItemInputs[key]', listItemInputs[key])
+        let curInput =  listItemInputs[key];
 
-        let curInput = listItemInputs[i];
-        //console.log('curInput', curInput)
         htmlResult.push(
           <li key={key} >
-            <InputText value={curInput.name} placeholder="item name" 
+            <InputText value={listItemInputs[key].name} placeholder="item name" 
               id={key} onChangeHandler={inputChangeHandler} name={key}
             />
-            <SelectList value={curInput.section} id={selectKey} 
+            <SelectList value={listItemInputs[key].section} id={selectKey} 
               options={sectionOptions} onChange={onChangeHandlerSelectSection} name={selectKey}
             />
           </li>
@@ -209,21 +161,12 @@ const ListTemplateDetailForm = (props) => {
       case "edit":
         setListItemInputs(props.editList.listItemInputs);
         setListName(props.editList.listName);
-        // this.setState({
-        //   listItemInputs: this.props.editList.listItemInputs,
-        //   listName: this.props.editList.listName
-        // })
         break;
-
       case "add":
       case "empty":
       default:
         setListItemInputs(initListItemInputs);
         setListName('');
-        // this.setState({
-        //   listItemInputs: initListItemInputs,
-        //   listName: ''
-        // })
         break;
     }
   }
@@ -237,24 +180,13 @@ const ListTemplateDetailForm = (props) => {
           .then(resp => {
             if (resp && resp.type !== 'error') {
               setListName(resp.listTemplate.name);
-              setListItemInputs(resp.listTemplate.listItems || []);
+              let listItemInputsObj = resp.listTemplate.listItems.length ? arrayToObj(resp.listTemplate.listItems): {};
+              setListItemInputs(listItemInputsObj);
             }
           })
       }
-      //props.fetchListTemplate(props.listTemplateGuid);
     }
   }, []);
-
-  //TODO refactor button set into one component
-  // if (mode === "edit" && props.listTemplates && props.listTemplates.curListTemplate) {
-  //   listGuid = props.listTemplateGuid;
-  //   //curListTemplate = props.listTemplates.listTemplates[listGuid];
-  //   let {name, listItems} = props.listTemplates.curListTemplate;
-  //   console.log('name', name)
-  //   console.log('listItems', listItems)
-  //   setListName(name);
-  //   setListItemInputs(listItems);
-  // }
 
   return (
     <div className="main">
@@ -285,7 +217,8 @@ const mapStateToProps = state => ({ authenticate: state.authenticate, listTempla
 const mapDispatchToProps = dispatch => {
   return {
     fetchTemplateListAdd: (list) => dispatch(fetchTemplateListAdd(list)),
-    fetchListTemplate: (guid) => dispatch(fetchListTemplate(guid))
+    fetchListTemplate: (guid) => dispatch(fetchListTemplate(guid)),
+    fetchTemplateListEdit: (list) => dispatch(fetchTemplateListEdit(list))
   }
 }
 
