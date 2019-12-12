@@ -201,7 +201,7 @@ const ListTemplateDetailForm = (props) => {
       </div>
       <br />
       <InputText name="listNameInp" value={listName} placeholder="list name" onChangeHandler={inputChangeHandler} />
-      <ul>
+      <ul className="list-no-style">
         {renderForm()}
       </ul>
       <div>
