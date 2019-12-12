@@ -1,3 +1,5 @@
+import { getCookieStr } from './utils';
+
 const API_ROOT = process.env.API_ROOT;
 //URL MIDDLE
 const API_LIST_MIDDLE = '/list';
@@ -11,6 +13,8 @@ const AUTH_REGISTER_SUFFIX = '/register';
 const AUTH_LOGIN_SUFFIX = '/login';
 const AUTH_LOGOUT_SUFFIX = '/logout';
 const AUTH_AUTHENTICATED_SUFFIX = '/authenticated';
+
+let cookieStr = getCookieStr();
 
 const requests = {
   get: (url) => {
@@ -34,18 +38,51 @@ const requests = {
         .then(resp => resolve(resp.json()))
         .catch(err => reject(err));
     });
+  },
+  put: (url, body) => {
+    return new Promise((resolve, reject) => {
+      fetch(url, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'same-origin',
+        body: JSON.stringify(body),
+      })
+        .then(resp => resolve(resp.json()))
+        .catch(err => reject(err));
+    });
+  },
+  delete: (url) => {
+    return new Promise((resolve, reject) => {
+      fetch(url, {
+        method: 'DELETE',
+        credentials: 'same-origin'
+      })
+        .then(resp => resolve(resp.json()))
+        .catch(err => reject(err));
+    });
   }
 };
 
 const Lists = {
   getAllShoppingLists: () => {
-    return requests.get(`${API_ROOT}${API_LIST_MIDDLE}${GET_SHOPPING_LISTS_SUFFIX}`, token);
+    return requests.post(`${API_ROOT}${API_LIST_MIDDLE}${GET_SHOPPING_LISTS_SUFFIX}`, { cookieStr });
   },
   getAllTemplateLists: () => {
-    return requests.get(`${API_ROOT}${API_LIST_MIDDLE}${GET_TEMPLATE_LISTS_SUFFIX}`, token);
+    return requests.post(`${API_ROOT}${API_LIST_MIDDLE}${GET_TEMPLATE_LISTS_SUFFIX}`, { cookieStr });
+  },
+  getTemplateList: (guid) => {
+    return requests.post(`${API_ROOT}${API_LIST_MIDDLE}${LIST_DETAIL_SUFFIX}/${guid}`, { cookieStr });
   },
   postTemplateList: (list) => {
-    return requests.post(`${API_ROOT}${API_LIST_MIDDLE}${CREATE_LIST_SUFFIX}`, token, list)
+    return requests.post(`${API_ROOT}${API_LIST_MIDDLE}${CREATE_LIST_SUFFIX}`, { ...list, cookieStr });
+  },
+  putTemplateList: (list) => {
+    return requests.put(`${API_ROOT}${API_LIST_MIDDLE}${LIST_DETAIL_SUFFIX}/${list.guid}`, { ...list, cookieStr });
+  },
+  deleteTemplateList: (guid) => {
+    return requests.delete(`${API_ROOT}${API_LIST_MIDDLE}${LIST_DETAIL_SUFFIX}/${guid}`);
   }
 };
 

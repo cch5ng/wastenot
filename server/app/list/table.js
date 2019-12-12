@@ -4,86 +4,122 @@ const ListItemTable = require('../list_item/table');
 
 class ListTable {
 
-	static storeList({ list }) {
-		const { name, type, listItems } = list;
-		let list_guid = uuidv4();
-		return new Promise((resolve, reject) => {
-			pool.query(
-				`INSERT INTO list (name, type, guid) VALUES ($1, $2, $3) RETURNING guid`,
-				[name, type, list_guid],
-				(error, response) => {
-					if (error) return reject(error);
-					if (response.rows.length) {
-						const listId = response.rows[0].id;
+  static storeList({ name, type, listItems, owner_id }) {
+    //const {  } = list;
+    let list_guid = uuidv4();
+    return new Promise((resolve, reject) => {
+      pool.query(
+        `INSERT INTO list (name, type, guid, owner_id) VALUES ($1, $2, $3, $4) RETURNING guid`,
+        [name, type, list_guid, owner_id],
+        (error, response) => {
+          if (error) return reject(error);
+          if (response.rows.length) {
+            const listId = response.rows[0].id;
 
-						Promise.all(
-							listItems.map(({ name }) => {
-								let list_item_guid = uuidv4();
-								return ListItemTable.storeListItem({ name, list_guid, list_item_guid })
-							})
-						)
-							.then(() => resolve({ list_guid }))
-							.catch(err => reject(err))
-					}
-				}
-			)
-		})
-	}
+            Promise.all(
+              listItems.map(({ name }) => {
+                let list_item_guid = uuidv4();
+                return ListItemTable.storeListItem({ name, list_guid, list_item_guid })
+              })
+            )
+              .then(() => resolve(
+                { message: `templateList with guid, ${list_guid}, was added`,
+                  listTemplate: {[list_guid]: { name, type, listItems } } }))
+              .catch(err => reject(err))
+          }
+        }
+      )
+    })
+  }
 
-	static getListsByType({ listType }) {
-		return new Promise((resolve, reject) => {
-			pool.query(
-				`SELECT * from list WHERE type = $1`,
-				[listType],
-				(error, response) => {
-					if (error) return reject(error);
-					console.log('response.rows', response.rows);
-					resolve(response.rows);
-				}
-			)
-		})
-	}
+  static getListsByType({ listType, owner_id }) {
+    return new Promise((resolve, reject) => {
+      pool.query(
+        `SELECT name, guid FROM list WHERE type = $1 AND "owner_id" = $2`,
+        [listType, owner_id],
+        (error, response) => {
+          if (error) return reject(error);
+          let message = '';
+          let key = listType === 'template' ? 'listTemplates' : 'shoppingLists';
+          if (response.rows.length === 0) {
+            message = 'No lists were found.'
+          }
+          resolve({[key]: response.rows, message});
+        }
+      )
+    })
+  }
 
-	static updateList({ name, type, guid }) {
-		return new Promise((resolve, reject) => {
-			pool.query(
-				`UPDATE list SET name = $1, type = $2 WHERE guid = $3 RETURNING guid`,
-				[name, type, guid],
-				(error, response) => {
-					if (error) return reject(error);
-					resolve({list_guid: guid});
-				}
-			)
-		})
-	}
+  static getListByGuid({ guid }) {
+    return new Promise((resolve, reject) => {
+      if (guid) {
+        pool.query(
+          `SELECT name FROM list WHERE guid = $1`,
+          [guid],
+          (error, response) => {
+            if (error) return reject(error);
+            let message = '';
+            if (response.rows.length === 0) {
+              message = 'No list was found.'
+            }
+            resolve({name: response.rows[0].name, guid});
+          }
+        )
+      } else {
+        let err = new Error;
+        err.statusCode = 400;
+        err.message = 'Missing list guid';
+        return reject(err)
+      }
+    })
+  }
 
-	static updateListAndListItems({name, type, guid, listItems}) {
-		return Promise.all([
-			ListTable.updateList({name, type, guid}),
-			ListItemTable.updateListItems(listItems)
-		])
-	}
 
-	static deleteList(guid) {
-		return new Promise((resolve, reject) => {
-			pool.query(
-				`DELETE from list WHERE guid = $1 RETURNING guid`,
-				[guid],
-				(error, response) => {
-					if (error) return reject(error);
-					if (response.rows.length)
-					resolve({list_guid: response.rows[0].guid});
-				}
-			)
-		})
-	}
+  static updateList({ name, type, guid }) {
+    return new Promise((resolve, reject) => {
+      pool.query(
+        `UPDATE list SET name = $1, type = $2 WHERE guid = $3 RETURNING guid`,
+        [name, type, guid],
+        (error, response) => {
+          if (error) return reject(error);
+          resolve({list_guid: guid});
+        }
+      )
+    })
+  }
 
-	static deleteListAndListItems(guid) {
-		return Promise.all([
-			ListTable.deleteList(guid),
-			ListItemTable.deleteListItemsByListGuid(guid)
-		])
-	}
+  static updateListAndListItems({name, type, guid, listItems}) {
+    return Promise.all([
+      ListTable.updateList({name, type, guid}),
+      ListItemTable.updateListItems(listItems)
+    ])
+  }
+
+  static deleteList(guid) {
+    return new Promise((resolve, reject) => {
+      pool.query(
+        `DELETE from list WHERE guid = $1 RETURNING guid`,
+        [guid],
+        (error, response) => {
+          if (error) return reject(error);
+          if (response.rows.length) {
+            resolve({guid: response.rows[0].guid, message: `List with guid, ${response.rows[0].guid} was removed.`});
+          }
+        }
+      )
+    })
+  }
+
+  static deleteListAndListItems(guid) {
+    return ListItemTable.deleteListItemByListGuid(guid)
+      .then(resp => {
+        if (resp) {
+          return ListTable.deleteList(guid);
+        }
+      })
+      .catch(err => console.error('error', err))
+    //])
+  }
 
 }
 

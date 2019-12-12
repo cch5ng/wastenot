@@ -8,8 +8,22 @@ export function objToArray(obj) {
   return resultAr;
 }
 
+//assumes array of objects where each object has an id key
+export function arrayToObj(ar) {
+  let obj = {};
+
+  ar.forEach(curObj => {
+    let key = curObj.guid;
+    obj[key] = curObj;
+  })
+
+  return obj;
+}
+
 export function getCookieStr() {
   const cookieKey = 'sessionStr';
-  let cookieVal = sessionStorage.getItem(cookieKey);
-  return cookieVal;
+  if (sessionStorage.getItem(cookieKey)) {
+    return sessionStorage.getItem(cookieKey);
+  }
+  return null;
 }

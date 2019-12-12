@@ -1,5 +1,5 @@
 import React from 'react';
-import './InputText.css';
+import './style.css';
 
 const InputText = (props) => {
   let {value, options, placeholder, id, onChangeHandler, name} = props;

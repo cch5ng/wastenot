@@ -2,47 +2,48 @@ import React, { Component, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { IoIosAddCircleOutline } from "react-icons/io";
-//import useListTemplates from '../utils/hooks/useListTemplates';
-
-//import {FaPlusSquareO} from 'react-icons/fa';
 import Lists from '../Lists/Lists';
 import { objToArray } from '../utils/utils';
 import http_requests from '../utils/http_requests';
-//import '../App.css';
+import { fetchLists, fetchTemplateListDelete } from '../actions/listTemplates';
+import '../App.css';
 
-const ListTemplates = (props) => {
-  const {listTemplates, updateListTemplates, removeListTemplates} = props;
-
-  let listTemplatesAr = []
-  if (listTemplates) {
-    listTemplatesAr = objToArray(listTemplates)
+class ListTemplates extends Component {
+  componentDidMount() {
+    this.props.fetchLists();
   }
 
-  useEffect(() => {
-    //TODO
-    //fetch list template and update hook state
-    let token = props.authenticate && props.authenticate.token ? props.authenticate.token : null;
-    http_requests.Lists.getAllTemplateLists(token)
-      .then(json => updateListTemplates(json))
-      .catch(err => console.error('fetch error', err))
-  });
+  removeListTemplates = (ev) => {
+    let listGuid = ev.target.id;
 
-  console.log('props', props);
+    this.props.fetchTemplateListDelete(listGuid)
+  }
 
-  return (
-    <div className="main">
-      <Link to="/settings/listTemplatesNew"><IoIosAddCircleOutline className="list-item-icon-lg" /> New Template List</Link>
-      <Lists lists={listTemplatesAr} type="template" clickHandlerDelete={removeListTemplates} />
-    </div>
-  )
+  render() {
+    let listTemplatesAr = [];
+    if (this.props.listTemplates && this.props.listTemplates.listTemplates) {
+      listTemplatesAr = objToArray(this.props.listTemplates.listTemplates);
+    }
+
+    return (
+      <div className="main">
+        <Link to="/settings/listTemplatesNew"><IoIosAddCircleOutline className="list-item-icon-lg" /> New Template List</Link>
+        <Lists lists={listTemplatesAr} type="template" clickHandlerDelete={this.removeListTemplates} />
+      </div>
+    )
+  }
 }
 
-const mapStateToProps = state => ({ authenticate: state.authenticate });
+const mapStateToProps = state => ({ authenticate: state.authenticate, listTemplates: state.listTemplates });
+
+const mapDispatchToProps = dispatch => {
+  return {
+    fetchLists: () => dispatch(fetchLists()),
+    fetchTemplateListDelete: (guid) => dispatch(fetchTemplateListDelete(guid))
+  }
+}
 
 export default connect(
   mapStateToProps,
-  null
+  mapDispatchToProps
 )(ListTemplates);
-
-
-//export default ListTemplates;

@@ -30,18 +30,18 @@ module.exports = () => {
         },
         {
           test: /\.(sa|sc|c)ss$/,
-          use: [
-            devMode ? 'style-loader' : MiniCssExtractPlugin.loader,
-            //'style-loader',
-            { loader: 'css-loader', options: { modules: true, importLoaders: 1 } },
-            'postcss-loader'
-          ]
           // use: [
           //   devMode ? 'style-loader' : MiniCssExtractPlugin.loader,
-          //   'css-loader',
-          //   'postcss-loader',
-          //   //'sass-loader',
-          // ],
+          //   //'style-loader',
+          //   { loader: 'css-loader', options: { modules: true, importLoaders: 1 } },
+          //   'postcss-loader'
+          // ]
+          use: [
+            devMode ? 'style-loader' : MiniCssExtractPlugin.loader,
+            'css-loader',
+            'postcss-loader',
+            //'sass-loader',
+          ]
         }
       ],
       

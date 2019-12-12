@@ -1,0 +1,4 @@
+CREATE TABLE section(
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(64)
+);
