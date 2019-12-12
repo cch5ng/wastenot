@@ -58,6 +58,13 @@ const listTemplates = (state = { listTemplates: {} }, action) => {
         message: action.message,
         curListTemplate: action.listTemplate
       }
+    case TEMPLATE_LISTS_EDIT_FETCH_SUCCESS:
+      return {
+        ...state,
+        status: 'success',
+        message: action.message
+      }
+
     // case REQUEST_EDIT_LIST:
     default:
       return state
