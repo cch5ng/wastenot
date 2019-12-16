@@ -14,7 +14,7 @@ const AUTH_LOGIN_SUFFIX = '/login';
 const AUTH_LOGOUT_SUFFIX = '/logout';
 const AUTH_AUTHENTICATED_SUFFIX = '/authenticated';
 
-let cookieStr = getCookieStr();
+//let cookieStr = getCookieStr();
 
 const requests = {
   get: (url) => {
@@ -69,8 +69,8 @@ const Lists = {
   getAllShoppingLists: () => {
     return requests.post(`${API_ROOT}${API_LIST_MIDDLE}${GET_SHOPPING_LISTS_SUFFIX}`, { cookieStr });
   },
-  getAllTemplateLists: () => {
-    return requests.post(`${API_ROOT}${API_LIST_MIDDLE}${GET_TEMPLATE_LISTS_SUFFIX}`, { cookieStr });
+  getAllTemplateLists: ({cookie}) => {
+    return requests.post(`${API_ROOT}${API_LIST_MIDDLE}${GET_TEMPLATE_LISTS_SUFFIX}`, { cookieStr: cookie });
   },
   getTemplateList: (guid) => {
     return requests.post(`${API_ROOT}${API_LIST_MIDDLE}${LIST_DETAIL_SUFFIX}/${guid}`, { cookieStr });
