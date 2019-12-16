@@ -43,7 +43,8 @@ const authenticate = (state = { isLoggedIn: false, hasButtonClicked: false }, ac
         ...state,
         status: 'success',
         message: action.message,
-        isLoggedIn: false
+        isLoggedIn: false,
+        authStr: ''
       }
     default:
       return state
