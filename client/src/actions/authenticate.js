@@ -17,27 +17,6 @@ export const LOGOUT_FETCH_SUCCESS = 'LOGOUT_FETCH_SUCCESS';
 
 export const REG_FETCH = 'REG_FETCH';
 
-//get auth string from local storage
-export const AUTH_LS_FETCH_SUCCESS = 'AUTH_LS_FETCH_SUCCESS';
-
-//sync
-export const storeAuthStr = () => dispatch => {
-  dispatch({ type: AUTH_FETCH });
-  const authStr = getCookieStr();
-  if (authStr) {
-    dispatch(
-      { type: AUTH_LS_FETCH_SUCCESS,
-        authStr
-      }
-    );
-  } else {
-    dispatch(
-      { type: AUTH_FETCH_ERR,
-        message: 'Auth string not found in browser'
-      }
-    );
-  }
-}
 
 //async
 export const register = ({ email, password }) => dispatch => {
@@ -191,12 +170,3 @@ function storageAvailable(type) {
             (storage && storage.length !== 0);
     }
 }
-
-//TODO refactor
-// export function fetchAuthLogin(email, password) {
-//   fetchAuth();
-//   http_requests.Auth.postLogin(email, password)
-//     .then(resp => resp.json())
-//     .then(json => fetchAuthSuccess(json))
-//     .catch(err => fetchAuthErr(err))
-// }
