@@ -1,8 +1,16 @@
 import React from 'react';
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 import './Header.css';
+import { logout } from '../../actions/authenticate';
 
-const Header = () => {
+const Header = (props) => {
+
+  const logOutHandler = (ev) => {
+    //ev.preventDefault();
+    props.logout();
+  }
+
   return (
     <div className="header title">
       <div className="header-main">
@@ -20,11 +28,29 @@ const Header = () => {
         </p>
       </div>
 
+      {props.authenticate.isLoggedIn && (
+        <div>
+          <button onClick={logOutHandler}>Log Out</button>
+        </div>
+      )}
+
     </div>
   )
 }
 
-export default Header;
+const mapStateToProps = state => ({
+  authenticate: state.authenticate
+});
+
+const mapDispatchToProps = dispatch => {
+  return {
+    logout: () => dispatch(logout())
+  }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Header)
+
+// export default Header;
 
 /*
         <p className="nav-link">
