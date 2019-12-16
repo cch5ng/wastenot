@@ -20,12 +20,12 @@ export const SHOPPING_LISTS_FETCH_ERR = 'SHOPPING_LISTS_FETCH_ERR';
 export const SHOPPING_LISTS_FETCH_SUCCESS = 'SHOPPING_LISTS_FETCH_SUCCESS';
 
 //async action for getting all template lists
-export const fetchLists = () => dispatch => {
+export const fetchLists = ({cookie}) => dispatch => {
   dispatch({ type: TEMPLATE_LISTS_FETCH });
 
-  let cookieStr = getCookieStr();
-  if (cookieStr) {
-    http_requests.Lists.getAllTemplateLists()
+  //let cookieStr = getCookieStr();
+  if (cookie) {
+    http_requests.Lists.getAllTemplateLists({cookie})
       .then(resp => {
         if (resp.type === 'error') {
           dispatch({
