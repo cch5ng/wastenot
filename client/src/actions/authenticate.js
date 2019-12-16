@@ -146,7 +146,8 @@ export const isAuthenticated = () => dispatch => {
         } else if (resp) {
           dispatch({
             type: AUTH_FETCH_SUCCESS,
-            message: resp.message
+            message: resp.message,
+            authStr: cookieVal
           })
         }
       })
