@@ -17,6 +17,28 @@ export const LOGOUT_FETCH_SUCCESS = 'LOGOUT_FETCH_SUCCESS';
 
 export const REG_FETCH = 'REG_FETCH';
 
+//get auth string from local storage
+export const AUTH_LS_FETCH_SUCCESS = 'AUTH_LS_FETCH_SUCCESS';
+
+//sync
+export const storeAuthStr = () => dispatch => {
+  dispatch({ type: AUTH_FETCH });
+  const authStr = getCookieStr();
+  if (authStr) {
+    dispatch(
+      { type: AUTH_LS_FETCH_SUCCESS,
+        authStr
+      }
+    );
+  } else {
+    dispatch(
+      { type: AUTH_FETCH_ERR,
+        message: 'Auth string not found in browser'
+      }
+    );
+  }
+}
+
 //async
 export const register = ({ email, password }) => dispatch => {
   dispatch({ type: REG_FETCH });
@@ -28,13 +50,16 @@ export const register = ({ email, password }) => dispatch => {
           message: resp.message
         })
       } else {
+        let cookieAr;
+
         if (resp.cookie && storageAvailable('sessionStorage')) {
-          let cookieAr = resp.cookie.split('=');
+          cookieAr = resp.cookie.split('=');
           sessionStorage.setItem(cookieAr[0], cookieAr[1]);
         }
         dispatch({
           type: AUTH_FETCH_SUCCESS,
-          message: resp.message
+          message: resp.message,
+          authStr: cookieAr[1]
         })
       }
     })
@@ -48,6 +73,8 @@ export const login = ({ email, password }) => dispatch => {
   dispatch({ type: LOGIN_FETCH });
   http_requests.Auth.postLogin(email, password)
     .then(resp => {
+      let cookieAr;
+
       if (resp.type === 'error') {
         dispatch({
           type: LOGIN_FETCH_ERR,
@@ -55,12 +82,13 @@ export const login = ({ email, password }) => dispatch => {
         })
       } else {
         if (resp.cookie && storageAvailable('sessionStorage')) {
-          let cookieAr = resp.cookie.split('=');
+          cookieAr = resp.cookie.split('=');
           sessionStorage.setItem(cookieAr[0], cookieAr[1]);
         }
         dispatch({
           type: AUTH_FETCH_SUCCESS,
-          message: resp.message
+          message: resp.message,
+          authStr: cookieAr[1]
         })
       }
     })
