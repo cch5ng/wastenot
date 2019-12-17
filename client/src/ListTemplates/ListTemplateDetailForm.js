@@ -173,10 +173,8 @@ const ListTemplateDetailForm = (props) => {
 
   useEffect(() => {
     if (mode === 'edit') {
-      //refactor to use hook state instead
-        //let cookieStr = getCookieStr();
-      if (getCookieStr()) {
-        http_requests.Lists.getTemplateList(props.listTemplateGuid)
+      if (props.authenticate.authStr) {
+        http_requests.Lists.getTemplateList({ guid: props.listTemplateGuid, cookieStr: props.authenticate.authStr })
           .then(resp => {
             if (resp && resp.type !== 'error') {
               setListName(resp.listTemplate.name);
@@ -186,7 +184,7 @@ const ListTemplateDetailForm = (props) => {
           })
       }
     }
-  }, []);
+  }, [props.authenticate.authStr]);
 
   return (
     <div className="main">
@@ -217,7 +215,7 @@ const mapStateToProps = state => ({ authenticate: state.authenticate, listTempla
 const mapDispatchToProps = dispatch => {
   return {
     fetchTemplateListAdd: (list) => dispatch(fetchTemplateListAdd(list)),
-    fetchListTemplate: (guid) => dispatch(fetchListTemplate(guid)),
+    fetchListTemplate: ({ guid, cookieStr }) => dispatch(fetchListTemplate({ guid, cookieStr })),
     fetchTemplateListEdit: (list) => dispatch(fetchTemplateListEdit(list))
   }
 }
