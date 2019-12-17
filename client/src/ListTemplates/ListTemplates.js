@@ -11,13 +11,13 @@ import '../App.css';
 class ListTemplates extends Component {
   componentDidMount() {
     if (this.props.authenticate && this.props.authenticate.authStr) {
-      this.props.fetchLists({cookie: this.props.authenticate.authStr});
+      this.props.fetchLists({cookieStr: this.props.authenticate.authStr});
     }
   }
 
   componentDidUpdate(prevProps) {
     if (prevProps.authenticate.authStr !== this.props.authenticate.authStr) {
-      this.props.fetchLists({cookie: this.props.authenticate.authStr});
+      this.props.fetchLists({cookieStr: this.props.authenticate.authStr});
     }
 
   }
@@ -47,7 +47,7 @@ const mapStateToProps = state => ({ authenticate: state.authenticate, listTempla
 
 const mapDispatchToProps = dispatch => {
   return {
-    fetchLists: ({cookie}) => dispatch(fetchLists({cookie})),
+    fetchLists: ({cookieStr}) => dispatch(fetchLists({cookieStr})),
     fetchTemplateListDelete: (guid) => dispatch(fetchTemplateListDelete(guid))
   }
 }
