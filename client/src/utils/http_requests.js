@@ -66,13 +66,13 @@ const requests = {
 };
 
 const Lists = {
-  getAllShoppingLists: () => {
+  getAllShoppingLists: ({ cookieStr }) => {
     return requests.post(`${API_ROOT}${API_LIST_MIDDLE}${GET_SHOPPING_LISTS_SUFFIX}`, { cookieStr });
   },
-  getAllTemplateLists: ({cookie}) => {
-    return requests.post(`${API_ROOT}${API_LIST_MIDDLE}${GET_TEMPLATE_LISTS_SUFFIX}`, { cookieStr: cookie });
+  getAllTemplateLists: ({ cookieStr }) => {
+    return requests.post(`${API_ROOT}${API_LIST_MIDDLE}${GET_TEMPLATE_LISTS_SUFFIX}`, { cookieStr });
   },
-  getTemplateList: (guid) => {
+  getTemplateList: ({ guid, cookieStr }) => {
     return requests.post(`${API_ROOT}${API_LIST_MIDDLE}${LIST_DETAIL_SUFFIX}/${guid}`, { cookieStr });
   },
   postTemplateList: (list) => {
