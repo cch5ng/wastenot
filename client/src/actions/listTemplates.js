@@ -86,12 +86,11 @@ export const fetchListTemplate = ({ guid, cookieStr }) => dispatch => {
   }
 }
 
-export const fetchTemplateListAdd = (list) => dispatch => {
+export const fetchTemplateListAdd = ({ list, cookieStr }) => dispatch => {
   dispatch({ type: TEMPLATE_LISTS_ADD_FETCH });
 
-  let cookieStr = getCookieStr();
   if (cookieStr) {
-    http_requests.Lists.postTemplateList(list)
+    http_requests.Lists.postTemplateList({ list, cookieStr })
       .then(resp => {
         if (resp.type === 'error') {
           dispatch({
@@ -119,12 +118,11 @@ export const fetchTemplateListAdd = (list) => dispatch => {
 }
 
 //update a list template
-export const fetchTemplateListEdit = (list) => dispatch => {
+export const fetchTemplateListEdit = ({ list, cookieStr }) => dispatch => {
   dispatch({ type: TEMPLATE_LISTS_FETCH });
 
-  let cookieStr = getCookieStr();
   if (cookieStr) {
-    http_requests.Lists.putTemplateList(list)
+    http_requests.Lists.putTemplateList({ list, cookieStr })
       .then(resp => {
         if (resp.type === 'error') {
           dispatch({
