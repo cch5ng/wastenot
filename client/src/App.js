@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import {
-  BrowserRouter as Router, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { connect } from 'react-redux';
 import Home from './Home';
 import Root from './Root';
 import './App.css';
@@ -12,9 +12,12 @@ import ListTemplateDetailForm from './ListTemplates/ListTemplateDetailForm';
 import useListTemplates from './utils/hooks/useListTemplates';
 import config from './config';
 
-function App() {
+function App(props) {
 
   const {listTemplates, updateListTemplates, removeListTemplates} = useListTemplates();
+  if (props.authenticate && props.authenticate.isLoggedIn) {
+   console.log('isLoggedIn')
+  }
 
   return (
     <Router>
@@ -40,7 +43,9 @@ function App() {
   )
 }
 
-export default App;
 
-//              listTemplates={listTemplates}
-// listTemplates={listTemplates}
+const mapStateToProps = state => ({
+  authenticate: state.authenticate
+})
+
+export default connect(mapStateToProps, null)(App);
