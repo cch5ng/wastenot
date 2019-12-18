@@ -75,10 +75,10 @@ const Lists = {
   getTemplateList: ({ guid, cookieStr }) => {
     return requests.post(`${API_ROOT}${API_LIST_MIDDLE}${LIST_DETAIL_SUFFIX}/${guid}`, { cookieStr });
   },
-  postTemplateList: (list) => {
+  postTemplateList: ({ list, cookieStr }) => {
     return requests.post(`${API_ROOT}${API_LIST_MIDDLE}${CREATE_LIST_SUFFIX}`, { ...list, cookieStr });
   },
-  putTemplateList: (list) => {
+  putTemplateList: ({ list, cookieStr }) => {
     return requests.put(`${API_ROOT}${API_LIST_MIDDLE}${LIST_DETAIL_SUFFIX}/${list.guid}`, { ...list, cookieStr });
   },
   deleteTemplateList: (guid) => {
