@@ -121,24 +121,30 @@ export const isAuthenticated = () => dispatch => {
           dispatch({
             type: AUTH_FETCH_ERR,
             message: resp.message
-          })
+          });
+          return false;
         } else if (resp) {
           dispatch({
             type: AUTH_FETCH_SUCCESS,
             message: resp.message,
             authStr: cookieVal
-          })
+          });
+          return true;
         }
       })
-      .catch(err => dispatch({
-        type: LOGOUT_FETCH_ERR,
-        message: err.message
-      }))
+      .catch(err => {
+        dispatch({
+          type: LOGOUT_FETCH_ERR,
+          message: err.message
+        });
+        return false;
+      })
     } else {
       dispatch({
         type: AUTH_FETCH_ERR,
         message: 'invalid authentication'
-      })
+      });
+      return false;
     }
 }
 
