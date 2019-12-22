@@ -6,9 +6,12 @@ import { getCookieStr } from '../utils/utils';
 
 class AuthForm extends Component {
 
-  state = {
-    email: '',
-    password: ''
+  constructor(props) {
+    super(props);
+    this.state = {
+      email: '',
+      password: ''
+    }
   }
 
   componentDidMount() {
@@ -50,7 +53,7 @@ class AuthForm extends Component {
   render() {
     return (
       <div>
-        <h1>AuthForm</h1>
+        <h1>{this.props.title}</h1>
         <form>
           {this.Error}
 
@@ -58,21 +61,21 @@ class AuthForm extends Component {
             name="email"
             value={this.state.email}
             placeholder="email"
-            onChange={this.updateInput}
-          />
+            onChange={this.updateInput} />
           <div />
           <input type="password"
             name="password"
             value={this.state.password}
             placeholder="password"
-            onChange={this.updateInput}
-          />
+            onChange={this.updateInput} />
           <div />
-          <button onClick={this.logInBtnClick}>Log In</button>
-          <span> or </span>
-          <button onClick={this.signInBtnClick}>Sign Up</button>
-          <span> or </span>
-          <button onClick={this.logOutBtnClick}>Log Out</button>
+
+          {this.props.title === 'Login' && (
+            <button onClick={this.logInBtnClick}>Log In</button>
+          )}
+          {this.props.title === 'Register' && (
+            <button onClick={this.signInBtnClick}>Sign Up</button>
+          )}
         </form>
       </div>
     )
