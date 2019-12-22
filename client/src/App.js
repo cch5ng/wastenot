@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import Home from './Home';
 import './App.css';
 import Header from './App/Header/Header';
+import AuthHeader from './App/Header/AuthHeader';
 //import Footer from './App/Footer/Footer'
 import ListTemplates from './ListTemplates/ListTemplates';
 import ListTemplateDetailForm from './ListTemplates/ListTemplateDetailForm';
@@ -22,7 +23,20 @@ function App(props) {
   }
 
   if (!isLoggedIn) {
-    return <AuthForm />
+    return (
+      <Router>
+        <div className="App">
+          <AuthHeader />
+            <Route path='/' exact 
+              render={(props) => (<AuthForm {...props} title="Login" />
+              )} />
+            <Route path='/register' exact 
+              render={(props) => (<AuthForm {...props} title="Register" />
+              )} />
+
+        </div>
+      </Router>
+    )
   }
 
   if (isLoggedIn) {
