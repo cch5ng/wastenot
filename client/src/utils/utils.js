@@ -24,6 +24,7 @@ export function getCookieStr() {
   const cookieKey = 'sessionStr';
   if (sessionStorage.getItem(cookieKey)) {
     return sessionStorage.getItem(cookieKey);
+  } else {
+    return null;
   }
-  return null;
 }

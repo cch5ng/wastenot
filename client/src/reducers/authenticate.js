@@ -1,6 +1,6 @@
 import { AUTH_FETCH, AUTH_FETCH_ERR, AUTH_FETCH_SUCCESS,
   LOGOUT_FETCH_SUCCESS, LOGOUT_FETCH, LOGOUT_FETCH_ERR,
-  LOGIN_FETCH, LOGIN_FETCH_ERR, REG_FETCH
+  LOGIN_FETCH, LOGIN_FETCH_ERR, REG_FETCH//, AUTH_LS_FETCH_SUCCESS
 } from '../actions/authenticate';
 
 //can refactor and remove redundant types
@@ -35,14 +35,16 @@ const authenticate = (state = { isLoggedIn: false, hasButtonClicked: false }, ac
         ...state,
         status: 'success',
         message: action.message,
-        isLoggedIn: true
+        isLoggedIn: true,
+        authStr: action.authStr
       }
     case 'LOGOUT_FETCH_SUCCESS':
       return {
         ...state,
         status: 'success',
         message: action.message,
-        isLoggedIn: false
+        isLoggedIn: false,
+        authStr: ''
       }
     default:
       return state

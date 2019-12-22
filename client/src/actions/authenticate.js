@@ -17,6 +17,7 @@ export const LOGOUT_FETCH_SUCCESS = 'LOGOUT_FETCH_SUCCESS';
 
 export const REG_FETCH = 'REG_FETCH';
 
+
 //async
 export const register = ({ email, password }) => dispatch => {
   dispatch({ type: REG_FETCH });
@@ -28,13 +29,16 @@ export const register = ({ email, password }) => dispatch => {
           message: resp.message
         })
       } else {
+        let cookieAr;
+
         if (resp.cookie && storageAvailable('sessionStorage')) {
-          let cookieAr = resp.cookie.split('=');
+          cookieAr = resp.cookie.split('=');
           sessionStorage.setItem(cookieAr[0], cookieAr[1]);
         }
         dispatch({
           type: AUTH_FETCH_SUCCESS,
-          message: resp.message
+          message: resp.message,
+          authStr: cookieAr[1]
         })
       }
     })
@@ -48,6 +52,8 @@ export const login = ({ email, password }) => dispatch => {
   dispatch({ type: LOGIN_FETCH });
   http_requests.Auth.postLogin(email, password)
     .then(resp => {
+      let cookieAr;
+
       if (resp.type === 'error') {
         dispatch({
           type: LOGIN_FETCH_ERR,
@@ -55,12 +61,13 @@ export const login = ({ email, password }) => dispatch => {
         })
       } else {
         if (resp.cookie && storageAvailable('sessionStorage')) {
-          let cookieAr = resp.cookie.split('=');
+          cookieAr = resp.cookie.split('=');
           sessionStorage.setItem(cookieAr[0], cookieAr[1]);
         }
         dispatch({
           type: AUTH_FETCH_SUCCESS,
-          message: resp.message
+          message: resp.message,
+          authStr: cookieAr[1]
         })
       }
     })
@@ -114,23 +121,30 @@ export const isAuthenticated = () => dispatch => {
           dispatch({
             type: AUTH_FETCH_ERR,
             message: resp.message
-          })
+          });
+          return false;
         } else if (resp) {
           dispatch({
             type: AUTH_FETCH_SUCCESS,
-            message: resp.message
-          })
+            message: resp.message,
+            authStr: cookieVal
+          });
+          return true;
         }
       })
-      .catch(err => dispatch({
-        type: LOGOUT_FETCH_ERR,
-        message: err.message
-      }))
+      .catch(err => {
+        dispatch({
+          type: LOGOUT_FETCH_ERR,
+          message: err.message
+        });
+        return false;
+      })
     } else {
       dispatch({
         type: AUTH_FETCH_ERR,
         message: 'invalid authentication'
-      })
+      });
+      return false;
     }
 }
 
@@ -162,12 +176,3 @@ function storageAvailable(type) {
             (storage && storage.length !== 0);
     }
 }
-
-//TODO refactor
-// export function fetchAuthLogin(email, password) {
-//   fetchAuth();
-//   http_requests.Auth.postLogin(email, password)
-//     .then(resp => resp.json())
-//     .then(json => fetchAuthSuccess(json))
-//     .catch(err => fetchAuthErr(err))
-// }

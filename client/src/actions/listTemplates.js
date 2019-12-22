@@ -20,12 +20,12 @@ export const SHOPPING_LISTS_FETCH_ERR = 'SHOPPING_LISTS_FETCH_ERR';
 export const SHOPPING_LISTS_FETCH_SUCCESS = 'SHOPPING_LISTS_FETCH_SUCCESS';
 
 //async action for getting all template lists
-export const fetchLists = () => dispatch => {
+export const fetchLists = ({cookieStr}) => dispatch => {
   dispatch({ type: TEMPLATE_LISTS_FETCH });
 
-  let cookieStr = getCookieStr();
+  //let cookieStr = getCookieStr();
   if (cookieStr) {
-    http_requests.Lists.getAllTemplateLists()
+    http_requests.Lists.getAllTemplateLists({cookieStr})
       .then(resp => {
         if (resp.type === 'error') {
           dispatch({
@@ -54,12 +54,12 @@ export const fetchLists = () => dispatch => {
 }
 
 //async action for getting single template list by guid
-export const fetchListTemplate = (guid) => dispatch => {
+export const fetchListTemplate = ({ guid, cookieStr }) => dispatch => {
   dispatch({ type: TEMPLATE_LISTS_FETCH });
 
   let cookieStr = getCookieStr();
   if (cookieStr) {
-    http_requests.Lists.getTemplateList(guid)
+    http_requests.Lists.getTemplateList({ guid, cookieStr })
       .then(resp => {
         if (resp.type === 'error') {
           dispatch({
@@ -86,12 +86,11 @@ export const fetchListTemplate = (guid) => dispatch => {
   }
 }
 
-export const fetchTemplateListAdd = (list) => dispatch => {
+export const fetchTemplateListAdd = ({ list, cookieStr }) => dispatch => {
   dispatch({ type: TEMPLATE_LISTS_ADD_FETCH });
 
-  let cookieStr = getCookieStr();
   if (cookieStr) {
-    http_requests.Lists.postTemplateList(list)
+    http_requests.Lists.postTemplateList({ list, cookieStr })
       .then(resp => {
         if (resp.type === 'error') {
           dispatch({
@@ -119,12 +118,11 @@ export const fetchTemplateListAdd = (list) => dispatch => {
 }
 
 //update a list template
-export const fetchTemplateListEdit = (list) => dispatch => {
+export const fetchTemplateListEdit = ({ list, cookieStr }) => dispatch => {
   dispatch({ type: TEMPLATE_LISTS_FETCH });
 
-  let cookieStr = getCookieStr();
   if (cookieStr) {
-    http_requests.Lists.putTemplateList(list)
+    http_requests.Lists.putTemplateList({ list, cookieStr })
       .then(resp => {
         if (resp.type === 'error') {
           dispatch({

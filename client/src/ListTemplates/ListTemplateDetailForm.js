@@ -90,6 +90,7 @@ const ListTemplateDetailForm = (props) => {
     let requestBody;
     let listGuid;
     let list = {};
+    let cookieStr = (props.authenticate && props.authenticate.authStr) ? props.authenticate.authStr : null;
 
     if (mode === 'add') {
       listGuid = uuidv1();
@@ -103,7 +104,7 @@ const ListTemplateDetailForm = (props) => {
       list.name = listName;
       list.type = listType;
       list.listItems = objToArray(listItemInputs);
-      props.fetchTemplateListAdd(list);
+      props.fetchTemplateListAdd({ list, cookieStr});
     } else if (mode === 'edit') {
       listGuid = props.listTemplateGuid;
 
@@ -116,7 +117,7 @@ const ListTemplateDetailForm = (props) => {
       list.listItems = objToArray(listItemInputs);
       list.guid = listGuid;
 
-      props.fetchTemplateListEdit(list)
+      props.fetchTemplateListEdit({ list, cookieStr })
     }
 
     //updateListTemplates(requestBody);
@@ -173,10 +174,8 @@ const ListTemplateDetailForm = (props) => {
 
   useEffect(() => {
     if (mode === 'edit') {
-      //refactor to use hook state instead
-        //let cookieStr = getCookieStr();
-      if (getCookieStr()) {
-        http_requests.Lists.getTemplateList(props.listTemplateGuid)
+      if (props.authenticate.authStr) {
+        http_requests.Lists.getTemplateList({ guid: props.listTemplateGuid, cookieStr: props.authenticate.authStr })
           .then(resp => {
             if (resp && resp.type !== 'error') {
               setListName(resp.listTemplate.name);
@@ -186,7 +185,7 @@ const ListTemplateDetailForm = (props) => {
           })
       }
     }
-  }, []);
+  }, [props.authenticate.authStr]);
 
   return (
     <div className="main">
@@ -216,8 +215,8 @@ const mapStateToProps = state => ({ authenticate: state.authenticate, listTempla
 
 const mapDispatchToProps = dispatch => {
   return {
-    fetchTemplateListAdd: (list) => dispatch(fetchTemplateListAdd(list)),
-    fetchListTemplate: (guid) => dispatch(fetchListTemplate(guid)),
+    fetchTemplateListAdd: ({ list, cookieStr }) => dispatch(fetchTemplateListAdd({ list, cookieStr })),
+    fetchListTemplate: ({ guid, cookieStr }) => dispatch(fetchListTemplate({ guid, cookieStr })),
     fetchTemplateListEdit: (list) => dispatch(fetchTemplateListEdit(list))
   }
 }
