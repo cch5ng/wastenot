@@ -28,6 +28,10 @@
   flex-flow: row no-wrap;
 }
 
+.formGroup {
+  margin: 8px 0;
+}
+
 @media (min-width: 768px) {
   .main {
     margin: 15px 35px;

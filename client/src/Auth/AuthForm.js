@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import { register, logout, login, isAuthenticated } from '../actions/authenticate';
 import { getCookieStr } from '../utils/utils';
+import Button from '../App/Shared/Button/Button';
+import InputText from '../App/Shared/InputText/InputText';
 
 class AuthForm extends Component {
 
@@ -57,11 +59,11 @@ class AuthForm extends Component {
         <form>
           {this.Error}
 
-          <input type="text"
-            name="email"
+          <InputText
+            name="email" id="email"
             value={this.state.email}
             placeholder="email"
-            onChange={this.updateInput} />
+            onChangeHandler={this.updateInput} />
           <div />
           <input type="password"
             name="password"
@@ -71,10 +73,10 @@ class AuthForm extends Component {
           <div />
 
           {this.props.title === 'Login' && (
-            <button onClick={this.logInBtnClick}>Log In</button>
+            <Button label="Log In" onClickHandler={this.logInBtnClick} />
           )}
-          {this.props.title === 'Register' && (
-            <button onClick={this.signInBtnClick}>Sign Up</button>
+          {this.props.title === 'Sign Up' && (
+            <Button label="Sign Up" onClickHandler={this.signInBtnClick} />
           )}
         </form>
       </div>

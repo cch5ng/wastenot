@@ -30,8 +30,8 @@ function App(props) {
             <Route path='/' exact 
               render={(props) => (<AuthForm {...props} title="Login" />
               )} />
-            <Route path='/register' exact 
-              render={(props) => (<AuthForm {...props} title="Register" />
+            <Route path='/signup' exact 
+              render={(props) => (<AuthForm {...props} title="Sign Up" />
               )} />
 
         </div>
