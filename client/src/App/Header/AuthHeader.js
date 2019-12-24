@@ -7,19 +7,9 @@ import { logout } from '../../actions/authenticate';
 const AuthHeader = (props) => {
   const [menuDisplayed, setMenuDisplayed] = useState(false);
 
-  const logOutHandler = (ev) => {
-    props.logout();
-  }
-
   const toggleMenu = (ev) => {
-    console.log('clicked Menu')
     setMenuDisplayed(!menuDisplayed)
-
   }
-
-        // <p className="nav-link">
-        //   <Link to="/">Login</Link>
-        // </p>
 
   if (!menuDisplayed) {
     return (
@@ -27,11 +17,22 @@ const AuthHeader = (props) => {
         <div className="header-main">
           <h2><Link to="/" className="title">Waste Not</Link></h2>
         </div>
+        <div className="menu-links-medium">
+          <p className="menu-link-item">
+            <Link to="/about">About</Link>
+          </p>
+          <p className="menu-link-item">
+            <Link to="/support">Support</Link>
+          </p>
+        </div>
         <div className="header-nav">
+          <p className="nav-link">
+            <Link to="/">Log In</Link>
+          </p>
           <p className="action-link">
             <Link to="/signup">Sign Up</Link>
           </p>
-          <p className="nav-link" onClick={toggleMenu} >Menu</p>
+          <p className="nav-link menu-text" onClick={toggleMenu} >Menu</p>
         </div>
       </div>
     )
@@ -43,17 +44,17 @@ const AuthHeader = (props) => {
         <div className="icon" onClick={toggleMenu} >X</div>
         <div className="menu-links">
           <p className="menu-link-item">
-            <Link to="/">Nav Item</Link>
+            <Link to="/about">About</Link>
           </p>
           <p className="menu-link-item">
-            <Link to="/">Nav Item2</Link>
+            <Link to="/support">Support</Link>
           </p>
         </div>
         <div className="menu-buttons">
-          <div className="div-button">
-            <Link to="/signup">Sign </Link>
+          <div className="div-button sign-up-button">
+            <Link to="/signup">Sign Up</Link>
           </div>
-          <div className="div-button">
+          <div className="div-button log-in-button">
             <Link to="/">Log In</Link>
           </div>
         </div>
