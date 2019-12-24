@@ -1,14 +1,27 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
 import './Header.css';
 import { logout } from '../../actions/authenticate';
+import Button from '../../App/Shared/Button/Button';
 
 const AuthHeader = (props) => {
   const [menuDisplayed, setMenuDisplayed] = useState(false);
 
   const toggleMenu = (ev) => {
     setMenuDisplayed(!menuDisplayed)
+  }
+
+  let history = useHistory();
+
+  const handleSignUpBtn = (ev) => {
+    toggleMenu(ev);
+    history.push('/signup');
+  }
+
+  const handleLogInBtn = (ev) => {
+    toggleMenu(ev);
+    history.push('/');
   }
 
   if (!menuDisplayed) {
@@ -51,18 +64,23 @@ const AuthHeader = (props) => {
           </p>
         </div>
         <div className="menu-buttons">
+          <Button label="Sign Up" onClickHandler={handleSignUpBtn} size="extra-large"/>
+          <Button label="Log In" onClickHandler={handleLogInBtn} size="extra-large"/>
+        </div>
+      </div>
+    )
+  }
+}
+
+/*
           <Link to="/signup">
             <div className="div-button sign-up-button">Sign Up</div>
           </Link>
           <Link to="/">
             <div className="div-button log-in-button">Log In</div>
           </Link>
-        </div>
-      </div>
-    )
-  }
 
-}
+*/
 
 const mapStateToProps = state => ({
   authenticate: state.authenticate
