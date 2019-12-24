@@ -9,6 +9,34 @@
   color: #fff;
 }
 
+.small {
+  width: 20%;
+}
+
+.medium {
+  width: 35%;
+}
+
+.large {
+  width: 50%;
+}
+
+.extra-large {
+  width: 80%;
+}
+
+.extra-extra-large {
+  width: 100%;
+}
+
+.nav {
+  background-color: #fff;
+}
+
+.important {
+  background-color: #F1665D;
+}
+
 .button:hover {
   background-color: #9e968a;
 }

@@ -2,10 +2,11 @@ import React from 'react';
 import './style.css';
 
 const Button = (props) => {
-  let { label, onClickHandler, classVal, idVal } = props;
+  let { label, onClickHandler, classVal, idVal, size, type } = props;
 
+  let classNameVal = size ? `button ${size}` : `button`;
   return (
-    <button className="button"  onClick={ev => onClickHandler(ev)} >{label}</button>
+    <button className={classNameVal}  onClick={ev => onClickHandler(ev)} >{label}</button>
   )
 }
 
