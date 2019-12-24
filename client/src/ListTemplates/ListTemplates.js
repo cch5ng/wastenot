@@ -19,12 +19,10 @@ class ListTemplates extends Component {
     if (prevProps.authenticate.authStr !== this.props.authenticate.authStr) {
       this.props.fetchLists({cookieStr: this.props.authenticate.authStr});
     }
-
   }
 
   removeListTemplates = (ev) => {
     let listGuid = ev.target.id;
-
     this.props.fetchTemplateListDelete(listGuid)
   }
 
@@ -36,7 +34,9 @@ class ListTemplates extends Component {
 
     return (
       <div className="main">
-        <Link to="/settings/listTemplatesNew"><IoIosAddCircleOutline className="list-item-icon-lg" /> New Template List</Link>
+        <div className="div-control">
+          <Link to="/settings/listTemplatesNew"><IoIosAddCircleOutline className="list-item-icon-lg" /> New Template List</Link>
+        </div>
         <Lists lists={listTemplatesAr} type="template" clickHandlerDelete={this.removeListTemplates} />
       </div>
     )

@@ -1,0 +1,15 @@
+input {
+  width: calc(100% - 34px);
+  height: 25px;
+  padding-left: 8px;
+  font-size: 14px;
+  border-radius: 5px;
+  border: 1px solid #999;
+}
+
+@media (min-width: 768px) {
+
+  input {
+    width: 50%;
+  }
+}

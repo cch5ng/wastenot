@@ -10,7 +10,7 @@
 
 .list-no-style {
   list-style: none;
-  padding-left: 8px;
+  /*padding-left: 8px;*/
 }
 
 /* list items */
@@ -26,6 +26,14 @@
 .row {
   display: flex;
   flex-flow: row no-wrap;
+}
+
+.formGroup {
+  margin: 8px 0;
+}
+
+.div-control {
+  margin-bottom: 16px;
 }
 
 @media (min-width: 768px) {

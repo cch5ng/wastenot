@@ -1,11 +1,20 @@
 import React from 'react';
+import classNames from 'classnames';
 import './style.css';
 
 const Button = (props) => {
-  let { label, onClickHandler, classVal, idVal } = props;
+  let { label, onClickHandler, classVal, idVal, size, type } = props;
+
+  var btnClass = classNames({
+      button: true,
+      [`${size}`]: size && true,
+      [`${type}`]: type && true,
+      'small': !size,
+      'basic': !type
+  });
 
   return (
-    <button className="button"  onClick={ev => onClickHandler(ev)} >{label}</button>
+    <button className={btnClass}  onClick={ev => onClickHandler(ev)} >{label}</button>
   )
 }
 

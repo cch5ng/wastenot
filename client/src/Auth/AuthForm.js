@@ -3,12 +3,17 @@ import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import { register, logout, login, isAuthenticated } from '../actions/authenticate';
 import { getCookieStr } from '../utils/utils';
+import Button from '../App/Shared/Button/Button';
+import InputText from '../App/Shared/InputText/InputText';
 
 class AuthForm extends Component {
 
-  state = {
-    email: '',
-    password: ''
+  constructor(props) {
+    super(props);
+    this.state = {
+      email: '',
+      password: ''
+    }
   }
 
   componentDidMount() {
@@ -50,29 +55,29 @@ class AuthForm extends Component {
   render() {
     return (
       <div>
-        <h1>AuthForm</h1>
+        <h1>{this.props.title}</h1>
         <form>
           {this.Error}
 
-          <input type="text"
-            name="email"
+          <InputText
+            name="email" id="email"
             value={this.state.email}
             placeholder="email"
-            onChange={this.updateInput}
-          />
+            onChangeHandler={this.updateInput} />
           <div />
           <input type="password"
             name="password"
             value={this.state.password}
             placeholder="password"
-            onChange={this.updateInput}
-          />
+            onChange={this.updateInput} />
           <div />
-          <button onClick={this.logInBtnClick}>Log In</button>
-          <span> or </span>
-          <button onClick={this.signInBtnClick}>Sign Up</button>
-          <span> or </span>
-          <button onClick={this.logOutBtnClick}>Log Out</button>
+
+          {this.props.title === 'Login' && (
+            <Button label="Log In" onClickHandler={this.logInBtnClick} />
+          )}
+          {this.props.title === 'Sign Up' && (
+            <Button label="Sign Up" onClickHandler={this.signInBtnClick} />
+          )}
         </form>
       </div>
     )
