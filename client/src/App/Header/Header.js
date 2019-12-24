@@ -36,9 +36,7 @@ const Header = (props) => {
           </p>
         </div>
         <div className="header-nav">
-          <p className="nav-link">
-            <Link to="/">Log Out</Link>
-          </p>
+          <p className="nav-link" onClick={logOutHandler} >Log Out</p>
           <p className="nav-link menu-text" onClick={toggleMenu} >Menu</p>
         </div>
       </div>
@@ -64,17 +62,12 @@ const Header = (props) => {
           </p>
         </div>
         <div className="menu-buttons">
-          <div className="div-button log-in-button">
-            <Link to="/">Log Out</Link>
-          </div>
+          <div className="div-button log-in-button" onClick={logOutHandler} >Log Out</div>
         </div>
       </div>
     )
   }
 }
-
-//            <button onClick={logOutHandler}>Log Out</button>
-
 
 const mapStateToProps = state => ({
   authenticate: state.authenticate
@@ -87,19 +80,3 @@ const mapDispatchToProps = dispatch => {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Header)
-
-// export default Header;
-
-/*
-        <p className="nav-link">
-          <Link to="/lists">Lists</Link>
-        </p>
-        <p className="nav-link">
-          <Link to="/listsNew">New List</Link>
-        </p>
-
-
-        <p className="nav-link">
-          <Link to="/settings/store_sections">Store Sections</Link>
-        </p>
-*/
