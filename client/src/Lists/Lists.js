@@ -1,10 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { IoIosRemoveCircleOutline, IoMdCreate } from "react-icons/io";
+import '../App.css';
 
 const Lists = ({ lists, type, clickHandlerDelete }) => {
   return (
-    <ul className="list-group">
+    <ul className="list-group list-no-style">
       {lists.map(list => {
         let editListLink;
         if (list) {
