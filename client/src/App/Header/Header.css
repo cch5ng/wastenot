@@ -80,6 +80,10 @@ a.title:active {
   text-decoration: underline;
 }
 
+.action-link {
+  padding-left: 12px;
+}
+
 .action-link a:link,
 .action-link a:visited {
   color: #F1665D;
@@ -95,8 +99,8 @@ a.title:active {
 /* menu */
 
 .menu {
-  width: 90%;
-  margin: 10px auto;
+  padding: 10px 5%;
+  background-color: #e5e5e5;
 }
 
 .icon {
@@ -117,19 +121,45 @@ a.title:active {
   margin-bottom: 5px;
 }
 
+.sign-up-button {
+  background-color: #F1665D;
+}
+
+.log-in-button {
+  background-color: #fff;
+}
+
+.menu-links-medium {
+  display: none;
+}
+
+.menu-link-item a,
+.div-button a {
+  text-decoration: none;
+  color: #000;
+}
+
+.menu-link-item {
+  padding-left: 12px;
+}
+
 
 @media (min-width: 768px) {
 
+  .menu-text {
+    display: none;
+  }
+
   .header-main {
     /*margin-top: 15px;*/
-    width: 50%;
+    width: 30%;
     margin-left: 15px;
     text-align: left;
 
   }
 
   .header-nav {
-    width: 50%;
+    width: 20%;
     justify-content: flex-end;
     align-items: normal;
     margin-right: 15px;
@@ -139,6 +169,15 @@ a.title:active {
     display: flex;
     width: 100%;
   }
+
+  .menu-links-medium {
+    display: flex;
+    flex-flow: row no-wrap;
+    width: 50%;
+    margin: 20px auto 0;
+    justify-content: center;
+  }
+
 
 /*  .contact {
     padding-bottom: 12px;

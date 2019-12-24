@@ -1,42 +1,80 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import './Header.css';
 import { logout } from '../../actions/authenticate';
 
 const Header = (props) => {
+  const [menuDisplayed, setMenuDisplayed] = useState(false);
 
   const logOutHandler = (ev) => {
-    //ev.preventDefault();
     props.logout();
   }
 
-  return (
-    <div className="header title">
-      <div className="header-main">
-        <h2><Link to="/" className="header-main">Waste Not</Link></h2>
-      </div>
+  const toggleMenu = (ev) => {
+    setMenuDisplayed(!menuDisplayed)
+  }
 
-      <div className="header-contact">
-        <p className="nav-link">
-          <Link to="/settings/listTemplatesNew">New Template</Link>
-        </p>
-      </div>
-      <div className="header-contact">
-        <p className="nav-link">
-          <Link to="/settings/listTemplates">Templates</Link>
-        </p>
-      </div>
-
-      {props.authenticate.isLoggedIn && (
-        <div>
-          <button onClick={logOutHandler}>Log Out</button>
+  if (!menuDisplayed) {
+    return (
+      <div className="header title">
+        <div className="header-main">
+          <h2><Link to="/" className="title">Waste Not</Link></h2>
         </div>
-      )}
+        <div className="menu-links-medium">
+          <p className="menu-link-item">
+            <Link to="/settings/listTemplatesNew">New Template</Link>
+          </p>
+          <p className="menu-link-item">
+            <Link to="/settings/listTemplates">Templates</Link>
+          </p>
+          <p className="menu-link-item">
+            <Link to="/about">About</Link>
+          </p>
+          <p className="menu-link-item">
+            <Link to="/support">Support</Link>
+          </p>
+        </div>
+        <div className="header-nav">
+          <p className="nav-link">
+            <Link to="/">Log Out</Link>
+          </p>
+          <p className="nav-link menu-text" onClick={toggleMenu} >Menu</p>
+        </div>
+      </div>
+    )
+  }
 
-    </div>
-  )
+  if (menuDisplayed) {
+    return (
+      <div className="menu">
+        <div className="icon" onClick={toggleMenu} >X</div>
+        <div className="menu-links">
+          <p className="menu-link-item">
+            <Link to="/settings/listTemplatesNew">New Template</Link>
+          </p>
+          <p className="menu-link-item">
+            <Link to="/settings/listTemplates">Templates</Link>
+          </p>
+          <p className="menu-link-item">
+            <Link to="/about">About</Link>
+          </p>
+          <p className="menu-link-item">
+            <Link to="/support">Support</Link>
+          </p>
+        </div>
+        <div className="menu-buttons">
+          <div className="div-button log-in-button">
+            <Link to="/">Log Out</Link>
+          </div>
+        </div>
+      </div>
+    )
+  }
 }
+
+//            <button onClick={logOutHandler}>Log Out</button>
+
 
 const mapStateToProps = state => ({
   authenticate: state.authenticate
