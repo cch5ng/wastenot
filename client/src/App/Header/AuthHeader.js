@@ -64,8 +64,8 @@ const AuthHeader = (props) => {
           </p>
         </div>
         <div className="menu-buttons">
-          <Button label="Sign Up" onClickHandler={handleSignUpBtn} size="extra-large"/>
-          <Button label="Log In" onClickHandler={handleLogInBtn} size="extra-large"/>
+          <Button label="Sign Up" onClickHandler={handleSignUpBtn} size="extra-large" type="important"/>
+          <Button label="Log In" onClickHandler={handleLogInBtn} size="extra-large" type="neutral"/>
         </div>
       </div>
     )
