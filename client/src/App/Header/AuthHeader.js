@@ -26,11 +26,11 @@ const AuthHeader = (props) => {
           </p>
         </div>
         <div className="header-nav">
-          <p className="nav-link">
-            <Link to="/">Log In</Link>
-          </p>
           <p className="action-link">
             <Link to="/signup">Sign Up</Link>
+          </p>
+          <p className="nav-link">
+            <Link to="/">Log In</Link>
           </p>
           <p className="nav-link menu-text" onClick={toggleMenu} >Menu</p>
         </div>
@@ -51,12 +51,12 @@ const AuthHeader = (props) => {
           </p>
         </div>
         <div className="menu-buttons">
-          <div className="div-button sign-up-button">
-            <Link to="/signup">Sign Up</Link>
-          </div>
-          <div className="div-button log-in-button">
-            <Link to="/">Log In</Link>
-          </div>
+          <Link to="/signup">
+            <div className="div-button sign-up-button">Sign Up</div>
+          </Link>
+          <Link to="/">
+            <div className="div-button log-in-button">Log In</div>
+          </Link>
         </div>
       </div>
     )
