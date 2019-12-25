@@ -29,6 +29,7 @@ router.post('/add', (req, res, next) => {
      .catch(error => next(error));
 });
 
+//GET all shopping lists
 router.post('/shoppingLists', (req, res, next) => {
   let cookieStr = req.body.cookieStr;
   let { email, id } = Session.parse(cookieStr);
@@ -49,6 +50,7 @@ router.post('/shoppingLists', (req, res, next) => {
     .catch(error => next(error));
 });
 
+//GET all template lists
 router.post('/templateLists', (req, res, next) => {
   let cookieStr = req.body.cookieStr;
   let { email, id } = Session.parse(cookieStr);
@@ -70,6 +72,7 @@ router.post('/templateLists', (req, res, next) => {
 });
 
 //REFACTOR get list items and also the list name by guid
+//TEST but should apply to both template list and shopping list
 router.post('/listDetail/:listGuid', (req, res, next) => {
   const { listGuid } = req.params;
   let cookieStr = req.body.cookieStr;
@@ -101,6 +104,7 @@ router.post('/listDetail/:listGuid', (req, res, next) => {
     .catch(error => next(error));
 });
 
+//TEST should apply to both template list and shopping list
 router.put('/listDetail/:listGuid', (req, res, next) => {
   const { listGuid } = req.params;
   const { name, type, listItems } = req.body;
@@ -152,6 +156,7 @@ router.put('/listDetail/:listGuid', (req, res, next) => {
     .catch(error => next(error));
 });
 
+//TEST should apply to both template list and shopping list
 router.delete('/listDetail/:listGuid', (req, res, next) => {
   const { listGuid } = req.params;
   let cookieStr = req.body.cookieStr;
@@ -173,6 +178,7 @@ router.delete('/listDetail/:listGuid', (req, res, next) => {
     .catch(error => next(error));
 })
 
+//TEST should apply to both template list and shopping list
 router.delete('/listItemDetail/:listItemGuid', (req, res, next) => {
   const {listItemGuid} = req.params;
   ListItemTable.deleteListItemByItemGuid(listItemGuid)
