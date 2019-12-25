@@ -26,6 +26,9 @@ const Header = (props) => {
             <Link to="/shoppingLists">Shopping Lists</Link>
           </p>
           <p className="menu-link-item">
+            <Link to="/shoppingLists/new">New Shopping List</Link>
+          </p>
+          <p className="menu-link-item">
             <Link to="/settings/listTemplatesNew">New Template</Link>
           </p>
           <p className="menu-link-item">
@@ -53,6 +56,9 @@ const Header = (props) => {
         <div className="menu-links">
           <p className="menu-link-item">
             <Link to="/shoppingLists">Shopping Lists</Link>
+          </p>
+          <p className="menu-link-item">
+            <Link to="/shoppingLists/new">New Shopping List</Link>
           </p>
           <p className="menu-link-item">
             <Link to="/settings/listTemplatesNew">New Template</Link>
