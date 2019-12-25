@@ -5,25 +5,25 @@ import { IoIosAddCircleOutline } from "react-icons/io";
 import Lists from '../Lists/Lists';
 import { objToArray } from '../utils/utils';
 import http_requests from '../utils/http_requests';
-import { fetchLists, fetchTemplateListDelete } from '../actions/listTemplates';
+import { fetchShoppingLists } from '../actions/shoppingLists';
 import '../App.css';
 
 class ShoppingLists extends Component {
   componentDidMount() {
     if (this.props.authenticate && this.props.authenticate.authStr) {
-      this.props.fetchLists({cookieStr: this.props.authenticate.authStr});
+      this.props.fetchShoppingLists({cookieStr: this.props.authenticate.authStr});
     }
   }
 
-  componentDidUpdate(prevProps) {
-    if (prevProps.authenticate.authStr !== this.props.authenticate.authStr) {
-      this.props.fetchLists({cookieStr: this.props.authenticate.authStr});
-    }
-  }
+  // componentDidUpdate(prevProps) {
+  //   if (prevProps.authenticate.authStr !== this.props.authenticate.authStr) {
+  //     this.props.fetchLists({cookieStr: this.props.authenticate.authStr});
+  //   }
+  // }
 
   removeListTemplates = (ev) => {
     let listGuid = ev.target.id;
-    this.props.fetchTemplateListDelete(listGuid)
+    //this.props.fetchTemplateListDelete(listGuid)
   }
 
   render() {
@@ -35,9 +35,9 @@ class ShoppingLists extends Component {
     return (
       <div className="main">
         <div className="div-control">
-          <Link to="/settings/listTemplatesNew"><IoIosAddCircleOutline className="list-item-icon-lg" /> New Template List</Link>
+          <Link to="/shoppingLists/new"><IoIosAddCircleOutline className="list-item-icon-lg" /> New Shopping List</Link>
         </div>
-        <Lists lists={listTemplatesAr} type="template" clickHandlerDelete={this.removeListTemplates} />
+        <Lists lists={listTemplatesAr} type="shopping" clickHandlerDelete={this.removeListTemplates} />
       </div>
     )
   }
@@ -47,8 +47,7 @@ const mapStateToProps = state => ({ authenticate: state.authenticate, listTempla
 
 const mapDispatchToProps = dispatch => {
   return {
-    fetchLists: ({cookieStr}) => dispatch(fetchLists({cookieStr})),
-    fetchTemplateListDelete: (guid) => dispatch(fetchTemplateListDelete(guid))
+    fetchShoppingLists: ({cookieStr}) => dispatch(fetchShoppingLists({cookieStr}))
   }
 }
 
