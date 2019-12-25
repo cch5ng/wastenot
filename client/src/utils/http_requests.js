@@ -53,11 +53,15 @@ const requests = {
         .catch(err => reject(err));
     });
   },
-  delete: (url) => {
+  delete: (url, body) => {
     return new Promise((resolve, reject) => {
       fetch(url, {
         method: 'DELETE',
-        credentials: 'same-origin'
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'same-origin',
+        body: JSON.stringify(body),
       })
         .then(resp => resolve(resp.json()))
         .catch(err => reject(err));
@@ -81,9 +85,13 @@ const Lists = {
   putTemplateList: ({ list, cookieStr }) => {
     return requests.put(`${API_ROOT}${API_LIST_MIDDLE}${LIST_DETAIL_SUFFIX}/${list.guid}`, { ...list, cookieStr });
   },
-  deleteTemplateList: (guid) => {
-    return requests.delete(`${API_ROOT}${API_LIST_MIDDLE}${LIST_DETAIL_SUFFIX}/${guid}`);
+  deleteTemplateList: ({ guid, cookieStr }) => {
+    return requests.delete(`${API_ROOT}${API_LIST_MIDDLE}${LIST_DETAIL_SUFFIX}/${guid}`, { cookieStr });
   }
+  // getShoppingList,
+  // postShoppingList,
+  // putShoppingList,
+  // deleteShoppingList
 };
 
 const Auth = {
