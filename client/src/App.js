@@ -8,7 +8,7 @@ import AuthHeader from './App/Header/AuthHeader';
 //import Footer from './App/Footer/Footer'
 import ListTemplates from './ListTemplates/ListTemplates';
 import ListTemplateDetailForm from './ListTemplates/ListTemplateDetailForm';
-//import ListTemplateDetail from './ListTemplates/ListTemplateDetail';
+import ShoppingListDetailForm from './ShoppingLists/ShoppingListDetailForm';
 import useListTemplates from './utils/hooks/useListTemplates';
 import ShoppingLists from './ShoppingLists/ShoppingLists';
 import config from './config';
@@ -48,6 +48,9 @@ function App(props) {
           <Header />
           <Route path='/' exact component={Home}/>
           <Route exact path='/shoppingLists' component={ShoppingLists} />
+          <Route exact path='/shoppingLists/new'
+            render={(props) => (<ShoppingListDetailForm {...props} mode="add"
+          />
 
           <Route exact path="/settings/listTemplates" 
             render={(props) => (<ListTemplates {...props} updateListTemplates={updateListTemplates}
