@@ -22,8 +22,14 @@ class ListTemplates extends Component {
   }
 
   removeListTemplates = (ev) => {
-    let listGuid = ev.target.id;
-    this.props.fetchTemplateListDelete(listGuid)
+    let guid = ev.target.id;
+    if (this.props.authenticate && this.props.authenticate.authStr) {
+      this.props.fetchTemplateListDelete(
+        { guid,
+          cookieStr: this.props.authenticate.authStr
+        }
+      )
+    }
   }
 
   render() {
