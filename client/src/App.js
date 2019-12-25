@@ -47,12 +47,7 @@ function App(props) {
         <div className="App">
           <Header />
           <Route path='/' exact component={Home}/>
-
-          <Route exact path='/shoppingLists' 
-            render={(props) => (<ShoppingLists {...props} updateShoppingLists={updateShoppingLists}
-              removeShoppingLists={removeShoppingLists} lists={lists}
-            />
-          )} />
+          <Route exact path='/shoppingLists' component={ShoppingLists} />
 
           <Route exact path="/settings/listTemplates" 
             render={(props) => (<ListTemplates {...props} updateListTemplates={updateListTemplates}
