@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux';
 import authenticate from './authenticate';
-//import lists from './lists';
+import shoppingLists from './shoppingLists';
 import listTemplates from './listTemplates';
 
 export default combineReducers({
   authenticate,
-  //lists,
+  shoppingLists,
   listTemplates,
 });
