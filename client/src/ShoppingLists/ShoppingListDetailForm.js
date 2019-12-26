@@ -11,14 +11,14 @@ import http_requests from '../utils/http_requests';
 import { fetchTemplateListAdd, fetchListTemplate, fetchTemplateListEdit } from '../actions/listTemplates';
 import { objToArray, getCookieStr, arrayToObj } from '../utils/utils';
 
-let inputObj = {name: '', section: 'none'};
-const keyBase = 'shoppingListItem';
+let inputObj = {name: '', section: 'none', done: false};
+const KEY_BASE = 'shoppingListItem';
 
 const listType = 'shopping';
 const initListItemInputs = {};
 
 for (let i = 0; i < 50; i++) {
-  let key = `${keyBase}${i}`;
+  let key = `${KEY_BASE}${i}`;
   initListItemInputs[key] = inputObj;
 }
 
@@ -50,15 +50,27 @@ const ShoppingListDetailForm = (props) => {
   function inputChangeHandler(ev) {
     let name = ev.target.name;
     let value = ev.target.value;
+    let type = ev.target.type;
     let id = ev.target.id;
 
     if (name === 'listNameInp') {
       setListName(value);
-    } else {
-      // handle list item inputs
+    } else if (type === 'text') {
+      // handle list item text inputs
       let prevListItemInputs = listItemInputs;
       let newInput2 = {};
       newInput2.name = value;
+      let newInput = {}
+      newInput[id] = {...prevListItemInputs[id], ...newInput2}
+      let newListItemInputs = { ...prevListItemInputs, ...newInput};
+      setListItemInputs(newListItemInputs);
+    } else if (type === 'checkbox') {
+    // else handle list item checkbox inputs
+      console.log('toggle checkbox')
+      console.log('checkbox val', value)
+      let prevListItemInputs = listItemInputs;
+      let newInput2 = {};
+      newInput2.done = value === 'on' ? true : false;
       let newInput = {}
       newInput[id] = {...prevListItemInputs[id], ...newInput2}
       let newListItemInputs = { ...prevListItemInputs, ...newInput};
@@ -130,16 +142,18 @@ const ShoppingListDetailForm = (props) => {
 
     if (Object.keys(listItemInputs).length) {
       for (let i = 0; i < 50; i++) {
-        let key = mode === 'add' ? 'templateListItem' + i.toString() : Object.keys(listItemInputs)[i];
+        let key = mode === 'add' ? `${KEY_BASE}${i.toString()}` : Object.keys(listItemInputs)[i];
         //TODO fix later when I handle select value/id pairs
         let selectKey = 'templateListItemSelect' + i.toString();
         let curInput =  listItemInputs[key];
+        let checked = curInput.done === true ? 'on' : 'off';
 
 
         //TODO add checkbox
         //TODO add some way to indicate that the list items were purchased
         htmlResult.push(
-          <li key={key} >
+          <li key={key} className="form-row-inline">
+            <input type="checkbox" value={checked} onChange={inputChangeHandler} />
             <InputText value={listItemInputs[key].name} placeholder="item name" 
               id={key} onChangeHandler={inputChangeHandler} name={key}
             />
