@@ -49,7 +49,8 @@ function App(props) {
           <Route path='/' exact component={Home}/>
           <Route exact path='/shoppingLists' component={ShoppingLists} />
           <Route exact path='/shoppingLists/new'
-            render={(props) => (<ShoppingListDetailForm {...props} mode="add"
+            render={(props) => (<ShoppingListDetailForm {...props} mode="add" />
+            )}
           />
 
           <Route exact path="/settings/listTemplates" 
