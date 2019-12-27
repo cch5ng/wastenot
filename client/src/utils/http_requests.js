@@ -76,22 +76,24 @@ const Lists = {
   getAllTemplateLists: ({ cookieStr }) => {
     return requests.post(`${API_ROOT}${API_LIST_MIDDLE}${GET_TEMPLATE_LISTS_SUFFIX}`, { cookieStr });
   },
+  //this GET is used for templates and shopping lists because retrieval by id
   getTemplateList: ({ guid, cookieStr }) => {
     return requests.post(`${API_ROOT}${API_LIST_MIDDLE}${LIST_DETAIL_SUFFIX}/${guid}`, { cookieStr });
   },
   postTemplateList: ({ list, cookieStr }) => {
     return requests.post(`${API_ROOT}${API_LIST_MIDDLE}${CREATE_LIST_SUFFIX}`, { ...list, cookieStr });
   },
+  postShoppingList: ({ list, cookieStr }) => {
+    return requests.post(`${API_ROOT}${API_LIST_MIDDLE}${CREATE_LIST_SUFFIX}`, { ...list, cookieStr });
+  },
+  //this PUT is used for templates and shopping lists because update by id
   putTemplateList: ({ list, cookieStr }) => {
     return requests.put(`${API_ROOT}${API_LIST_MIDDLE}${LIST_DETAIL_SUFFIX}/${list.guid}`, { ...list, cookieStr });
   },
+  //this DELETE is used for templates and shopping lists because done by id
   deleteTemplateList: ({ guid, cookieStr }) => {
     return requests.delete(`${API_ROOT}${API_LIST_MIDDLE}${LIST_DETAIL_SUFFIX}/${guid}`, { cookieStr });
   }
-  // getShoppingList,
-  // postShoppingList,
-  // putShoppingList,
-  // deleteShoppingList
 };
 
 const Auth = {
