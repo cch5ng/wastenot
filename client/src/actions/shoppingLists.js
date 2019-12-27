@@ -4,9 +4,9 @@ import { getCookieStr, arrayToObj } from '../utils/utils';
 export const SHOPPING_LISTS_FETCH = 'SHOPPING_LISTS_FETCH';
 export const SHOPPING_LISTS_ERR = 'SHOPPING_LISTS_ERR';
 export const SHOPPING_LISTS_FETCH_SUCCESS = 'SHOPPING_LISTS_FETCH_SUCCESS';
+export const SHOPPING_LISTS_ADD_FETCH_SUCCESS = 'SHOPPING_LISTS_ADD_FETCH_SUCCESS';
 export const SHOPPING_LISTS_EDIT_FETCH_SUCCESS = 'SHOPPING_LISTS_EDIT_FETCH_SUCCESS';
 
-// async action for getting posts
 export const fetchShoppingLists = ({ cookieStr }) => dispatch => {
   dispatch({ type: SHOPPING_LISTS_FETCH });
 
@@ -30,10 +30,30 @@ export const fetchShoppingLists = ({ cookieStr }) => dispatch => {
   }
 }
 
-//TODO missing handler for post a new shopping list
-//right now probably reusing the template action outright
+export const fetchShoppingListCreate = ({ list, cookieStr }) => dispatch => {
+  dispatch({ type: SHOPPING_LISTS_FETCH});
 
-// async action for getting posts
+  if (cookieStr) {
+    http_requests.Lists.postShoppingList({ list, cookieStr })
+      .then(response => {
+        console.log('response', response)
+        if (response.type === 'success') {
+          dispatch({
+            type: SHOPPING_LISTS_ADD_FETCH_SUCCESS,
+            message: response.message,
+            shoppingList: response.shoppingList
+          })
+        }
+      })
+      // use json.posts to make the data more shallow
+      // .then(json => )
+      .catch(function(err) {
+        dispatch({ type: SHOPPING_LISTS_ERR, message: action.message })
+        console.log('fetch err: ' + err.message)
+      })
+  }
+}
+
 export const fetchShoppingListEdit = ({ list, cookieStr }) => dispatch => {
   dispatch({ type: SHOPPING_LISTS_FETCH });
 
@@ -58,38 +78,7 @@ export const fetchShoppingListEdit = ({ list, cookieStr }) => dispatch => {
 }
 
 
-// export function receiveListCreate(listObj) {
 
-//   let normListObj = {};
-//   let listId = listObj.listId;
-//   normListObj[listId] = listObj;
-
-//   return {
-//     type: RECEIVE_ADD_LIST,
-//     normListObj,
-//     retrieving: false
-//   }
-// }
-
-// async action for getting posts
-export const fetchShoppingListCreate = ({ list, cookieStr }) => dispatch => {
-  dispatch({ type: SHOPPING_LISTS_FETCH});
-
-  if (cookieStr) {
-    http_requests.Lists.postShoppingList({ list, cookieStr })
-      .then(response => response.json())
-      // use json.posts to make the data more shallow
-      .then(json => dispatch({
-        type: SHOPPING_LISTS_FETCH_SUCCESS,
-        message: action.message,
-        shoppingLists: json.shoppingLists
-      }))
-      .catch(function(err) {
-        dispatch({ type: SHOPPING_LISTS_ERR, message: action.message })
-        console.log('fetch err: ' + err.message)
-      })
-  }
-}
 
 /////
 
