@@ -4,6 +4,7 @@ import { getCookieStr, arrayToObj } from '../utils/utils';
 export const SHOPPING_LISTS_FETCH = 'SHOPPING_LISTS_FETCH';
 export const SHOPPING_LISTS_ERR = 'SHOPPING_LISTS_ERR';
 export const SHOPPING_LISTS_FETCH_SUCCESS = 'SHOPPING_LISTS_FETCH_SUCCESS';
+export const SHOPPING_LISTS_EDIT_FETCH_SUCCESS = 'SHOPPING_LISTS_EDIT_FETCH_SUCCESS';
 
 // async action for getting posts
 export const fetchShoppingLists = ({ cookieStr }) => dispatch => {
@@ -29,15 +30,30 @@ export const fetchShoppingLists = ({ cookieStr }) => dispatch => {
   }
 }
 
-// export const REQUEST_ADD_LIST = 'REQUEST_ADD_LIST'
-// export const RECEIVE_ADD_LIST = 'RECEIVE_ADD_LIST'
+// async action for getting posts
+export const fetchShoppingListEdit = ({ list, cookieStr }) => dispatch => {
+  dispatch({ type: SHOPPING_LISTS_FETCH });
 
-// export function requestListCreate() {
-//   return {
-//     type: REQUEST_ADD_LIST,
-//     retrieving: true
-//   }
-// }
+  if (cookieStr) {
+    http_requests.Lists.putTemplateList({ list, cookieStr })
+      .then(response => {
+        if (response.type === 'success') {
+          //let shoppingListsObj = arrayToObj(response.templateList);
+          dispatch(
+            { type: SHOPPING_LISTS_EDIT_FETCH_SUCCESS,
+              message: response.message,
+              shoppingList: list
+            }
+          )
+        }
+      })
+      .catch(function(err) {
+        dispatch({ type: SHOPPING_LISTS_ERR, message: err.message});
+        console.log('fetch err: ' + err.message)
+      })
+  }
+}
+
 
 // export function receiveListCreate(listObj) {
 
@@ -53,24 +69,24 @@ export const fetchShoppingLists = ({ cookieStr }) => dispatch => {
 // }
 
 // async action for getting posts
-// export const fetchListCreate = (postData) => dispatch => {
-//   dispatch(requestPostCreate())
-//   let INIT_CREATE_POST = {method: 'POST',
-//                           headers: {
-//                             'Authorization': 'mAuth',
-//                             "Content-Type": 'application/json'
-//                           },
-//                           body: JSON.stringify(postData)
-//                         }
+export const fetchShoppingListCreate = ({ list, cookieStr }) => dispatch => {
+  dispatch({ type: SHOPPING_LISTS_FETCH});
 
-//   return fetch(API_GET_POSTS, INIT_CREATE_POST)
-//     .then(response => response.json())
-//     // use json.posts to make the data more shallow
-//     .then(json => dispatch(receivePostCreate(json)))
-//     .catch(function(err) {
-//       console.log('fetch err: ' + err.message)
-//     })
-// }
+  if (cookieStr) {
+    http_requests.Lists.postShoppingList({ list, cookieStr })
+      .then(response => response.json())
+      // use json.posts to make the data more shallow
+      .then(json => dispatch({
+        type: SHOPPING_LISTS_FETCH_SUCCESS,
+        message: action.message,
+        shoppingLists: json.shoppingLists
+      }))
+      .catch(function(err) {
+        dispatch({ type: SHOPPING_LISTS_ERR, message: action.message })
+        console.log('fetch err: ' + err.message)
+      })
+  }
+}
 
 /////
 

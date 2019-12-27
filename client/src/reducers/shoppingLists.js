@@ -1,5 +1,5 @@
 import { SHOPPING_LISTS_FETCH, SHOPPING_LISTS_ERR,
-  SHOPPING_LISTS_FETCH_SUCCESS } from '../actions/shoppingLists';
+  SHOPPING_LISTS_FETCH_SUCCESS, SHOPPING_LISTS_EDIT_FETCH_SUCCESS } from '../actions/shoppingLists';
 
 const shoppingLists = (state = {}, action) => {
   let listObj = {}
@@ -21,6 +21,14 @@ const shoppingLists = (state = {}, action) => {
         status: 'success',
         message: action.message,
         shoppingLists: action.shoppingLists
+      }
+    case SHOPPING_LISTS_EDIT_FETCH_SUCCESS:
+      let id = action.shoppingList.guid;
+      return {
+        ...state,
+        status: 'success',
+        message: action.message,
+        shoppingLists: {...state.shoppingLists, [id]: action.shoppingList}
       }
     default:
       return state;
