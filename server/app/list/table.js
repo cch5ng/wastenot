@@ -118,7 +118,11 @@ class ListTable {
         (error, response) => {
           if (error) return reject(error);
           if (response.rows.length) {
-            resolve({guid: response.rows[0].guid, message: `List with guid, ${response.rows[0].guid} was removed.`});
+            resolve({
+              guid: response.rows[0].guid,
+              message: `List with guid, ${response.rows[0].guid} was removed.`,
+              type: 'success'
+            });
           }
         }
       )
