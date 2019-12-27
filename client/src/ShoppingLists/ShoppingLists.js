@@ -15,21 +15,23 @@ class ShoppingLists extends Component {
     }
   }
 
-  // componentDidUpdate(prevProps) {
-  //   if (prevProps.authenticate.authStr !== this.props.authenticate.authStr) {
-  //     this.props.fetchLists({cookieStr: this.props.authenticate.authStr});
-  //   }
-  // }
+  componentDidUpdate(prevProps) {
+    if (prevProps.authenticate.authStr !== this.props.authenticate.authStr) {
+      this.props.fetchShoppingLists({cookieStr: this.props.authenticate.authStr});
+    }
+  }
 
   removeListTemplates = (ev) => {
     let listGuid = ev.target.id;
+    //TODO
+    console.log('TODO implement ShoppingLists > removeListTemplates')
     //this.props.fetchTemplateListDelete(listGuid)
   }
 
   render() {
-    let listTemplatesAr = [];
-    if (this.props.listTemplates && this.props.listTemplates.listTemplates) {
-      listTemplatesAr = objToArray(this.props.listTemplates.listTemplates);
+    let shoppingListsAr = [];
+    if (this.props.shoppingLists && this.props.shoppingLists.shoppingLists) {
+      shoppingListsAr = objToArray(this.props.shoppingLists.shoppingLists);
     }
 
     return (
@@ -37,13 +39,13 @@ class ShoppingLists extends Component {
         <div className="div-control">
           <Link to="/shoppingLists/new"><IoIosAddCircleOutline className="list-item-icon-lg" /> New Shopping List</Link>
         </div>
-        <Lists lists={listTemplatesAr} type="shopping" clickHandlerDelete={this.removeListTemplates} />
+        <Lists lists={shoppingListsAr} type="shopping" clickHandlerDelete={this.removeListTemplates} />
       </div>
     )
   }
 }
 
-const mapStateToProps = state => ({ authenticate: state.authenticate, listTemplates: state.listTemplates });
+const mapStateToProps = state => ({ authenticate: state.authenticate, shoppingLists: state.shoppingLists });
 
 const mapDispatchToProps = dispatch => {
   return {
