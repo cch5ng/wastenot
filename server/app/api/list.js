@@ -9,8 +9,7 @@ const Session = require('../auth/Session');
 const router = Router();
 
 router.post('/add', (req, res, next) => {
-  let cookieStr = req.body.cookieStr;
-  let {name, type, listItems} = req.body;
+  let {name, type, listItems, cookieStr} = req.body;
   let { email, id } = Session.parse(cookieStr);
   let emailHash = hash(email);
 
@@ -38,7 +37,7 @@ router.post('/shoppingLists', (req, res, next) => {
   AuthTable.isAuthenticated({ sessionId: id, emailHash })
     .then(resp => {
       if (resp) {
-        ListTable.getListsByType({ listType: 'shopping', emailHash })
+        ListTable.getListsByType({ listType: 'shopping', owner_id: resp.account.id  })
           .then(lists => res.json(lists))
           .catch(err => next(err));
       } else {
