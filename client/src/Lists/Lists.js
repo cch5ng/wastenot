@@ -10,7 +10,7 @@ const Lists = ({ lists, type, clickHandlerDelete }) => {
         let editListLink;
         if (list) {
           if (type === "shopping") {
-            editListLink = `/listEdit/${list.guid}`;
+            editListLink = `/shoppingLists/${list.guid}/edit`;
           } else if (type === "template") {
             editListLink = `/settings/listTemplatesEdit/${list.guid}`;
           }
