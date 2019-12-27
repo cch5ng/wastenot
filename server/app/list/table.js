@@ -22,9 +22,22 @@ class ListTable {
                 return ListItemTable.storeListItem({ name, list_guid, list_item_guid })
               })
             )
-              .then(() => resolve(
-                { message: `templateList with guid, ${list_guid}, was added`,
-                  listTemplate: {[list_guid]: { name, type, listItems } } }))
+              .then(() => {
+                if (type === 'template') {
+                  resolve(
+                    { message: `templateList with guid, ${list_guid}, was added`,
+                      listTemplate: {[list_guid]: { name, type, listItems } }
+                    }
+                  )
+                }
+                if (type === 'shopping') {
+                  resolve(
+                    { message: `templateList with guid, ${list_guid}, was added`,
+                      shoppingList: {[list_guid]: { name, type, listItems } }
+                    }
+                  )
+                }
+              })
               .catch(err => reject(err))
           }
         }
