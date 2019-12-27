@@ -26,14 +26,16 @@ class ListTable {
                 if (type === 'template') {
                   resolve(
                     { message: `templateList with guid, ${list_guid}, was added`,
-                      listTemplate: {[list_guid]: { name, type, listItems } }
+                      listTemplate: {[list_guid]: { name, type, listItems } },
+                      type: 'success'
                     }
                   )
                 }
                 if (type === 'shopping') {
                   resolve(
                     { message: `templateList with guid, ${list_guid}, was added`,
-                      shoppingList: {[list_guid]: { name, type, listItems } }
+                      shoppingList: {[list_guid]: { name, type, listItems } },
+                      type: 'success'
                     }
                   )
                 }
