@@ -30,6 +30,9 @@ export const fetchShoppingLists = ({ cookieStr }) => dispatch => {
   }
 }
 
+//TODO missing handler for post a new shopping list
+//right now probably reusing the template action outright
+
 // async action for getting posts
 export const fetchShoppingListEdit = ({ list, cookieStr }) => dispatch => {
   dispatch({ type: SHOPPING_LISTS_FETCH });
