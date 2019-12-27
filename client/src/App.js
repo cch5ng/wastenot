@@ -52,6 +52,10 @@ function App(props) {
             render={(props) => (<ShoppingListDetailForm {...props} mode="add" />
             )}
           />
+          <Route exact path='/shoppingLists/:listGuid/edit'
+            render={({match}) => (<ShoppingListDetailForm mode="edit" listGuid={match.params.listGuid} />
+            )}
+          />
 
           <Route exact path="/settings/listTemplates" 
             render={(props) => (<ListTemplates {...props} updateListTemplates={updateListTemplates}
