@@ -5,10 +5,15 @@ import { IoIosAddCircleOutline } from "react-icons/io";
 import Lists from '../Lists/Lists';
 import { objToArray } from '../utils/utils';
 import http_requests from '../utils/http_requests';
-import { fetchShoppingLists } from '../actions/shoppingLists';
+import { fetchShoppingLists, fetchShoppingListDelete } from '../actions/shoppingLists';
 import '../App.css';
 
 class ShoppingLists extends Component {
+
+  constructor(props) {
+    super(props);
+  }
+
   componentDidMount() {
     if (this.props.authenticate && this.props.authenticate.authStr) {
       this.props.fetchShoppingLists({cookieStr: this.props.authenticate.authStr});
@@ -23,9 +28,9 @@ class ShoppingLists extends Component {
 
   removeListTemplates = (ev) => {
     let listGuid = ev.target.id;
-    //TODO
-    console.log('TODO implement ShoppingLists > removeListTemplates')
-    //this.props.fetchTemplateListDelete(listGuid)
+    if (this.props.authenticate && this.props.authenticate.authStr) {
+      this.props.fetchShoppingListDelete({cookieStr: this.props.authenticate.authStr, guid: listGuid});
+    }
   }
 
   render() {
@@ -49,7 +54,8 @@ const mapStateToProps = state => ({ authenticate: state.authenticate, shoppingLi
 
 const mapDispatchToProps = dispatch => {
   return {
-    fetchShoppingLists: ({cookieStr}) => dispatch(fetchShoppingLists({cookieStr}))
+    fetchShoppingLists: ({cookieStr}) => dispatch(fetchShoppingLists({cookieStr})),
+    fetchShoppingListDelete: ({ guid, cookieStr }) => dispatch(fetchShoppingListDelete({ guid, cookieStr }))
   }
 }
 
