@@ -150,12 +150,10 @@ export const fetchTemplateListEdit = ({ list, cookieStr }) => dispatch => {
 }
 
 
-export const fetchTemplateListDelete = (guid) => dispatch => {
+export const fetchTemplateListDelete = ({ guid, cookieStr }) => dispatch => {
   dispatch({ type: TEMPLATE_LISTS_FETCH });
-
-  let cookieStr = getCookieStr();
   if (cookieStr) {
-    http_requests.Lists.deleteTemplateList(guid)
+    http_requests.Lists.deleteTemplateList({ guid, cookieStr })
       .then(resp => {
         if (resp.type === 'error') {
           dispatch({

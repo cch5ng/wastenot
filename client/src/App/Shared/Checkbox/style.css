@@ -1,3 +1,7 @@
+.form-group {
+  height: 25px;
+}
+
 input {
   padding: 0 0 0 8px;
   font-size: 14px;

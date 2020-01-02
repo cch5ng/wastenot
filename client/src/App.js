@@ -8,15 +8,18 @@ import AuthHeader from './App/Header/AuthHeader';
 //import Footer from './App/Footer/Footer'
 import ListTemplates from './ListTemplates/ListTemplates';
 import ListTemplateDetailForm from './ListTemplates/ListTemplateDetailForm';
-//import ListTemplateDetail from './ListTemplates/ListTemplateDetail';
+import ShoppingListDetailForm from './ShoppingLists/ShoppingListDetailForm';
 import useListTemplates from './utils/hooks/useListTemplates';
+import ShoppingLists from './ShoppingLists/ShoppingLists';
 import config from './config';
 import AuthForm from './Auth/AuthForm';
 
 
 function App(props) {
 
+  //TODO test, think these hooks are not being used currently
   const {listTemplates, updateListTemplates, removeListTemplates} = useListTemplates();
+
   let isLoggedIn = false;
   if (props.authenticate && props.authenticate.isLoggedIn) {
     isLoggedIn = true;
@@ -27,13 +30,12 @@ function App(props) {
       <Router>
         <div className="App">
           <AuthHeader />
-            <Route path='/' exact 
-              render={(props) => (<AuthForm {...props} title="Login" />
-              )} />
-            <Route path='/signup' exact 
-              render={(props) => (<AuthForm {...props} title="Sign Up" />
-              )} />
-
+          <Route path='/' exact 
+            render={(props) => (<AuthForm {...props} title="Login" />
+            )} />
+          <Route path='/signup' exact 
+            render={(props) => (<AuthForm {...props} title="Sign Up" />
+            )} />
         </div>
       </Router>
     )
@@ -44,21 +46,33 @@ function App(props) {
       <Router>
         <div className="App">
           <Header />
-            <Route path='/' exact component={Home}/>
-            <Route exact path="/settings/listTemplates" 
-              render={(props) => (<ListTemplates {...props} updateListTemplates={updateListTemplates}
-                removeListTemplates={removeListTemplates} listTemplates={listTemplates}
-              />
-            )} />
-            <Route exact path="/settings/listTemplatesNew"
-              render={(props) => (<ListTemplateDetailForm {...props} mode="add" updateListTemplates={updateListTemplates}
-              />
-            )} />
-            <Route exact path="/settings/listTemplatesEdit/:listTemplateGuid"
-              render={({match}) => (<ListTemplateDetailForm mode="edit" updateListTemplates={updateListTemplates}
-                listTemplateGuid={match.params.listTemplateGuid}
-              />
-            )} />
+          <Route path='/' exact component={Home}/>
+          <Route exact path='/shoppingLists' component={ShoppingLists} />
+          <Route exact path='/shoppingLists/new'
+            render={(props) => (<ShoppingListDetailForm {...props} mode="add" />
+            )}
+          />
+          <Route exact path='/shoppingLists/:listGuid/edit'
+            render={({match}) => (<ShoppingListDetailForm mode="edit" listGuid={match.params.listGuid} />
+            )}
+          />
+
+          <Route exact path="/settings/listTemplates" 
+            render={(props) => (<ListTemplates {...props} updateListTemplates={updateListTemplates}
+              removeListTemplates={removeListTemplates} listTemplates={listTemplates}
+            />
+          )} />
+          <Route exact path="/settings/listTemplatesNew"
+            render={(props) => (<ListTemplateDetailForm {...props} mode="add" 
+              updateListTemplates={updateListTemplates}
+            />
+          )} />
+          <Route exact path="/settings/listTemplatesEdit/:listTemplateGuid"
+            render={({match}) => (<ListTemplateDetailForm mode="edit" 
+              updateListTemplates={updateListTemplates}
+              listTemplateGuid={match.params.listTemplateGuid}
+            />
+          )} />
         </div>
       </Router>
     )
@@ -70,3 +84,18 @@ const mapStateToProps = state => ({
 })
 
 export default connect(mapStateToProps, null)(App);
+
+/*
+          <Route exact path='/shoppingLists/new' 
+            render={(props) => (<ShoppingListDetailForm {...props} mode="add" 
+              updateShoppingLists={updateShoppingLists}
+            />
+          )} />
+
+          <Route exact path="/shoppingLists/edit/:listGuid"
+            render={({match}) => (<ShoppingListDetailForm mode="edit" 
+              updateShoppingLists={updateShoppingLists}
+              listGuid={match.params.listGuid}
+            />
+          )} />
+*/

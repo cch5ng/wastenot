@@ -9,6 +9,10 @@
   color: #fff;
 }
 
+.button:hover {
+  background-color: #9e968a;
+}
+
 .small {
   width: 20%;
 }
@@ -42,8 +46,4 @@
 
 .important {
   background-color: #F1665D;
-}
-
-.button:hover {
-  background-color: #9e968a;
 }

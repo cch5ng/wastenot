@@ -7,21 +7,14 @@ import Button from '../App/Shared/Button/Button';
 import SelectList from '../App/Shared/SelectList/SelectList';
 import InputText from '../App/Shared/InputText/InputText';
 import '../App.css';
+import Checkbox from '../App/Shared/Checkbox/Checkbox';
 import http_requests from '../utils/http_requests';
-import { fetchTemplateListAdd, fetchListTemplate, fetchTemplateListEdit } from '../actions/listTemplates';
+import { fetchShoppingListCreate, fetchShoppingListEdit } from '../actions/shoppingLists';
 import { objToArray, getCookieStr, arrayToObj } from '../utils/utils';
 
-const keyBase = 'templateListItem';
-
-const listType = 'template';
+const KEY_BASE = 'shoppingListItem';
+const listType = 'shopping';
 const initListItemInputs = {};
-
-for (let i = 0; i < 50; i++) {
-  let key = `${keyBase}${i}`;
-  let inputObj = {name: '', section: 'none', done: false};
-  initListItemInputs[key] = inputObj;
-  initListItemInputs[key].sortOrder = i;
-}
 
 const sectionOptions = [
       {label: 'Section', value: 'none'},
@@ -35,29 +28,47 @@ const sectionOptions = [
       {label: 'bread', value: 'bread'},
 ]
 
-const ListTemplateDetailForm = (props) => {
+const ShoppingListDetailForm = (props) => {
   const [formSubmitted, setFormSubmitted] = useState(false);
-  const [title, setTitle] = useState(props.mode === 'edit' ? 'Edit Template List' : 'Add Template List');
+  const [title, setTitle] = useState(props.mode === 'edit' ? 'Edit Shopping List' : 'Add Shopping List');
   let editListItemTemplates;
   let editListTemplateName;
   let listGuid;
   let curListTemplate;
 
   const [listName, setListName] = useState('');
+
+  for (let i = 0; i < 50; i++) {
+    let key = `${KEY_BASE}${i}`;
+    let inputObj = {name: '', section: 'none', checked: false};
+    initListItemInputs[key] = inputObj;
+    initListItemInputs[key].sortOrder = i;
+  }
+
   const [listItemInputs, setListItemInputs] = useState(initListItemInputs);
 
   function inputChangeHandler(ev) {
     let name = ev.target.name;
     let value = ev.target.value;
+    let type = ev.target.type;
     let id = ev.target.id;
 
     if (name === 'listNameInp') {
       setListName(value);
-    } else {
-      // handle list item inputs
+    } else if (type === 'text') {
+      // handle list item text inputs
       let prevListItemInputs = listItemInputs;
       let newInput2 = {};
       newInput2.name = value;
+      let newInput = {}
+      newInput[id] = {...prevListItemInputs[id], ...newInput2}
+      let newListItemInputs = { ...prevListItemInputs, ...newInput};
+      setListItemInputs(newListItemInputs);
+    } else {
+      // handle click on checkbox label (custom input)
+      let prevListItemInputs = listItemInputs;
+      let newInput2 = {};
+      newInput2.checked = !prevListItemInputs[id].checked;
       let newInput = {}
       newInput[id] = {...prevListItemInputs[id], ...newInput2}
       let newListItemInputs = { ...prevListItemInputs, ...newInput};
@@ -98,9 +109,10 @@ const ListTemplateDetailForm = (props) => {
       list.name = listName;
       list.type = listType;
       list.listItems = objToArray(listItemInputs);
-      props.fetchTemplateListAdd({ list, cookieStr});
+
+      props.fetchShoppingListCreate({ list, cookieStr});
     } else if (props.mode === 'edit') {
-      listGuid = props.listTemplateGuid;
+      listGuid = props.listGuid;
 
       for (let tempId in listItemInputs) {
         listItemInputs[tempId].parentId = listGuid;
@@ -111,10 +123,8 @@ const ListTemplateDetailForm = (props) => {
       list.listItems = objToArray(listItemInputs);
       list.guid = listGuid;
 
-      props.fetchTemplateListEdit({ list, cookieStr })
+      props.fetchShoppingListEdit({ list, cookieStr })
     }
-
-    //updateListTemplates(requestBody);
 
     clearForm('empty');
     setFormSubmitted(true);
@@ -123,16 +133,21 @@ const ListTemplateDetailForm = (props) => {
   //renders all list items (text inp and select list)
   function renderForm() {
     let htmlResult = [];
+    let sortedObjects = [];
 
     if (Object.keys(listItemInputs).length) {
+      let key;
+      let selectKey;
       for (let i = 0; i < 50; i++) {
-        let key = props.mode === 'add' ? 'templateListItem' + i.toString() : Object.keys(listItemInputs)[i];
+        key = props.mode === 'add' ? `${KEY_BASE}${i.toString()}` : Object.keys(listItemInputs)[i];
         //TODO fix later when I handle select value/id pairs
-        let selectKey = 'templateListItemSelect' + i.toString();
+        selectKey = 'templateListItemSelect' + i.toString();
         let curInput =  listItemInputs[key];
 
+        //TODO add some way to indicate that the list items were purchased
         htmlResult.push(
-          <li key={key} >
+          <li key={key} className="form-row-inline">
+            <Checkbox checkboxVal={curInput.checked} onChangeHandler={inputChangeHandler} itemId={key}/>
             <InputText value={listItemInputs[key].name} placeholder="item name" 
               id={key} onChangeHandler={inputChangeHandler} name={key}
             />
@@ -144,7 +159,6 @@ const ListTemplateDetailForm = (props) => {
       }
       return htmlResult;
     }
-
     return null;
   }
 
@@ -168,23 +182,25 @@ const ListTemplateDetailForm = (props) => {
 
   useEffect(() => {
     if (props.mode === 'edit') {
+      console.log('gets to use effect')
       if (props.authenticate.authStr) {
-        http_requests.Lists.getTemplateList({ guid: props.listTemplateGuid, cookieStr: props.authenticate.authStr })
+        http_requests.Lists.getTemplateList({ guid: props.listGuid, cookieStr: props.authenticate.authStr })
           .then(resp => {
             if (resp && resp.type !== 'error') {
               setListName(resp.listTemplate.name);
-              let listItemInputsObj = resp.listTemplate.listItems.length ? arrayToObj(resp.listTemplate.listItems): {};
+              let listItemInputsObj = resp.listTemplate.listItems.length ? resp.listTemplate.listItems : {};
+              //arrayToObj(resp.listTemplate.listItems)
               setListItemInputs(listItemInputsObj);
             }
           })
       }
     }
-  }, [props.authenticate.authStr]);
+  }, []); //props.authenticate.authStr
 
   return (
     <div className="main">
       {formSubmitted && (
-        <Redirect to="/settings/listTemplates" />
+        <Redirect to="/shoppingLists" />
       )}
 
       <h3>{title}</h3>
@@ -205,17 +221,17 @@ const ListTemplateDetailForm = (props) => {
   )
 }
 
-const mapStateToProps = state => ({ authenticate: state.authenticate, listTemplates: state.listTemplates });
+const mapStateToProps = state => ({ authenticate: state.authenticate, shoppingLists: state.shoppingLists });
 
 const mapDispatchToProps = dispatch => {
   return {
-    fetchTemplateListAdd: ({ list, cookieStr }) => dispatch(fetchTemplateListAdd({ list, cookieStr })),
-    fetchListTemplate: ({ guid, cookieStr }) => dispatch(fetchListTemplate({ guid, cookieStr })),
-    fetchTemplateListEdit: (list) => dispatch(fetchTemplateListEdit(list))
+    fetchShoppingListCreate: ({ list, cookieStr }) => dispatch(fetchShoppingListCreate({ list, cookieStr })),
+    //fetchListTemplate: ({ guid, cookieStr }) => dispatch(fetchListTemplate({ guid, cookieStr })),
+    fetchShoppingListEdit: ({ list, cookieStr }) => dispatch(fetchShoppingListEdit({ list, cookieStr }))
   }
 }
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(ListTemplateDetailForm);
+)(ShoppingListDetailForm);
