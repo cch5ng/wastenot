@@ -5,7 +5,7 @@ const API_ROOT = process.env.API_ROOT;
 const API_LIST_MIDDLE = '/list';
 const API_AUTH_MIDDLE = '/auth';
 //URL SUFFIXES
-const CREATE_LIST_SUFFIX = '/add';
+const CREATE_TEMPLATE_LIST_SUFFIX = '/templateLists/add';
 const CREATE_SHOPPING_LIST_SUFFIX = '/shoppingLists/add';
 const GET_SHOPPING_LISTS_SUFFIX = '/shoppingLists';
 const GET_TEMPLATE_LISTS_SUFFIX = '/templateLists';
@@ -83,7 +83,7 @@ const Lists = {
     return requests.post(`${API_ROOT}${API_LIST_MIDDLE}${LIST_DETAIL_SUFFIX}/${guid}`, { cookieStr });
   },
   postTemplateList: ({ list, cookieStr }) => {
-    return requests.post(`${API_ROOT}${API_LIST_MIDDLE}${CREATE_LIST_SUFFIX}`, { ...list, cookieStr });
+    return requests.post(`${API_ROOT}${API_LIST_MIDDLE}${CREATE_TEMPLATE_LIST_SUFFIX}`, { ...list, cookieStr });
   },
   postShoppingList: ({ list, cookieStr }) => {
     return requests.post(`${API_ROOT}${API_LIST_MIDDLE}${CREATE_SHOPPING_LIST_SUFFIX}`, { ...list, cookieStr });
