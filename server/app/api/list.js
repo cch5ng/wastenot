@@ -9,7 +9,7 @@ const Session = require('../auth/Session');
 const router = Router();
 
 //probably want to refactor this to be more clear like /templateLists/add
-router.post('/add', (req, res, next) => {
+router.post('/templateLists/add', (req, res, next) => {
   let {name, type, listItems, cookieStr} = req.body;
   let { email, id } = Session.parse(cookieStr);
   let emailHash = hash(email);
