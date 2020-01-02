@@ -40,12 +40,9 @@ const ShoppingListDetailForm = (props) => {
 
   const [listName, setListName] = useState('');
 
-//test
-//DEBUG sortOrder is always set to the end value 49, even if it should be 0
   for (let i = 0; i < 50; i++) {
     let key = `${KEY_BASE}${i}`;
     let inputObj = {name: '', section: 'none', done: false};
-    //inputObj.sortOrder = i;
     initListItemInputs[key] = inputObj;
     initListItemInputs[key].sortOrder = i;
   }
