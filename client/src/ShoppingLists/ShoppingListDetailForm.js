@@ -42,7 +42,7 @@ const ShoppingListDetailForm = (props) => {
 
   for (let i = 0; i < 50; i++) {
     let key = `${KEY_BASE}${i}`;
-    let inputObj = {name: '', section: 'none', done: false};
+    let inputObj = {name: '', section: 'none', checked: false};
     initListItemInputs[key] = inputObj;
     initListItemInputs[key].sortOrder = i;
   }
@@ -66,20 +66,11 @@ const ShoppingListDetailForm = (props) => {
       newInput[id] = {...prevListItemInputs[id], ...newInput2}
       let newListItemInputs = { ...prevListItemInputs, ...newInput};
       setListItemInputs(newListItemInputs);
-    } else if (type === 'checkbox') {
-      // else handle list item checkbox inputs
-      let prevListItemInputs = listItemInputs;
-      let newInput2 = {};
-      newInput2.done = value === 'on' ? true : false;
-      let newInput = {}
-      newInput[id] = {...prevListItemInputs[id], ...newInput2}
-      let newListItemInputs = { ...prevListItemInputs, ...newInput};
-      setListItemInputs(newListItemInputs);
     } else {
-      // handle click 
+      // handle click on checkbox label (custom input)
       let prevListItemInputs = listItemInputs;
       let newInput2 = {};
-      newInput2.done = !prevListItemInputs[id].done;
+      newInput2.checked = !prevListItemInputs[id].checked;
       let newInput = {}
       newInput[id] = {...prevListItemInputs[id], ...newInput2}
       let newListItemInputs = { ...prevListItemInputs, ...newInput};
@@ -158,7 +149,7 @@ const ShoppingListDetailForm = (props) => {
         //TODO add some way to indicate that the list items were purchased
         htmlResult.push(
           <li key={key} className="form-row-inline">
-            <Checkbox checkboxVal={curInput.done} onChangeHandler={inputChangeHandler} itemId={key}/>
+            <Checkbox checkboxVal={curInput.checked} onChangeHandler={inputChangeHandler} itemId={key}/>
             <InputText value={listItemInputs[key].name} placeholder="item name" 
               id={key} onChangeHandler={inputChangeHandler} name={key}
             />
