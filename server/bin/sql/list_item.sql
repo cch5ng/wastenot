@@ -5,6 +5,7 @@ CREATE TABLE list_item(
   list_guid VARCHAR(64),
   guid VARCHAR(64) UNIQUE,
   section_id INTEGER,
+  checked BOOLEAN,
   FOREIGN KEY (list_guid) REFERENCES list(guid),
   FOREIGN KEY (section_id) REFERENCES section(id)
 );
