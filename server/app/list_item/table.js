@@ -38,7 +38,7 @@ class ListItemTable {
   static getListItemsByListGuid({ listGuid }) {
     return new Promise((resolve, reject) => {
       pool.query(
-        `SELECT list_item.guid, list_item.name, list_item.sort_order, list_item.list_guid from list_item WHERE list_guid = $1 ORDER BY list_item.sort_order`,
+        `SELECT list_item.guid, list_item.name, list_item.sort_order, list_item.list_guid, list_item.checked from list_item WHERE list_guid = $1 ORDER BY list_item.sort_order`,
         [listGuid],
         (error, response) => {
           if (error) return reject(error);
@@ -66,11 +66,35 @@ class ListItemTable {
     })
   }
 
+  static updateShoppingListItem({ name, guid, sort_order, checked }) {
+    return new Promise((resolve, reject) => {
+      pool.query(
+        `UPDATE list_item SET name = $2, sort_order = $3, checked = $4 WHERE guid = $1 RETURNING guid`,
+        [guid, name, sort_order, checked],
+        (error, response) => {
+          if (error) return reject(error);
+          if (response.rows.length) {
+            resolve({list_item_guid: response.rows[0].guid});
+          }
+        }
+      )
+    })
+  }
+
   static updateListItems(listItems) {
     return Promise.all(
       listItems.map(listItem => {
         const { name, guid, sort_order } = listItem;
         return ListItemTable.updateListItem({ name, guid, sort_order })
+      })
+    )
+  }
+
+  static updateShoppingListItems(listItems) {
+    return Promise.all(
+      listItems.map(listItem => {
+        const { name, guid, sort_order, checked } = listItem;
+        return ListItemTable.updateShoppingListItem({ name, guid, sort_order, checked })
       })
     )
   }
