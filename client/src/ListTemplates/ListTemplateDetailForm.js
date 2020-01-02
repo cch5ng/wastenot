@@ -11,7 +11,6 @@ import http_requests from '../utils/http_requests';
 import { fetchTemplateListAdd, fetchListTemplate, fetchTemplateListEdit } from '../actions/listTemplates';
 import { objToArray, getCookieStr, arrayToObj } from '../utils/utils';
 
-let inputObj = {name: '', section: 'none'};
 const keyBase = 'templateListItem';
 
 const listType = 'template';
@@ -19,7 +18,9 @@ const initListItemInputs = {};
 
 for (let i = 0; i < 50; i++) {
   let key = `${keyBase}${i}`;
+  let inputObj = {name: '', section: 'none', done: false};
   initListItemInputs[key] = inputObj;
+  initListItemInputs[key].sortOrder = i;
 }
 
 const sectionOptions = [
