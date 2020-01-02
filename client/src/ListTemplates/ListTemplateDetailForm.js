@@ -37,9 +37,7 @@ const sectionOptions = [
 
 const ListTemplateDetailForm = (props) => {
   const [formSubmitted, setFormSubmitted] = useState(false);
-  const [mode, setMode] = useState(props.mode);
   const [title, setTitle] = useState(props.mode === 'edit' ? 'Edit Template List' : 'Add Template List');
-  //const {listTemplates, updateListTemplates} = props;
   let editListItemTemplates;
   let editListTemplateName;
   let listGuid;
@@ -85,28 +83,23 @@ const ListTemplateDetailForm = (props) => {
     setListItemInputs(newListItemInputs);
   }
 
-  //DEBUG and figure out how to handle actions
-  //TODO update the backend
   function formSubmitHandler(ev) {
     let requestBody;
     let listGuid;
     let list = {};
     let cookieStr = (props.authenticate && props.authenticate.authStr) ? props.authenticate.authStr : null;
 
-    if (mode === 'add') {
+    if (props.mode === 'add') {
       listGuid = uuidv1();
       for (let tempId in listItemInputs) {
         listItemInputs[tempId].parentId = listGuid;
       }
-      // listItemInputs.forEach(listItem => {
-      //   listItem.parentId = listGuid;
-      // })
 
       list.name = listName;
       list.type = listType;
       list.listItems = objToArray(listItemInputs);
       props.fetchTemplateListAdd({ list, cookieStr});
-    } else if (mode === 'edit') {
+    } else if (props.mode === 'edit') {
       listGuid = props.listTemplateGuid;
 
       for (let tempId in listItemInputs) {
@@ -133,7 +126,7 @@ const ListTemplateDetailForm = (props) => {
 
     if (Object.keys(listItemInputs).length) {
       for (let i = 0; i < 50; i++) {
-        let key = mode === 'add' ? 'templateListItem' + i.toString() : Object.keys(listItemInputs)[i];
+        let key = props.mode === 'add' ? 'templateListItem' + i.toString() : Object.keys(listItemInputs)[i];
         //TODO fix later when I handle select value/id pairs
         let selectKey = 'templateListItemSelect' + i.toString();
         let curInput =  listItemInputs[key];
@@ -157,7 +150,7 @@ const ListTemplateDetailForm = (props) => {
 
   //TODO think clicking cancel btn on edit form mode maybe should not clear entire form
   function clearForm(clearMode = null) {
-    let formClearMode = clearMode === "empty" ? clearMode : {mode};
+    let formClearMode = clearMode === "empty" ? clearMode : props.mode;
 
     switch(formClearMode) {
       case "edit":
@@ -174,7 +167,7 @@ const ListTemplateDetailForm = (props) => {
   }
 
   useEffect(() => {
-    if (mode === 'edit') {
+    if (props.mode === 'edit') {
       if (props.authenticate.authStr) {
         http_requests.Lists.getTemplateList({ guid: props.listTemplateGuid, cookieStr: props.authenticate.authStr })
           .then(resp => {
