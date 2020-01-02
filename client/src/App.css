@@ -23,10 +23,13 @@
   margin-left: 10px;
 }
 
-.row {
+.row,
+.form-row-inline {
   display: flex;
   flex-flow: row no-wrap;
 }
+
+/* form */
 
 .formGroup {
   margin: 8px 0;
@@ -35,6 +38,7 @@
 .div-control {
   margin-bottom: 16px;
 }
+
 
 @media (min-width: 768px) {
   .main {
