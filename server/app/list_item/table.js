@@ -3,13 +3,27 @@ const pool = require('../../databasePool');
 const { section_name_to_id } = require('../utils/constants');
 
 class ListItemTable {
-
-  //REFACTOR, maybe should move to ListItemTable class
+  // list items for template list
   static storeListItem({ name, list_guid, list_item_guid, sortOrder }) {
     return new Promise((resolve, reject) => {
       pool.query(
         `INSERT INTO list_item (name, list_guid, guid, sort_order) VALUES ($1, $2, $3, $4) RETURNING list_guid`,
         [name, list_guid, list_item_guid, sortOrder],
+        (error, response) => {
+          if (error) return reject(error);
+          if (response.rows.length) {
+            resolve({ list_guid });
+          }
+        }
+      )
+    })
+  }
+
+  static storeShoppingListItem({ name, list_guid, list_item_guid, sortOrder, checked }) {
+    return new Promise((resolve, reject) => {
+      pool.query(
+        `INSERT INTO list_item (name, list_guid, guid, sort_order, checked) VALUES ($1, $2, $3, $4, $5) RETURNING list_guid`,
+        [name, list_guid, list_item_guid, sortOrder, checked],
         (error, response) => {
           if (error) return reject(error);
           if (response.rows.length) {
