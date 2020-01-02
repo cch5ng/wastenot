@@ -30,9 +30,7 @@ const sectionOptions = [
 
 const ShoppingListDetailForm = (props) => {
   const [formSubmitted, setFormSubmitted] = useState(false);
-  const [mode, setMode] = useState(props.mode);
   const [title, setTitle] = useState(props.mode === 'edit' ? 'Edit Shopping List' : 'Add Shopping List');
-  //const {listTemplates, updateListTemplates} = props;
   let editListItemTemplates;
   let editListTemplateName;
   let listGuid;
@@ -102,7 +100,7 @@ const ShoppingListDetailForm = (props) => {
     let list = {};
     let cookieStr = (props.authenticate && props.authenticate.authStr) ? props.authenticate.authStr : null;
 
-    if (mode === 'add') {
+    if (props.mode === 'add') {
       listGuid = uuidv1();
       for (let tempId in listItemInputs) {
         listItemInputs[tempId].parentId = listGuid;
@@ -113,7 +111,7 @@ const ShoppingListDetailForm = (props) => {
       list.listItems = objToArray(listItemInputs);
 
       props.fetchShoppingListCreate({ list, cookieStr});
-    } else if (mode === 'edit') {
+    } else if (props.mode === 'edit') {
       listGuid = props.listGuid;
 
       for (let tempId in listItemInputs) {
@@ -141,7 +139,7 @@ const ShoppingListDetailForm = (props) => {
       let key;
       let selectKey;
       for (let i = 0; i < 50; i++) {
-        key = mode === 'add' ? `${KEY_BASE}${i.toString()}` : Object.keys(listItemInputs)[i];
+        key = props.mode === 'add' ? `${KEY_BASE}${i.toString()}` : Object.keys(listItemInputs)[i];
         //TODO fix later when I handle select value/id pairs
         selectKey = 'templateListItemSelect' + i.toString();
         let curInput =  listItemInputs[key];
@@ -166,7 +164,7 @@ const ShoppingListDetailForm = (props) => {
 
   //TODO think clicking cancel btn on edit form mode maybe should not clear entire form
   function clearForm(clearMode = null) {
-    let formClearMode = clearMode === "empty" ? clearMode : {mode};
+    let formClearMode = clearMode === "empty" ? clearMode : props.mode;
 
     switch(formClearMode) {
       case "edit":
@@ -183,7 +181,7 @@ const ShoppingListDetailForm = (props) => {
   }
 
   useEffect(() => {
-    if (mode === 'edit') {
+    if (props.mode === 'edit') {
       console.log('gets to use effect')
       if (props.authenticate.authStr) {
         http_requests.Lists.getTemplateList({ guid: props.listGuid, cookieStr: props.authenticate.authStr })
