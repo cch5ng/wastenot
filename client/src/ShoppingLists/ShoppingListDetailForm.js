@@ -12,16 +12,9 @@ import http_requests from '../utils/http_requests';
 import { fetchShoppingListCreate, fetchShoppingListEdit } from '../actions/shoppingLists';
 import { objToArray, getCookieStr, arrayToObj } from '../utils/utils';
 
-let inputObj = {name: '', section: 'none', done: false};
 const KEY_BASE = 'shoppingListItem';
-
 const listType = 'shopping';
 const initListItemInputs = {};
-
-for (let i = 0; i < 50; i++) {
-  let key = `${KEY_BASE}${i}`;
-  initListItemInputs[key] = inputObj;
-}
 
 const sectionOptions = [
       {label: 'Section', value: 'none'},
@@ -46,6 +39,17 @@ const ShoppingListDetailForm = (props) => {
   let curListTemplate;
 
   const [listName, setListName] = useState('');
+
+//test
+//DEBUG sortOrder is always set to the end value 49, even if it should be 0
+  for (let i = 0; i < 50; i++) {
+    let key = `${KEY_BASE}${i}`;
+    let inputObj = {name: '', section: 'none', done: false};
+    //inputObj.sortOrder = i;
+    initListItemInputs[key] = inputObj;
+    initListItemInputs[key].sortOrder = i;
+  }
+
   const [listItemInputs, setListItemInputs] = useState(initListItemInputs);
 
   function inputChangeHandler(ev) {
@@ -67,8 +71,6 @@ const ShoppingListDetailForm = (props) => {
       setListItemInputs(newListItemInputs);
     } else if (type === 'checkbox') {
       // else handle list item checkbox inputs
-      console.log('toggle checkbox')
-      console.log('checkbox val', value)
       let prevListItemInputs = listItemInputs;
       let newInput2 = {};
       newInput2.done = value === 'on' ? true : false;
@@ -78,17 +80,9 @@ const ShoppingListDetailForm = (props) => {
       setListItemInputs(newListItemInputs);
     } else {
       // handle click 
-      console.log('click checkbox label')
-      console.log('id', id)
       let prevListItemInputs = listItemInputs;
       let newInput2 = {};
-
-      console.log('old checkbox val', listItemInputs[id].done)
-
       newInput2.done = !prevListItemInputs[id].done;
-      console.log('newInput2.done checkbox val', newInput2.done)
-
-
       let newInput = {}
       newInput[id] = {...prevListItemInputs[id], ...newInput2}
       let newListItemInputs = { ...prevListItemInputs, ...newInput};
@@ -153,12 +147,15 @@ const ShoppingListDetailForm = (props) => {
   //renders all list items (text inp and select list)
   function renderForm() {
     let htmlResult = [];
+    let sortedObjects = [];
 
     if (Object.keys(listItemInputs).length) {
+      let key;
+      let selectKey;
       for (let i = 0; i < 50; i++) {
-        let key = mode === 'add' ? `${KEY_BASE}${i.toString()}` : Object.keys(listItemInputs)[i];
+        key = mode === 'add' ? `${KEY_BASE}${i.toString()}` : Object.keys(listItemInputs)[i];
         //TODO fix later when I handle select value/id pairs
-        let selectKey = 'templateListItemSelect' + i.toString();
+        selectKey = 'templateListItemSelect' + i.toString();
         let curInput =  listItemInputs[key];
 
         //TODO add some way to indicate that the list items were purchased
@@ -176,7 +173,6 @@ const ShoppingListDetailForm = (props) => {
       }
       return htmlResult;
     }
-
     return null;
   }
 
@@ -206,7 +202,8 @@ const ShoppingListDetailForm = (props) => {
           .then(resp => {
             if (resp && resp.type !== 'error') {
               setListName(resp.listTemplate.name);
-              let listItemInputsObj = resp.listTemplate.listItems.length ? arrayToObj(resp.listTemplate.listItems): {};
+              let listItemInputsObj = resp.listTemplate.listItems.length ? resp.listTemplate.listItems : {};
+              //arrayToObj(resp.listTemplate.listItems)
               setListItemInputs(listItemInputsObj);
             }
           })
