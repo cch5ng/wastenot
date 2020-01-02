@@ -8,6 +8,7 @@ const Session = require('../auth/Session');
 
 const router = Router();
 
+//probably want to refactor this to be more clear like /templateLists/add
 router.post('/add', (req, res, next) => {
   let {name, type, listItems, cookieStr} = req.body;
   let { email, id } = Session.parse(cookieStr);
@@ -27,6 +28,27 @@ router.post('/add', (req, res, next) => {
      })
      .catch(error => next(error));
 });
+
+router.post('/shoppingLists/add', (req, res, next) => {
+  let {name, type, listItems, cookieStr} = req.body;
+  let { email, id } = Session.parse(cookieStr);
+  let emailHash = hash(email);
+
+  AuthTable.isAuthenticated({ sessionId: id, emailHash })
+    .then(resp => {
+      if (resp) {
+        ListTable.storeShoppingList({name, type, listItems, owner_id: resp.account.id})
+          .then(resp => res.json(resp))
+          .catch(err => next(err));
+       } else {
+         let error = new Error('User is not logged in.');
+         error.statusCode = 401;
+         next(error);
+       }
+     })
+     .catch(error => next(error));
+});
+
 
 //GET all shopping lists
 router.post('/shoppingLists', (req, res, next) => {
@@ -103,7 +125,7 @@ router.post('/listDetail/:listGuid', (req, res, next) => {
     .catch(error => next(error));
 });
 
-//TEST should apply to both template list and shopping list
+//TEST should apply to template list
 router.put('/listDetail/:listGuid', (req, res, next) => {
   const { listGuid } = req.params;
   const { name, type, listItems } = req.body;
@@ -154,6 +176,59 @@ router.put('/listDetail/:listGuid', (req, res, next) => {
     })
     .catch(error => next(error));
 });
+
+//TEST should apply to shopping list
+router.put('/shoppingListDetail/:listGuid', (req, res, next) => {
+  const { listGuid } = req.params;
+  const { name, type, listItems } = req.body;
+  let cookieStr = req.body.cookieStr;
+  let { email, id } = Session.parse(cookieStr);
+  let emailHash = hash(email);
+
+
+  AuthTable.isAuthenticated({ sessionId: id, emailHash })
+    .then(resp => {
+      if (resp) {
+        if ((name || type) && listItems.length) {
+          ListTable.updateShoppingListAndListItems({name, guid: listGuid, listItems})
+            .then(values => {
+              if (values.length) {
+                res.json({ message: `list with guid, ${listGuid} was updated`,
+                            type: 'success'
+                })
+              }
+            })
+            .catch(err => next(err));
+        } else if (name || type) {
+          ListTable.updateList({name, type, guid: listGuid})
+            .then(list_guid => {
+              if (list_guid) {
+                res.json({ message: `list with guid, ${listGuid} was updated`,
+                            type: 'success'
+              })
+              }
+            })
+            .catch(err => next(err));
+        } else if (listItems.length) {
+          ListItemTable.updateShoppingListItems(listItems)
+            .then(list_item_guids => {
+              if (list_item_guids.length) {
+                res.json({ message: `list with guid, ${listGuid} was updated`,
+                            type: 'success'
+                })
+              }
+            })
+            .catch(err => next(err));
+        }
+      } else {
+        let error = new Error('User is not logged in.');
+        error.statusCode = 401;
+        next(error);
+      }
+    })
+    .catch(error => next(error));
+});
+
 
 //TEST should apply to both template list and shopping list
 router.delete('/listDetail/:listGuid', (req, res, next) => {
