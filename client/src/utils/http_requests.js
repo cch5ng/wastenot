@@ -6,9 +6,11 @@ const API_LIST_MIDDLE = '/list';
 const API_AUTH_MIDDLE = '/auth';
 //URL SUFFIXES
 const CREATE_LIST_SUFFIX = '/add';
+const CREATE_SHOPPING_LIST_SUFFIX = '/shoppingLists/add';
 const GET_SHOPPING_LISTS_SUFFIX = '/shoppingLists';
 const GET_TEMPLATE_LISTS_SUFFIX = '/templateLists';
 const LIST_DETAIL_SUFFIX = '/listDetail';
+const SHOPPING_LIST_DETAIL_SUFFIX = '/shoppingListDetail';
 const AUTH_REGISTER_SUFFIX = '/register';
 const AUTH_LOGIN_SUFFIX = '/login';
 const AUTH_LOGOUT_SUFFIX = '/logout';
@@ -84,11 +86,13 @@ const Lists = {
     return requests.post(`${API_ROOT}${API_LIST_MIDDLE}${CREATE_LIST_SUFFIX}`, { ...list, cookieStr });
   },
   postShoppingList: ({ list, cookieStr }) => {
-    return requests.post(`${API_ROOT}${API_LIST_MIDDLE}${CREATE_LIST_SUFFIX}`, { ...list, cookieStr });
+    return requests.post(`${API_ROOT}${API_LIST_MIDDLE}${CREATE_SHOPPING_LIST_SUFFIX}`, { ...list, cookieStr });
   },
-  //this PUT is used for templates and shopping lists because update by id
   putTemplateList: ({ list, cookieStr }) => {
     return requests.put(`${API_ROOT}${API_LIST_MIDDLE}${LIST_DETAIL_SUFFIX}/${list.guid}`, { ...list, cookieStr });
+  },
+  putShoppingList: ({ list, cookieStr }) => {
+    return requests.put(`${API_ROOT}${API_LIST_MIDDLE}${SHOPPING_LIST_DETAIL_SUFFIX}/${list.guid}`, { ...list, cookieStr });
   },
   //this DELETE is used for templates and shopping lists because done by id
   deleteTemplateList: ({ guid, cookieStr }) => {
