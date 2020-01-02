@@ -56,7 +56,7 @@ export const fetchShoppingListEdit = ({ list, cookieStr }) => dispatch => {
   dispatch({ type: SHOPPING_LISTS_FETCH });
 
   if (cookieStr) {
-    http_requests.Lists.putTemplateList({ list, cookieStr })
+    http_requests.Lists.putShoppingList({ list, cookieStr })
       .then(response => {
         if (response.type === 'success') {
           //let shoppingListsObj = arrayToObj(response.templateList);
