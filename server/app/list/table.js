@@ -17,9 +17,9 @@ class ListTable {
             const listId = response.rows[0].id;
 
             Promise.all(
-              listItems.map(({ name }) => {
+              listItems.map(({ name, sortOrder }) => {
                 let list_item_guid = uuidv4();
-                return ListItemTable.storeListItem({ name, list_guid, list_item_guid })
+                return ListItemTable.storeListItem({ name, list_guid, list_item_guid, sortOrder })
               })
             )
               .then(() => {
