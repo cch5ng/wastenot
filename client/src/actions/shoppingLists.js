@@ -59,7 +59,6 @@ export const fetchShoppingListEdit = ({ list, cookieStr }) => dispatch => {
     http_requests.Lists.putShoppingList({ list, cookieStr })
       .then(response => {
         if (response.type === 'success') {
-          //let shoppingListsObj = arrayToObj(response.templateList);
           dispatch(
             { type: SHOPPING_LISTS_EDIT_FETCH_SUCCESS,
               message: response.message,
@@ -82,7 +81,6 @@ export const fetchShoppingListDelete = ({ guid, cookieStr }) => dispatch => {
     http_requests.Lists.deleteTemplateList({ guid, cookieStr })
       .then(response => {
         if (response.type === 'success') {
-          //let shoppingListsObj = arrayToObj(response.templateList);
           dispatch(
             { type: SHOPPING_LISTS_DELETE_FETCH_SUCCESS,
               message: response.message,
