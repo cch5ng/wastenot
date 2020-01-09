@@ -22,7 +22,7 @@ readInterface.on('line', function(line) {
   if (lineAr[0].indexOf('#') !== 0) {
     timeZoneAr.push(lineAr[2]);
 
-    fs.appendFile('db_timezone.js', `${lineAr[2]}, `, (err) => {
+    fs.appendFile('db_timezone.js', `'${lineAr[2]}', `, (err) => {
         if (err) throw err;
         console.log('db_timezone.js was updated!');
     });
