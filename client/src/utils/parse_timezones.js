@@ -2,7 +2,7 @@ const readline = require('readline');
 const fs = require('fs');
 let timeZoneAr = [];
 
-fs.writeFile('db_timezone.js', 'let dbTimezoneAr = [', (err) => {
+fs.writeFile('db_timezone.js', `let dbTimezoneAr = [{value: 'none', label: 'Select a local timezone'}, `, (err) => {
     // throws an error, you could also catch it here
     if (err) throw err;
 
@@ -22,7 +22,7 @@ readInterface.on('line', function(line) {
   if (lineAr[0].indexOf('#') !== 0) {
     timeZoneAr.push(lineAr[2]);
 
-    fs.appendFile('db_timezone.js', `'${lineAr[2]}', `, (err) => {
+    fs.appendFile('db_timezone.js', `{value: '${lineAr[2]}', label: '${lineAr[2]}'}, `, (err) => {
         if (err) throw err;
         console.log('db_timezone.js was updated!');
     });
