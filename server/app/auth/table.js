@@ -81,7 +81,7 @@ class AuthTable {
         [emailHash],
         (error, response) => {
           if (error) return reject(error);
-          resolve({ timezone: response.rows[0]})
+          resolve({ time_zone: response.rows[0]})
         })
     })
   }
