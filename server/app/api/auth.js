@@ -94,11 +94,11 @@ router.post('/authenticated', (req, res, next) => {
 })
 
 router.put('/settings/timezone', (req, res, next) => {
-  let { cookie, timezone } = req.body;
+  let { cookieStr, timezone } = req.body;
   let error;
 
-  if (cookie) {
-    const { email, id } = Session.parse(cookie.cookie);
+  if (cookieStr) {
+    const { email, id } = Session.parse(cookieStr);
     let emailHash = hash(email);
 
     AuthTable.storeUserTimezone( { timezone, emailHash })
@@ -121,17 +121,17 @@ router.put('/settings/timezone', (req, res, next) => {
 
 //used to get the user timezone; passing in cookie with request
 router.post('/settings/timezone', (req, res, next) => {
-  let { cookie } = req.body;
+  let { cookieStr } = req.body;
   let error;
 
-  if (cookie) {
-    const { email, id } = Session.parse(cookie.cookie);
+  if (cookieStr) {
+    const { email, id } = Session.parse(cookieStr);
     let emailHash = hash(email);
 
     AuthTable.getUserTimezone( { emailHash })
-      .then(({timezone}) => {
-        if (timezone) {
-          res.json({timezone})
+      .then((resp) => {
+        if (resp.time_zone) {
+          res.json(resp)
         } else {
           error = new Error('Invalid session');
           error.statusCode = 400;
