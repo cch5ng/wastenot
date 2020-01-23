@@ -14,92 +14,112 @@ const EXPIRATION_DATES = {
   "Hard cooked eggs": {
     refrigerator: "1 week",
     refrigeratorInt: 7,
-    freezer: null
+    freezer: null,
+    keyWords: ['hard-boiled eggs', 'hard-cooked eggs']
   },
   "Liquid pasteurized eggs or egg substitutes": {
     refrigerator: "10 days",
     refrigeratorInt: 10,
-    freezer: "1 year"
+    freezer: "1 year",
+    keyWords: ['liquid eggs', 'egg substitutes']
   },
   "TV Dinners, Frozen Casseroles": {
     refrigerator: null,
     refrigeratorInt: null,
-    freezer: "3 - 4 months"
+    freezer: "3 - 4 months",
+    keyWords: ['frozen dinner', 'microwave dinner', 'frozen meal', 'frozen']
+
   },
   "deli items (Store-prepared or homemade) egg, chicken, tuna, ham, macaroni salads": {
     refrigerator: "3 - 5 days",
     refrigeratorInt: 3,
-    freezer: null
+    freezer: null,
+    keyWords: ['deli salad', 'egg salad', 'chicken salad', 'potato salad', 'tuna salad', 'macaroni salad', 'deli', 'prepared']
   },
   "deli pre-stuffed pork & lamb chops, chicken breasts stuffed w/ dressing": {
     refrigerator: "1 day",
     refrigeratorInt: 1,
-    freezer: null
+    freezer: null,
+    keyWords: ['stuffed pork chops', 'stuffed lamb chops', 'stuffed chicken breasts']
   },
   "Store-cooked convenience meals": {
     refrigerator: "3 - 4 days",
     refrigeratorInt: 3,
-    freezer: null
+    freezer: null,
+    keyWords: []
   },
   "Commercial brand vacuum-packed dinners with USDA seal, unopened": {
     refrigerator: "2 weeks",
     refrigeratorInt: 14,
-    freezer: null
+    freezer: null,
+    keyWords: []
   },
   "Raw Hamburger, Ground & Stew Meat, Hamburger & stew meats": {
     refrigerator: "1 - 2 days",
     refrigeratorInt: 1,
-    freezer: "3 - 4 months"
+    freezer: "3 - 4 months",
+    keyWords: ['raw hamburger', 'raw ground beef', 'raw meat', 'raw stew meat']
   },
   "Ground turkey, veal, pork, lamb": {
     refrigerator: "1 - 2 days",
     refrigeratorInt: 1,
-    freezer: "3 - 4 months"
+    freezer: "3 - 4 months",
+    keyWords: ['raw ground turkey', 'raw ground veal', 'raw ground pork', 'raw ground lamb']
   },
   "Ham, Corned Beef, Corned beef in pouch, with pickling juices Drained": {
     refrigerator: "5 - 7 days",
     refrigeratorInt: 5,
-    freezer: "1 month"
+    freezer: "1 month",
+    keyWords: ['ham', 'corned beef in pouch, drained', 'corned beef']
   },
   "Ham, canned, labeled unopened": {
     refrigerator: "6 - 9 months",
     refrigeratorInt: 180,
-    freezer: null
+    freezer: null,
+    keyWords: ['canned ham']
   },
   "Ham, canned, labeled opened": {
     refrigerator: "3 - 5 days",
     refrigeratorInt: 3,
-    freezer: "1 - 2 months"
+    freezer: "1 - 2 months",
+    keyWords: ['canned ham, opened']
   },
   "Ham, fully cooked, whole": {
     refrigerator: "7 days",
     refrigeratorInt: 7,
-    freezer: "1 - 2 months"
+    freezer: "1 - 2 months",
+    keyWords: ['cooked ham, whole']
   },
   "Ham, fully cooked, half": {
     refrigerator: "3 - 5 days",
     refrigeratorInt: 3,
-    freezer: "1 - 2 months"
+    freezer: "1 - 2 months",
+    keyWords: ['cooked ham, half']
   },
   "Ham, fully cooked, slices": {
     refrigerator: "3 - 4 days",
     refrigeratorInt: 3,
-    freezer: "1 - 2 months"
+    freezer: "1 - 2 months",
+    keyWords: ['sliced ham, cooked']
   },
   "Hot dogs, opened package": {
     refrigerator: "1 week",
     refrigeratorInt: 7,
-    freezer: "1 - 2 months"
+    freezer: "1 - 2 months",
+    keyWords: ['hot dogs, opened']
   },
   "hot dogs unopened package": {
     refrigerator: "2 weeks",
     refrigeratorInt: 14,
-    freezer: "1 - 2 months"
+    freezer: "1 - 2 months",
+    keyWords: ['hot dogs']
   },
   "Lunch meats, opened package": {
     refrigerator: "3 - 5 days",
     refrigeratorInt: 3,
-    freezer: "1 - 2 months"
+    freezer: "1 - 2 months",
+    keyWords: ['lunch meats, opened', 'sliced turkey, opened', 'sliced ham, opened',
+      'sliced roast beef, opened', 'sliced pastrami, opened', 'sliced pepperoni, opened']
   },
   "Lunch meats unopened package": {
     refrigerator: "2 weeks",
