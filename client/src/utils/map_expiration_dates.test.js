@@ -23,6 +23,12 @@ describe('map expiration dates suite tests', () => {
       expect(getSubstringMatchCount(ar1, ar2)).toBe(4);
     })
 
+    test('getSubstringMatchCount() function test swap order of short/long ar', () => {
+      const ar7 = ['z', 'y', 'e', 'c', 'a', 'o', 'p', 'd'];
+      const ar8 = ['a', 'b', 'c', 'd', 'e'];
+      expect(getSubstringMatchCount(ar7, ar8)).toBe(4);
+    })
+
     test('getSubstringMatchCount() function test all match', () => {
       const ar3 = ['a', 'b', 'c', 'd', 'e'];
       const ar4 = ['a', 'b', 'c', 'd', 'e'];
