@@ -1,16 +1,16 @@
 import { EXPIRATION_DATES } from './expiration_dates';
 
-const removePunctuation(str) {
+const removePunctuation = (str) => {
   let cleanStr;
   const punctuation = [',', '(', ')', '.'];
   punctuation.forEach(pMark => {
-    let re = /pMark/gi
+    let re = /[,().]/g
     cleanStr = str.replace(re, '');
   })
   return cleanStr;
 }
 
-const getSubstringMatchCount(ar1, ar2) {
+const getSubstringMatchCount = (ar1, ar2) => {
   let matchCnt = 0;
   let shorterAr = (ar1.length < ar2.length === true) ? ar1 : ar2;
 
@@ -23,7 +23,7 @@ const getSubstringMatchCount(ar1, ar2) {
   return matchCnt;
 }
 
-const getExpirationDate(item, EXPIRATION_DATES) {
+const getExpirationDate = (item, EXPIRATION_DATES) => {
   let expirationKeys = Object.keys(EXPIRATION_DATES);
   let itemNoPunctuation;
   let highestSubstringMatchCount = 0;
@@ -55,3 +55,9 @@ const getExpirationDate(item, EXPIRATION_DATES) {
   key = expirationKeys[highestSubstringMatchIdx];
   return EXPIRATION_DATES[key].refrigeratorInt;
 }
+
+module.exports = {
+  removePunctuation,
+  getSubstringMatchCount,
+  getExpirationDate
+};
