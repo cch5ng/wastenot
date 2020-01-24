@@ -13,10 +13,11 @@ const removePunctuation = (str) => {
 const getSubstringMatchCount = (ar1, ar2) => {
   let matchCnt = 0;
   let shorterAr = (ar1.length < ar2.length === true) ? ar1 : ar2;
+  let longerAr = (ar1.length < ar2.length === true) ? ar2 : ar1;
 
   shorterAr.forEach(item => {
-    if (ar2.indexOf(item) > -1) {
-      matchCtn += 1;
+    if (longerAr.indexOf(item) > -1) {
+      matchCnt += 1;
     }
   })
 
