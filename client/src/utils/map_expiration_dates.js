@@ -53,8 +53,13 @@ const getExpirationDate = (item, EXPIRATION_DATES) => {
       highestSubstringMatchIdx = i;
     }
   }
-  key = expirationKeys[highestSubstringMatchIdx];
-  return EXPIRATION_DATES[key].refrigeratorInt;
+
+  if (highestSubstringMatchIdx) {
+    key = expirationKeys[highestSubstringMatchIdx];
+    return EXPIRATION_DATES[key].refrigeratorInt;
+  } else {
+    return null;
+  }
 }
 
 module.exports = {
