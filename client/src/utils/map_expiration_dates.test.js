@@ -3,6 +3,7 @@ const {
   getSubstringMatchCount,
   getExpirationDate
 } = require('./map_expiration_dates');
+const { EXPIRATION_DATES } = require ('./expiration_dates');
 
 describe('map expiration dates suite tests', () => {
 
@@ -42,6 +43,28 @@ describe('map expiration dates suite tests', () => {
     })
   })
 
+  describe('getExpirationDate', () => {
+
+    test('getExpirationDate() function no match', () => {
+      const item = 'rice';
+      expect(getExpirationDate(item, EXPIRATION_DATES)).toBeNull();
+    })
+
+    test('getExpirationDate() function exact match', () => {
+      const item2 = 'hot dogs unopened package';
+      expect(getExpirationDate(item2, EXPIRATION_DATES)).toBe(14);
+    })
+
+    test('getExpirationDate() function test partial match', () => {
+      const item3 = 'Canned seafood after opening';
+      expect(getExpirationDate(item3, EXPIRATION_DATES)).toBe(3);
+    })
+
+    test('getExpirationDate() function test partial match2', () => {
+      const item4 = 'tongue, kidneys, liver, heart, chitterlings';
+      expect(getExpirationDate(item4, EXPIRATION_DATES)).toBe(1);
+    })
 
 
+  })
 });
