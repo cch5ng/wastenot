@@ -248,7 +248,7 @@ const EXPIRATION_DATES = {
   }
 }
 
-export default { EXPIRATION_DATES };
+export { EXPIRATION_DATES };
 
 //missing dairy
 //missing produce
