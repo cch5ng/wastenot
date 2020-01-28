@@ -49,13 +49,14 @@ const ExpirationMapTest = (props) => {
       newMappings[idx].text = value;
       setMappings(newMappings);
     }
-      //this should trigger expirationDateMapper1
+    expirationDateMapper1();
   }
 
 
   //determines how to map the input text content to the expiration_dates objects
-  //const expirationDateMapper1 = () => {
-  //}
+  const expirationDateMapper1 = () => {
+    console.log('TODO')
+  }
 
   //determines how to convert above mapping to a resulting expiration date duration
   //I think this does not affect the UI but should be stored into state/backend
