@@ -8,18 +8,29 @@ const ExpirationMapTest = (props) => {
 
   const [mappings, setMappings] = useState({});
 
+  //
+  formChangeHandler = () => {
+
+  }
+
+  expirationDateMapper1 = () => {
+
+  }
+
+  expirationDateMapper2 = () => {
+
+  }
+
   renderForm = () => {
-
-    return (
-      for (let i = 0; i < 29; i++) {
+    for (let i = 0; i < 29; i++) {
+      return (
         <div>
-          <checkbox>
-          <input>
-          <react select>
+          <Checkbox />
+          <InputText />
         </div>
-      }
-    )
+      )
 
+    }
   }
 
   return (
