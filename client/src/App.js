@@ -14,6 +14,7 @@ import ShoppingLists from './ShoppingLists/ShoppingLists';
 import config from './config';
 import AuthForm from './Auth/AuthForm';
 import Settings from './Auth/Settings';
+import ExpirationMapTest from './Settings/ExpirationMapTest';
 
 function App(props) {
 
@@ -73,6 +74,9 @@ function App(props) {
               listTemplateGuid={match.params.listTemplateGuid}
             />
           )} />
+          <Route exact path="/settings/expirationMapTest" 
+            component={ExpirationMapTest}
+          />
           <Route exact path="/settings"
             render={(props) => (<Settings {...props}
             />
