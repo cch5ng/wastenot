@@ -17,7 +17,6 @@ const initMappings = () => {
 }
 
 const ExpirationMapTest = (props) => {
-
   const [mappings, setMappings] = useState(initMappings());
 
   //handles change to rows of checkbox and input text fields
@@ -28,13 +27,17 @@ const ExpirationMapTest = (props) => {
     let idx = idAr[idAr.length - 1];
     //handle checkbox change
     if (name = 'checkbox') {
-
+      let disabledNew = !mappings[idx].disabled;
+      let newMappings = [].concat(mappings)
+      newMappings[idx].disabled = disabledNew;
+      setMappings(newMappings);
     }
-      //this should trigger expirationDateMapper1
+    //this should trigger expirationDateMapper1
   }
 
   const inputChangeHandler = (ev) => {
     let name = ev.target.name;
+    let value = ev.target.value;
     let id = ev.target.id;
     let idAr = id.split('-');
     let idx = idAr[idAr.length - 1];
@@ -42,6 +45,9 @@ const ExpirationMapTest = (props) => {
     if (name = 'inputText') {
     //handle input text change
       console.log('name inputText')
+      let newMappings = [].concat(mappings)
+      newMappings[idx].text = value;
+      setMappings(newMappings);
     }
       //this should trigger expirationDateMapper1
   }
@@ -69,7 +75,7 @@ const ExpirationMapTest = (props) => {
           let inputTextIdx = `${keyBase}inputText-${idx}`;
           return (
             <div key={outerKey} >
-              <Checkbox checked={m.disabled} onChangeHandler={checkboxChangeHandler} 
+              <Checkbox checkboxVal={m.disabled} onChangeHandler={checkboxChangeHandler} 
                 name="checkbox" id={checkboxIdx} />
               <InputText value={m.text} onChangeHandler={inputChangeHandler} 
                 name="inputText" id={inputTextIdx} />
