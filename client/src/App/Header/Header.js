@@ -38,6 +38,9 @@ const Header = (props) => {
             <Link to="/settings">Settings</Link>
           </p>
           <p className="menu-link-item">
+            <Link to="/settings/expirationMapTest">Expiration Map Test</Link>
+          </p>
+          <p className="menu-link-item">
             <Link to="/about">About</Link>
           </p>
           <p className="menu-link-item">
@@ -71,6 +74,9 @@ const Header = (props) => {
           </p>
           <p className="menu-link-item">
             <Link to="/settings">Settings</Link>
+          </p>
+          <p className="menu-link-item">
+            <Link to="/settings/expirationMapTest">Expiration Map Test</Link>
           </p>
           <p className="menu-link-item">
             <Link to="/about">About</Link>
