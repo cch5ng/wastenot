@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import Checkbox from '../App/Shared/Checkbox/Checkbox';
 import InputText from '../App/Shared/InputText/InputText';
 import Button from '../App/Shared/Button/Button';
-//import SelectList from '../../App/Shared/SelectList/SelectList';
+import SelectList from '../App/Shared/SelectList/SelectList';
+import { EXPIRATION_DATES } from '../utils/expiration_dates';
 
 const initMappings = () => {
   let initM = [];
@@ -15,6 +16,9 @@ const initMappings = () => {
   }
   return initM;
 }
+
+const expirationCategoryOptions = Object.keys(EXPIRATION_DATES);
+console.log('expirationCategoryOptions', expirationCategoryOptions)
 
 const ExpirationMapTest = (props) => {
   const [mappings, setMappings] = useState(initMappings());
