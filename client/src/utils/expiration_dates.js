@@ -245,6 +245,11 @@ const EXPIRATION_DATES = {
     refrigerator: "3 - 4 days",
     refrigeratorInt: 3,
     freezer: "2 months"
+  },
+  "none": {
+    refrigerator: null,
+    refrigeratorInt: null,
+    freezer: null
   }
 }
 
