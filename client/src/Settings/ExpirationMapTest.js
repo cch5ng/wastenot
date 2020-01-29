@@ -4,6 +4,7 @@ import InputText from '../App/Shared/InputText/InputText';
 import Button from '../App/Shared/Button/Button';
 import SelectList from '../App/Shared/SelectList/SelectList';
 import { EXPIRATION_DATES } from '../utils/expiration_dates';
+import { getExpirationCategory, getExpirationDate } from '../utils/map_expiration_dates';
 
 const initMappings = () => {
   let initM = [];
@@ -11,14 +12,20 @@ const initMappings = () => {
     let obj = {};
     obj.disabled = false; //disabled is same as checked
     obj.text = '';
-    obj.expirationMap = 'none';
+    obj.expirationCategory = 'none';
     initM.push(obj);
   }
   return initM;
 }
 
-const expirationCategoryOptions = Object.keys(EXPIRATION_DATES);
-console.log('expirationCategoryOptions', expirationCategoryOptions)
+let expirationCategoryOptions = [];
+Object.keys(EXPIRATION_DATES).forEach(category => {
+  let obj = {}
+  obj.label = category;
+  obj.value = category;
+  expirationCategoryOptions.push(obj);
+});
+//console.log('expirationCategoryOptions', expirationCategoryOptions)
 
 const ExpirationMapTest = (props) => {
   const [mappings, setMappings] = useState(initMappings());
@@ -36,7 +43,8 @@ const ExpirationMapTest = (props) => {
       newMappings[idx].disabled = disabledNew;
       setMappings(newMappings);
     }
-    //this should trigger expirationDateMapper1
+    //this should trigger expirationDateMapper1, only if the checkbox is not checked
+    //handle also the case if mapping was never done but then the checkbox gets de selected
   }
 
   const inputChangeHandler = (ev) => {
@@ -53,13 +61,24 @@ const ExpirationMapTest = (props) => {
       newMappings[idx].text = value;
       setMappings(newMappings);
     }
+
     expirationDateMapper1(idx);
+  }
+
+  const selectListChangeHandler = (ev) => {
+    console.log('TODO')
   }
 
 
   //determines how to map the input text content to the expiration_dates objects
   const expirationDateMapper1 = (idx) => {
-    console.log('TODO idx', idx)
+    if (!mappings[idx].disabled) {
+      console.log('TODO idx', idx)
+      let expirationCategory = getExpirationCategory(idx, EXPIRATION_DATES)
+      let newMappings = [].concat(mappings)
+      newMappings[idx].expirationCategory = expirationCategory;
+      setMappings(newMappings);
+    }
   }
 
   //determines how to convert above mapping to a resulting expiration date duration
@@ -84,6 +103,8 @@ const ExpirationMapTest = (props) => {
                 name="checkbox" id={checkboxIdx} />
               <InputText value={m.text} onChangeHandler={inputChangeHandler} 
                 name="inputText" id={inputTextIdx} />
+              <SelectList value={m.expirationCategory} options={expirationCategoryOptions} 
+                onChange={selectListChangeHandler} />
             </div>
           )
         })}
