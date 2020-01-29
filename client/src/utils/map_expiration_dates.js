@@ -62,8 +62,13 @@ const getExpirationDate = (item, EXPIRATION_DATES) => {
   }
 }
 
+const getExpirationCategory = (item, EXPIRATION_DATES) => {
+
+}
+
 module.exports = {
   removePunctuation,
   getSubstringMatchCount,
-  getExpirationDate
+  getExpirationDate,
+  getExpirationCategory
 };

@@ -49,13 +49,13 @@ const ExpirationMapTest = (props) => {
       newMappings[idx].text = value;
       setMappings(newMappings);
     }
-    expirationDateMapper1();
+    expirationDateMapper1(idx);
   }
 
 
   //determines how to map the input text content to the expiration_dates objects
-  const expirationDateMapper1 = () => {
-    console.log('TODO')
+  const expirationDateMapper1 = (idx) => {
+    console.log('TODO idx', idx)
   }
 
   //determines how to convert above mapping to a resulting expiration date duration
