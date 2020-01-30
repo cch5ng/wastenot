@@ -1,7 +1,8 @@
 const {
   removePunctuation,
   getSubstringMatchCount,
-  getExpirationDate
+  getExpirationDate,
+  getExpirationCategory
 } = require('./map_expiration_dates');
 const { EXPIRATION_DATES } = require ('./expiration_dates');
 
@@ -44,7 +45,6 @@ describe('map expiration dates suite tests', () => {
   })
 
   describe('getExpirationDate', () => {
-
     test('getExpirationDate() function no match', () => {
       const item = 'rice';
       expect(getExpirationDate(item, EXPIRATION_DATES)).toBeNull();
@@ -64,7 +64,29 @@ describe('map expiration dates suite tests', () => {
       const item4 = 'tongue, kidneys, liver, heart, chitterlings';
       expect(getExpirationDate(item4, EXPIRATION_DATES)).toBe(1);
     })
-
-
   })
+
+  describe('getExpirationCategory', () => {
+    test('getExpirationCategory() function no match', () => {
+      const item = 'rice';
+      expect(getExpirationCategory(item, EXPIRATION_DATES)).toBe('none');
+    })
+
+    test('getExpirationCategory() function exact match', () => {
+      const item2 = 'hot dogs unopened package';
+      expect(getExpirationCategory(item2, EXPIRATION_DATES)).toBe('hot dogs unopened package');
+    })
+
+    test('getExpirationCategory() function test partial match', () => {
+      const item3 = 'Canned seafood after opening';
+      expect(getExpirationCategory(item3, EXPIRATION_DATES)).toBe('Canned seafood after opening out of can');
+    })
+
+    test('getExpirationCategory() function test partial match2', () => {
+      const item4 = 'tongue, kidneys, liver, heart, chitterlings';
+      expect(getExpirationCategory(item4, EXPIRATION_DATES)).toBe('Variety meats (tongue, kidneys, liver, heart, chitterlings)');
+    })
+  })
+
+
 });
