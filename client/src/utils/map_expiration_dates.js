@@ -35,7 +35,7 @@ const getExpirationCategory = (item, EXPIRATION_DATES) => {
   if (expirationKeys.indexOf(item) > -1) {
     let idx = expirationKeys.indexOf(item);
     key = expirationKeys[idx];
-    return EXPIRATION_DATES[key].refrigeratorInt;
+    return key;
   }
 
   //highest substring match (does this need to be in order or just a combination)
@@ -58,7 +58,7 @@ const getExpirationCategory = (item, EXPIRATION_DATES) => {
     key = expirationKeys[highestSubstringMatchIdx];
     return key;
   } else {
-    return null;
+    return 'none';
   }
 }
 
@@ -68,10 +68,11 @@ const getExpirationDate = (item, EXPIRATION_DATES) => {
   // let highestSubstringMatchCount = 0;
   // let highestSubstringMatchIdx;
   let key = getExpirationCategory(item, EXPIRATION_DATES);
-  if (key) {
+  if (key !== 'none') {
+    console.log('key', key)
     return EXPIRATION_DATES[key].refrigeratorInt;
   }
-  return 'none';
+  return null;
 
   //case exact string match
   // if (expirationKeys.indexOf(item) > -1) {
