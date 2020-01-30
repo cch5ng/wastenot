@@ -73,7 +73,6 @@ const ExpirationMapTest = (props) => {
   //determines how to map the input text content to the expiration_dates objects
   const expirationDateMapper1 = (idx) => {
     if (!mappings[idx].disabled) {
-      console.log('TODO idx', idx)
       let expirationCategory = getExpirationCategory(idx, EXPIRATION_DATES)
       let newMappings = [].concat(mappings)
       newMappings[idx].expirationCategory = expirationCategory;
