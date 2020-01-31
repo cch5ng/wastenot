@@ -1,8 +1,9 @@
 import { EXPIRATION_DATES } from './expiration_dates';
 
-const removePunctuation = (str) => {
+const removePunctuationLowerCase = (str) => {
   let cleanStr;
   const punctuation = [',', '(', ')', '.'];
+  str = str.toLowerCase();
   punctuation.forEach(pMark => {
     let re = /[,().]/g
     cleanStr = str.replace(re, '');
@@ -42,10 +43,10 @@ const getExpirationCategory = (item, EXPIRATION_DATES) => {
   //get 2 arrays where each string has been parsed using string.split('') but what to do about punctuation
   //remove punctuation
   //split string into array of indiv words
-  itemNoPunctuation = removePunctuation(item);
+  itemNoPunctuation = removePunctuationLowerCase(item);
   let itemWordAr = itemNoPunctuation.split(' ');
   for (let i = 0; i < expirationKeys.length; i++) {
-    let expirationKeyNoPunctuation = removePunctuation(expirationKeys[i]);
+    let expirationKeyNoPunctuation = removePunctuationLowerCase(expirationKeys[i]);
     let expirationKeyWordAr = expirationKeyNoPunctuation.split(' ');
     let substringMatchCount = getSubstringMatchCount(itemWordAr, expirationKeyWordAr);
     if (substringMatchCount > highestSubstringMatchCount) {
@@ -107,7 +108,7 @@ const getExpirationDate = (item, EXPIRATION_DATES) => {
 
 //module.exports = {
 export {
-  removePunctuation,
+  removePunctuationLowerCase,
   getSubstringMatchCount,
   getExpirationDate,
   getExpirationCategory
