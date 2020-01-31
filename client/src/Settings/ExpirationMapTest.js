@@ -80,12 +80,8 @@ const ExpirationMapTest = (props) => {
 
   const formSubmitHandler = (ev) => {
     ev.preventDefault();
-    console.log('TODO')
 
-    //perform a batch update
-    //want to end up with an array of mapped categories
     let mappedExpirationCategoriesAr = getMappedExpirationCategoriesAr();
-    //perform a batch state update with the new mapped categories
     let newMappings = [].concat(mappings);
     mappedExpirationCategoriesAr.forEach((expirCategory, idx) => {
       newMappings[idx].expirationCategory = expirCategory;
