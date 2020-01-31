@@ -53,31 +53,44 @@ const ExpirationMapTest = (props) => {
     let id = ev.target.id;
     let idAr = id.split('-');
     let idx = idAr[idAr.length - 1];
-    //handle checkbox change
     if (name = 'inputText') {
-    //handle input text change
-      console.log('name inputText')
       let newMappings = [].concat(mappings)
       newMappings[idx].text = value;
       setMappings(newMappings);
     }
-
-    expirationDateMapper1(idx);
   }
 
   const selectListChangeHandler = (ev) => {
     console.log('TODO')
   }
 
-
   //determines how to map the input text content to the expiration_dates objects
-  const expirationDateMapper1 = (idx) => {
-    if (!mappings[idx].disabled) {
-      let expirationCategory = getExpirationCategory(idx, EXPIRATION_DATES)
-      let newMappings = [].concat(mappings)
-      newMappings[idx].expirationCategory = expirationCategory;
-      setMappings(newMappings);
-    }
+  const getMappedExpirationCategoriesAr = () => {
+    let mappedExpirationCategoriesAr = mappings.map(mapping => {
+      if (!mapping.disabled && mapping.text.length) {
+        return getExpirationCategory(mapping.text, EXPIRATION_DATES)
+      } else {
+        //mapping is disabled
+        return 'none';
+      }
+    });
+
+    return mappedExpirationCategoriesAr;
+  }
+
+  const formSubmitHandler = (ev) => {
+    ev.preventDefault();
+    console.log('TODO')
+
+    //perform a batch update
+    //want to end up with an array of mapped categories
+    let mappedExpirationCategoriesAr = getMappedExpirationCategoriesAr();
+    //perform a batch state update with the new mapped categories
+    let newMappings = [].concat(mappings);
+    mappedExpirationCategoriesAr.forEach((expirCategory, idx) => {
+      newMappings[idx].expirationCategory = expirCategory;
+    })
+    setMappings(newMappings);
   }
 
   //determines how to convert above mapping to a resulting expiration date duration
@@ -90,6 +103,7 @@ const ExpirationMapTest = (props) => {
 
   return (
     <div>
+      <h1>TODO need explanation purpose of this form</h1>
       <form>
         {mappings.map((m, idx) => {
           let keyBase = `expirationMapRow-`;
@@ -107,10 +121,10 @@ const ExpirationMapTest = (props) => {
             </div>
           )
         })}
+        <Button label="Submit" onClickHandler={formSubmitHandler} size="medium" />
       </form>
     </div>
   )
-
 }
 
 export default ExpirationMapTest;
