@@ -1,5 +1,5 @@
 const {
-  removePunctuation,
+  removePunctuationLowerCase,
   getSubstringMatchCount,
   getExpirationDate,
   getExpirationCategory
@@ -8,13 +8,17 @@ const { EXPIRATION_DATES } = require ('./expiration_dates');
 
 describe('map expiration dates suite tests', () => {
 
-  describe('removePunctuation tests', () => {
-    test('removePunctuation() function test with one comma', () => {
-      expect(removePunctuation('lunch meats, opened')).toBe('lunch meats opened');
+  describe('removePunctuationLowerCase tests', () => {
+    test('removePunctuationLowerCase() function test with one comma', () => {
+      expect(removePunctuationLowerCase('lunch meats, opened')).toBe('lunch meats opened');
     });
 
-    test('removePunctuation() function test with two commas', () => {
-      expect(removePunctuation('lunch meats, opened, or closed')).toBe('lunch meats opened or closed');
+    test('removePunctuationLowerCase() function test with two commas', () => {
+      expect(removePunctuationLowerCase('lunch meats, opened, or closed')).toBe('lunch meats opened or closed');
+    });
+
+    test('removePunctuationLowerCase() function test with two commas and uppercase', () => {
+      expect(removePunctuationLowerCase('LUNCH MEATS, opened, or CLOSED')).toBe('lunch meats opened or closed');
     });
   })
 
