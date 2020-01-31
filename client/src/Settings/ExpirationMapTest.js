@@ -30,12 +30,16 @@ Object.keys(EXPIRATION_DATES).forEach(category => {
 const ExpirationMapTest = (props) => {
   const [mappings, setMappings] = useState(initMappings());
 
+  const getMappingsIdxFromId = (id) => {
+    let idAr = id.split('-');
+    return idAr[idAr.length - 1];
+  }
+
   //handles change to rows of checkbox and input text fields
   const checkboxChangeHandler = (ev) => {
     let name = ev.target.name;
     let id = ev.target.id;
-    let idAr = id.split('-');
-    let idx = idAr[idAr.length - 1];
+    let idx = getMappingsIdxFromId(id);
     //handle checkbox change
     if (name = 'checkbox') {
       let disabledNew = !mappings[idx].disabled;
@@ -51,8 +55,7 @@ const ExpirationMapTest = (props) => {
     let name = ev.target.name;
     let value = ev.target.value;
     let id = ev.target.id;
-    let idAr = id.split('-');
-    let idx = idAr[idAr.length - 1];
+    let idx = getMappingsIdxFromId(id);
     if (name = 'inputText') {
       let newMappings = [].concat(mappings)
       newMappings[idx].text = value;
@@ -61,7 +64,13 @@ const ExpirationMapTest = (props) => {
   }
 
   const selectListChangeHandler = (ev) => {
-    console.log('TODO')
+    let value = ev.target.value;
+    let id = ev.target.id;
+    let idx = getMappingsIdxFromId(id);
+
+    let newMappings = [].concat(mappings)
+    newMappings[idx].expirationCategory = value;
+    setMappings(newMappings);
   }
 
   //determines how to map the input text content to the expiration_dates objects
@@ -106,6 +115,7 @@ const ExpirationMapTest = (props) => {
           let outerKey = `${keyBase}${idx}`;
           let checkboxIdx = `${keyBase}checkBox-${idx}`;
           let inputTextIdx = `${keyBase}inputText-${idx}`;
+          let selectListIdx = `${keyBase}selectList-${idx}`;
           return (
             <div key={outerKey} >
               <Checkbox checkboxVal={m.disabled} onChangeHandler={checkboxChangeHandler} 
@@ -113,7 +123,7 @@ const ExpirationMapTest = (props) => {
               <InputText value={m.text} onChangeHandler={inputChangeHandler} 
                 name="inputText" id={inputTextIdx} />
               <SelectList value={m.expirationCategory} options={expirationCategoryOptions} 
-                onChange={selectListChangeHandler} />
+                onChange={selectListChangeHandler} id={selectListIdx} />
             </div>
           )
         })}
