@@ -15,6 +15,7 @@ const AUTH_REGISTER_SUFFIX = '/register';
 const AUTH_LOGIN_SUFFIX = '/login';
 const AUTH_LOGOUT_SUFFIX = '/logout';
 const AUTH_AUTHENTICATED_SUFFIX = '/authenticated';
+const SETTINGS_TIMEZONE_SUFFIX = '/settings/timezone';
 
 //let cookieStr = getCookieStr();
 
@@ -113,6 +114,12 @@ const Auth = {
   ,
   postAuthenticated: (cookie) => {
     return requests.post(`${API_ROOT}${API_AUTH_MIDDLE}${AUTH_AUTHENTICATED_SUFFIX}`, { cookie });
+  },
+  putTimezone: ({ timezone, cookieStr }) => {
+    return requests.put(`${API_ROOT}${API_AUTH_MIDDLE}${SETTINGS_TIMEZONE_SUFFIX}`, { timezone, cookieStr });
+  },
+  getTimezone: ({ cookieStr }) => {
+    return requests.post(`${API_ROOT}${API_AUTH_MIDDLE}${SETTINGS_TIMEZONE_SUFFIX}`, { cookieStr });
   }
 }
 

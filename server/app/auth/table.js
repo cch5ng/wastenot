@@ -57,6 +57,35 @@ class AuthTable {
         })
     })
   }
+
+  //userId, timezone
+  //doublecheck where user_id is currently stored
+  static storeUserTimezone({ timezone, emailHash }) {
+    return new Promise((resolve, reject) => {
+      pool.query(
+        `UPDATE wastenot_user SET time_zone=$1 WHERE "emailHash"=$2`,
+        [timezone, emailHash],
+        (error, response) => {
+          if (error) return reject(error);
+          resolve({ message: `Timezone was saved for user`})
+        })
+    })
+  }
+
+  //userId
+  //doublecheck where user_id is currently stored
+  static getUserTimezone({ emailHash }) {
+    return new Promise((resolve, reject) => {
+      pool.query(
+        `SELECT time_zone FROM wastenot_user WHERE "emailHash"=$1`,
+        [emailHash],
+        (error, response) => {
+          if (error) return reject(error);
+          resolve({ time_zone: response.rows[0]})
+        })
+    })
+  }
+
 }
 
 module.exports = AuthTable;

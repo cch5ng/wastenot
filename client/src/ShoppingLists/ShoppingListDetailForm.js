@@ -147,7 +147,7 @@ const ShoppingListDetailForm = (props) => {
         //TODO add some way to indicate that the list items were purchased
         htmlResult.push(
           <li key={key} className="form-row-inline">
-            <Checkbox checkboxVal={curInput.checked} onChangeHandler={inputChangeHandler} itemId={key}/>
+            <Checkbox checkboxVal={curInput.checked} onChangeHandler={inputChangeHandler} id={key}/>
             <InputText value={listItemInputs[key].name} placeholder="item name" 
               id={key} onChangeHandler={inputChangeHandler} name={key}
             />

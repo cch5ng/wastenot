@@ -13,7 +13,8 @@ import useListTemplates from './utils/hooks/useListTemplates';
 import ShoppingLists from './ShoppingLists/ShoppingLists';
 import config from './config';
 import AuthForm from './Auth/AuthForm';
-
+import Settings from './Auth/Settings';
+import ExpirationMapTest from './Settings/ExpirationMapTest';
 
 function App(props) {
 
@@ -71,6 +72,13 @@ function App(props) {
             render={({match}) => (<ListTemplateDetailForm mode="edit" 
               updateListTemplates={updateListTemplates}
               listTemplateGuid={match.params.listTemplateGuid}
+            />
+          )} />
+          <Route exact path="/settings/expirationMapTest" 
+            component={ExpirationMapTest}
+          />
+          <Route exact path="/settings"
+            render={(props) => (<Settings {...props}
             />
           )} />
         </div>

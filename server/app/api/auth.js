@@ -93,4 +93,59 @@ router.post('/authenticated', (req, res, next) => {
   }
 })
 
+router.put('/settings/timezone', (req, res, next) => {
+  let { cookieStr, timezone } = req.body;
+  let error;
+
+  if (cookieStr) {
+    const { email, id } = Session.parse(cookieStr);
+    let emailHash = hash(email);
+
+    AuthTable.storeUserTimezone( { timezone, emailHash })
+      .then(resp => {
+        if (resp) {
+          res.json(resp)
+        } else {
+          error = new Error('Invalid session');
+          error.statusCode = 400;
+          return next(error);
+        }
+      })
+      .catch(err => next(err));
+  } else  if (!cookie || !Session.verify()) {
+    error = new Error('Invalid session');
+    error.statusCode = 400;
+    return next(error);
+  }
+})
+
+//used to get the user timezone; passing in cookie with request
+router.post('/settings/timezone', (req, res, next) => {
+  let { cookieStr } = req.body;
+  let error;
+
+  if (cookieStr) {
+    const { email, id } = Session.parse(cookieStr);
+    let emailHash = hash(email);
+
+    AuthTable.getUserTimezone( { emailHash })
+      .then((resp) => {
+        if (resp.time_zone) {
+          res.json(resp)
+        } else {
+          error = new Error('Invalid session');
+          error.statusCode = 400;
+          return next(error);
+        }
+      })
+      .catch(err => next(err));
+  } else  if (!cookie || !Session.verify()) {
+    error = new Error('Invalid session');
+    error.statusCode = 400;
+    return next(error);
+  }
+})
+
+
+
 module.exports = router;
