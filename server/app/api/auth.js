@@ -1,5 +1,6 @@
 const { Router } = require('express');
 const AuthTable = require('../auth/table');
+const SettingTable = require('../setting/table');
 const Session = require('../auth/Session');
 const { hash } = require('../auth/helper');
 const { setSession } = require('./helper');
@@ -14,16 +15,26 @@ router.post('/register', (req, res, next) => {
   AuthTable.getAccount({ emailHash })
     .then(({ account }) => {
       if (!account) {
-        AuthTable.storeAccount({ emailHash, passwordHash })
+        //Promise.all([
+          return AuthTable.storeAccount({ emailHash, passwordHash })
+          //TODO fix how to send parameter
+          //SettingTable.storeMappedItemsSetting()
+        //])
+    
       } else {
         let error = new Error('This user already exists.');
         error.statusCode = 409;
         throw error;
       }
     })
+    //TODO fix how to handle response result of promises array resolved
+    .then(resp => {
+      console.log('resp', resp)
+      SettingTable.storeMappedItemsSetting({user_id: resp.userId})
+    })
     .then(() => {
       // adding return keyword allows the catch to then be shared across all then calls
-      return setSession({ email, res});
+      return setSession({ email, res});      
     })
     .then(({ message, cookie }) => {
       res.json({ message, cookie }) //reusing the message returned from setSession
@@ -145,7 +156,5 @@ router.post('/settings/timezone', (req, res, next) => {
     return next(error);
   }
 })
-
-
 
 module.exports = router;
