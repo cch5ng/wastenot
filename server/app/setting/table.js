@@ -17,6 +17,23 @@ class SettingTable {
             )
         })
       }
+
+      static getListItemMapping({ user_id }) {
+        return new Promise((resolve, reject) => {
+            pool.query(
+                `SELECT  mapped_items_to_categories FROM setting WHERE user_id=$1`,
+                [user_id],
+                (error, response) => {
+                  if (error) return reject(error);
+                  if (response.rows.length) {
+                    const mapped_items_to_categories = response.rows[0].mapped_items_to_categories;
+                    resolve({ mapped_items_to_categories });
+                  }
+                }
+            )
+        })
+      }
+
 }
 
 module.exports = SettingTable;
