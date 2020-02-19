@@ -1,35 +1,28 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import './style.css';
 
-class InternalNotification extends Component {
+const InternalNotification = (props) => {
 
-    constructor(props) {
-      super(props);
-      this.state = {
-      }
-    }
-  
-    componentDidMount() {
-    }
-
-    render() {
-        return (
-          <div>
-          </div>
-        )
-    }
+  return (
+    <div>
+      This is a reminder to <Link to="/settings/expirationMapTest">set up mapping between your shopping list items and expiration dates.</Link>
+    </div>
+  )
 }
 
-const mapStateToProps = state => ({ setting: state.setting });
+export default InternalNotification;
 
-const mapDispatchToProps = dispatch => {
-  return {
-    //register: ({ email, password }) => dispatch(register({ email, password }))
-  }
-}
+// const mapStateToProps = state => ({ setting: state.setting });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps)(InternalNotification);
+// const mapDispatchToProps = dispatch => {
+//   return {
+//     //register: ({ email, password }) => dispatch(register({ email, password }))
+//   }
+// }
+
+// export default connect(
+//   mapStateToProps,
+//   mapDispatchToProps)(InternalNotification);
