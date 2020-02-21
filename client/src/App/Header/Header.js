@@ -3,9 +3,11 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import './Header.css';
 import { logout } from '../../actions/authenticate';
+import InternalNotification from '../InternalNotification/InternalNotification';
 
 const Header = (props) => {
   const [menuDisplayed, setMenuDisplayed] = useState(false);
+  const [reminderListItemsMapDisplayed, setReminderListItemsMapDisplayed] = useState(true);
 
   const logOutHandler = (ev) => {
     props.logout();
@@ -18,6 +20,9 @@ const Header = (props) => {
   if (!menuDisplayed) {
     return (
       <div className="header title">
+        {reminderListItemsMapDisplayed && (
+          <InternalNotification />
+        )}
         <div className="header-main">
           <h2><Link to="/" className="title">Waste Not</Link></h2>
         </div>
@@ -58,6 +63,9 @@ const Header = (props) => {
   if (menuDisplayed) {
     return (
       <div className="menu">
+        {reminderListItemsMapDisplayed && (
+          <InternalNotification />
+        )}
         <div className="icon" onClick={toggleMenu} >X</div>
         <div className="menu-links">
           <p className="menu-link-item">
