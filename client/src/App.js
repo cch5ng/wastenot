@@ -47,7 +47,7 @@ function App(props) {
       <Router>
         <div className="App">
           <Header />
-          <Route path='/' exact component={Home}/>
+          <Route path='/' exact component={ShoppingLists}/>
           <Route exact path='/shoppingLists' component={ShoppingLists} />
           <Route exact path='/shoppingLists/new'
             render={(props) => (<ShoppingListDetailForm {...props} mode="add" />
