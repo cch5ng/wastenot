@@ -4,10 +4,12 @@ import { connect } from 'react-redux';
 import './Header.css';
 import { logout } from '../../actions/authenticate';
 import InternalNotification from '../InternalNotification/InternalNotification';
+import http_requests from '../../utils/http_requests';
+import { getCookieStr } from '../../utils/utils';
 
 const Header = (props) => {
   const [menuDisplayed, setMenuDisplayed] = useState(false);
-  const [reminderListItemsMapDisplayed, setReminderListItemsMapDisplayed] = useState(true);
+  const [userMappedListItemsToExpiration, setUserMappedListItemsToExpiration] = useState(true);
 
   const logOutHandler = (ev) => {
     props.logout();
@@ -17,10 +19,22 @@ const Header = (props) => {
     setMenuDisplayed(!menuDisplayed)
   }
 
+  useEffect(() => {
+    if (props.authenticate.authStr) {
+      let cookie = getCookieStr();
+      console.log('cookie', cookie)
+      http_requests.Setting.postListItemMapSetting(cookie)
+        .then(resp => {
+          setUserMappedListItemsToExpiration(resp.mapped_items_to_categories)
+          console.log('resp', resp);
+        });
+    }
+  }, [props.authenticate.authStr]);
+
   if (!menuDisplayed) {
     return (
       <div className="header title">
-        {reminderListItemsMapDisplayed && (
+        {!userMappedListItemsToExpiration && (
           <InternalNotification />
         )}
         <div className="header-main">
