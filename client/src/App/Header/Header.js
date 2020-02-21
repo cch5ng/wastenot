@@ -22,11 +22,9 @@ const Header = (props) => {
   useEffect(() => {
     if (props.authenticate.authStr) {
       let cookie = getCookieStr();
-      console.log('cookie', cookie)
       http_requests.Setting.postListItemMapSetting(cookie)
         .then(resp => {
-          setUserMappedListItemsToExpiration(resp.mapped_items_to_categories)
-          console.log('resp', resp);
+          setUserMappedListItemsToExpiration(resp.mapped_items_to_categories);
         });
     }
   }, [props.authenticate.authStr]);
@@ -77,7 +75,7 @@ const Header = (props) => {
   if (menuDisplayed) {
     return (
       <div className="menu">
-        {reminderListItemsMapDisplayed && (
+        {!userMappedListItemsToExpiration && (
           <InternalNotification />
         )}
         <div className="icon" onClick={toggleMenu} >X</div>
