@@ -28,7 +28,24 @@ router.post('/listItemMapping', (req, res, next) => {
   });
 
 //should update a record in setting table
-//router.put('/', (req, res, next) => { 
-//});
+router.put('/listItemMapping', (req, res, next) => { 
+    let { cookie } = req.body;
+    let { email, id } = Session.parse(cookie);
+    let emailHash = hash(email);
+  
+    AuthTable.isAuthenticated({ sessionId: id, emailHash })
+      .then(resp => {
+        if (resp) {
+          SettingTable.updateListItemMapping({ user_id: resp.account.id })
+            .then(resp => res.json(resp))
+            .catch(err => next(err));
+         } else {
+           let error = new Error('User is not logged in.');
+           error.statusCode = 401;
+           next(error);
+         }
+       })
+       .catch(error => next(error));
+});
 
 module.exports = router;
