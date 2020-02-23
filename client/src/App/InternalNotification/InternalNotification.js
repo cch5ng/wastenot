@@ -9,6 +9,7 @@ const InternalNotification = (props) => {
   return (
     <div className="internalNotification">
       This is a reminder to <Link to="/settings/expirationMapTest">set up mapping between your shopping list items and expiration dates.</Link>
+      <div onClick={props.clickCloseHandler}>X</div>
     </div>
   )
 }
