@@ -10,9 +10,8 @@ import { getCookieStr } from '../../utils/utils';
 const Header = (props) => {
   const [menuDisplayed, setMenuDisplayed] = useState(false);
   const [globalHideInternalNotification, setGlobalHideInternalNotification] = useState(false);
-  const [userMappedListItemsToExpiration, setUserMappedListItemsToExpiration] = useState(true);
-  const [userClosedInternalNotification, setUserClosedInternalNotification] = useState(false);
-  const [userVisitedSettingMapListItemsToExpiration, setUserVisitedSettingMapListItemsToExpiration] = useState(false);
+    //refactor so when user runs first mapping test, this should update the database and that should update the globalHideInternalNotification setting on render
+  const [sessionHideInternalNotification, setSessionHideInternalNotification] = useState(false);
 
   const logOutHandler = (ev) => {
     props.logout();
@@ -23,11 +22,7 @@ const Header = (props) => {
   }
 
   const notificationCloseHandler = (ev) => {
-    setUserClosedInternalNotification(true);
-  }
-
-  const internalNotificationLinkClickHandler = (ev) => {
-    setUserVisitedSettingMapListItemsToExpiration(true);
+    setSessionHideInternalNotification(true);
   }
 
   useEffect(() => {
@@ -35,7 +30,7 @@ const Header = (props) => {
       let cookie = getCookieStr();
       http_requests.Setting.postListItemMapSetting(cookie)
         .then(resp => {
-          setUserMappedListItemsToExpiration(resp.mapped_items_to_categories);
+          setGlobalHideInternalNotification(resp.mapped_items_to_categories);
         });
     }
   }, [props.authenticate.authStr]);
@@ -43,8 +38,8 @@ const Header = (props) => {
   if (!menuDisplayed) {
     return (
       <div className="header title">
-        {!globalHideInternalNotification || !userMappedListItemsToExpiration || !userVisitedSettingMapListItemsToExpiration || !userClosedInternalNotification && (
-          <InternalNotification clickCloseHandler={internalNotificationCloseHandler} />
+        {!globalHideInternalNotification && !sessionHideInternalNotification && (
+          <InternalNotification clickCloseHandler={notificationCloseHandler} />
         )}
         <div className="header-main">
           <h2><Link to="/" className="title">Waste Not</Link></h2>
@@ -86,8 +81,8 @@ const Header = (props) => {
   if (menuDisplayed) {
     return (
       <div className="menu">
-        {!globalHideInternalNotification || !userMappedListItemsToExpiration || !userVisitedSettingMapListItemsToExpiration || !userClosedInternalNotification && (
-          <InternalNotification />
+        {!globalHideInternalNotification && !sessionHideInternalNotification && (
+          <InternalNotification clickCloseHandler={notificationCloseHandler} />
         )}
         <div className="icon" onClick={toggleMenu} >X</div>
         <div className="menu-links">
