@@ -9,7 +9,10 @@ import { getCookieStr } from '../../utils/utils';
 
 const Header = (props) => {
   const [menuDisplayed, setMenuDisplayed] = useState(false);
+  const [globalHideInternalNotification, setGlobalHideInternalNotification] = useState(false);
   const [userMappedListItemsToExpiration, setUserMappedListItemsToExpiration] = useState(true);
+  const [userClosedInternalNotification, setUserClosedInternalNotification] = useState(false);
+  const [userVisitedSettingMapListItemsToExpiration, setUserVisitedSettingMapListItemsToExpiration] = useState(false);
 
   const logOutHandler = (ev) => {
     props.logout();
@@ -17,6 +20,14 @@ const Header = (props) => {
 
   const toggleMenu = (ev) => {
     setMenuDisplayed(!menuDisplayed)
+  }
+
+  const notificationCloseHandler = (ev) => {
+    setUserClosedInternalNotification(true);
+  }
+
+  const internalNotificationLinkClickHandler = (ev) => {
+    setUserVisitedSettingMapListItemsToExpiration(true);
   }
 
   useEffect(() => {
@@ -32,8 +43,8 @@ const Header = (props) => {
   if (!menuDisplayed) {
     return (
       <div className="header title">
-        {!userMappedListItemsToExpiration && (
-          <InternalNotification />
+        {!globalHideInternalNotification || !userMappedListItemsToExpiration || !userVisitedSettingMapListItemsToExpiration || !userClosedInternalNotification && (
+          <InternalNotification clickCloseHandler={internalNotificationCloseHandler} />
         )}
         <div className="header-main">
           <h2><Link to="/" className="title">Waste Not</Link></h2>
@@ -75,7 +86,7 @@ const Header = (props) => {
   if (menuDisplayed) {
     return (
       <div className="menu">
-        {!userMappedListItemsToExpiration && (
+        {!globalHideInternalNotification || !userMappedListItemsToExpiration || !userVisitedSettingMapListItemsToExpiration || !userClosedInternalNotification && (
           <InternalNotification />
         )}
         <div className="icon" onClick={toggleMenu} >X</div>
