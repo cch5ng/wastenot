@@ -128,6 +128,9 @@ const Auth = {
 const Setting = {
   postListItemMapSetting: (cookie) => {
     return requests.post(`${API_ROOT}${API_SETTING_MIDDLE}${SETTING_LIST_ITEM_MAP_SUFFIX}`, { cookie });
+  },
+  putListItemMapSetting: (cookie) => {
+    return requests.put(`${API_ROOT}${API_SETTING_MIDDLE}${SETTING_LIST_ITEM_MAP_SUFFIX}`, { cookie });
   }
 }
 
