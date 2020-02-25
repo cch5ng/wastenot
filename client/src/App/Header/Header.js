@@ -25,6 +25,14 @@ const Header = (props) => {
     setSessionHideInternalNotification(true);
   }
 
+  const notificationCloseGlobalHandler = (ev) => {
+    let cookie = getCookieStr();
+    http_requests.Setting.putListItemMapSetting(cookie)
+      .then(resp => {
+        setGlobalHideInternalNotification(true);
+      });
+  }
+
   useEffect(() => {
     if (props.authenticate.authStr) {
       let cookie = getCookieStr();
@@ -39,7 +47,7 @@ const Header = (props) => {
     return (
       <div className="header title">
         {!globalHideInternalNotification && !sessionHideInternalNotification && (
-          <InternalNotification clickCloseHandler={notificationCloseHandler} />
+          <InternalNotification clickCloseHandler={notificationCloseHandler} checkboxSelectHandler={notificationCloseGlobalHandler} />
         )}
         <div className="header-main">
           <h2><Link to="/" className="title">Waste Not</Link></h2>
