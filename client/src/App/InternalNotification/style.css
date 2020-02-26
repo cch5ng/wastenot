@@ -1,0 +1,19 @@
+.internalNotification {
+    z-index: 15;
+    position: absolute;
+    width: 65%;
+    height: 130px;
+    top: 50px;
+    left: calc(35% / 2);
+    background-color: #e5e5e5;
+    border-radius: 8px;
+    padding: 12px;
+    text-align: left;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: flex-start;
+}
+
+.controlClose {
+    align-self: flex-end;
+}

@@ -14,5 +14,6 @@ psql -U ${DB_USER} waste_not_db < ./bin/sql/list.sql
 psql -U ${DB_USER} waste_not_db < ./bin/sql/section.sql
 psql -U ${DB_USER} waste_not_db < ./bin/sql/list_item.sql
 psql -U ${DB_USER} waste_not_db < ./bin/sql/expiration.sql
+psql -U ${DB_USER} waste_not_db < ./bin/sql/setting.sql
 
 echo 'waste_not_db configured'

@@ -5,6 +5,8 @@ import Button from '../App/Shared/Button/Button';
 import SelectList from '../App/Shared/SelectList/SelectList';
 import { EXPIRATION_DATES } from '../utils/expiration_dates';
 import { getExpirationCategory, getExpirationDate } from '../utils/map_expiration_dates';
+import http_requests from '../utils/http_requests';
+import { getCookieStr } from '../utils/utils';
 
 const initMappings = () => {
   let initM = [];
@@ -90,12 +92,16 @@ const ExpirationMapTest = (props) => {
   const formSubmitHandler = (ev) => {
     ev.preventDefault();
 
+    let cookie = getCookieStr();
     let mappedExpirationCategoriesAr = getMappedExpirationCategoriesAr();
     let newMappings = [].concat(mappings);
     mappedExpirationCategoriesAr.forEach((expirCategory, idx) => {
       newMappings[idx].expirationCategory = expirCategory;
     })
     setMappings(newMappings);
+    http_requests.Setting.putListItemMapSetting(cookie)
+      .then(resp => console.log('resp', resp))
+      .catch(err => console.error(err))
   }
 
   //determines how to convert above mapping to a resulting expiration date duration

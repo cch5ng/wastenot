@@ -7,13 +7,14 @@ class AuthTable {
     let guid = uuidv4();
     return new Promise((resolve, reject) => {
       pool.query(
-        `INSERT INTO wastenot_user ("emailHash", "passwordHash", guid) VALUES ($1, $2, $3) RETURNING guid`,
+        `INSERT INTO wastenot_user ("emailHash", "passwordHash", guid) VALUES ($1, $2, $3) RETURNING id`,
         [emailHash, passwordHash, guid],
         (error, response) => {
           if (error) return reject(error);
           if (response.rows.length) {
-            const userGuid = response.rows[0].guid;
-            resolve({ userGuid });
+            const userId = response.rows[0].id;
+            console.log('userId', userId)
+            resolve({ userId });
           }
         }
       )
