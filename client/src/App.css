@@ -39,10 +39,44 @@
   margin-bottom: 16px;
 }
 
+/* global grid */
+
+.row {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+}
+
+.oneCol, 
+.twoCol,
+.threeCol,
+.sixCol {
+  width: 90%;
+  align-self: center;
+}
 
 @media (min-width: 768px) {
   .main {
     margin: 15px 35px;
   }
+
+  .row {
+    display: flex;
+    flex-flow: row nowrap;
+    /* justify-content: flex-start; */
+  }
+
+  .twoCol {
+    width: 45%;
+  }
+
+  .threeCol {
+    width: 30%;
+  }
+
+  .sixCol {
+    width: 15%;
+  }
+
 
 }
