@@ -30,6 +30,7 @@ Object.keys(EXPIRATION_DATES).forEach(category => {
 //console.log('expirationCategoryOptions', expirationCategoryOptions)
 
 const ExpirationMapTest = (props) => {
+  const [expirationMapPage, setExpirationMapPage] = useState(1);
   const [mappings, setMappings] = useState(initMappings());
 
   const getMappingsIdxFromId = (id) => {
@@ -89,7 +90,7 @@ const ExpirationMapTest = (props) => {
     return mappedExpirationCategoriesAr;
   }
 
-  const formSubmitHandler = (ev) => {
+  const stepOneFormSubmitHandler = (ev) => {
     ev.preventDefault();
 
     let cookie = getCookieStr();
@@ -102,7 +103,24 @@ const ExpirationMapTest = (props) => {
     http_requests.Setting.putListItemMapSetting(cookie)
       .then(resp => console.log('resp', resp))
       .catch(err => console.error(err))
+    setExpirationMapPage(2);
   }
+
+  const stepTwoFormSubmitHandler = (ev) => {
+    ev.preventDefault();
+
+    let cookie = getCookieStr();
+    // let mappedExpirationCategoriesAr = getMappedExpirationCategoriesAr();
+    // let newMappings = [].concat(mappings);
+    // mappedExpirationCategoriesAr.forEach((expirCategory, idx) => {
+    //   newMappings[idx].expirationCategory = expirCategory;
+    // })
+    // setMappings(newMappings);
+    // http_requests.Setting.putListItemMapSetting(cookie)
+    //   .then(resp => console.log('resp', resp))
+    //   .catch(err => console.error(err))
+  }
+
 
   //determines how to convert above mapping to a resulting expiration date duration
   //I think this does not affect the UI but should be stored into state/backend
@@ -112,31 +130,89 @@ const ExpirationMapTest = (props) => {
   //const renderForm = () => {
   //}
 
+  if (expirationMapPage === 1) {
+    return (
+      <MappingStep1 mappings={mappings} checkboxChangeHandler={checkboxChangeHandler} 
+        inputChangeHandler={inputChangeHandler} expirationCategoryOptions={expirationCategoryOptions}
+        selectListChangeHandler={selectListChangeHandler} stepOneFormSubmitHandler={stepOneFormSubmitHandler}
+      />
+    )    
+  }
+
+  if (expirationMapPage === 2) {
+    return (
+      <ReviewStep2 mappings={mappings} checkboxChangeHandler={checkboxChangeHandler} 
+        inputChangeHandler={inputChangeHandler} expirationCategoryOptions={expirationCategoryOptions}
+        selectListChangeHandler={selectListChangeHandler} stepTwoFormSubmitHandler={stepTwoFormSubmitHandler}
+      />
+    )    
+  }
+}
+
+export default ExpirationMapTest;
+
+const MappingStep1 = (props) => {
+
+//        <div className="twoCol">Expiration Category</div>
+//inputClassName="twoCol"
+//              <SelectList value={m.expirationCategory} options={props.expirationCategoryOptions} 
+//onChange={props.selectListChangeHandler} id={selectListIdx} selectClassName="twoCol"/>
+
   return (
     <div>
       <h1>TODO need explanation purpose of this form</h1>
+      <div className="row">
+        <div className="oneCol">List Item</div>
+      </div>
       <form>
-        {mappings.map((m, idx) => {
+        {props.mappings.map((m, idx) => {
           let keyBase = `expirationMapRow-`;
           let outerKey = `${keyBase}${idx}`;
           let checkboxIdx = `${keyBase}checkBox-${idx}`;
           let inputTextIdx = `${keyBase}inputText-${idx}`;
           let selectListIdx = `${keyBase}selectList-${idx}`;
           return (
-            <div key={outerKey} >
-              <Checkbox checkboxVal={m.disabled} onChangeHandler={checkboxChangeHandler} 
-                name="checkbox" id={checkboxIdx} />
-              <InputText value={m.text} onChangeHandler={inputChangeHandler} 
-                name="inputText" id={inputTextIdx} />
-              <SelectList value={m.expirationCategory} options={expirationCategoryOptions} 
-                onChange={selectListChangeHandler} id={selectListIdx} />
+            <div key={outerKey} className="row">
+              <InputText value={m.text} onChangeHandler={props.inputChangeHandler} 
+                name="inputText" id={inputTextIdx} inputClassName="oneCol"/>
             </div>
           )
         })}
-        <Button label="Submit" onClickHandler={formSubmitHandler} size="medium" />
+        <Button label="Next" onClickHandler={props.stepOneFormSubmitHandler} size="medium" />
       </form>
     </div>
   )
 }
 
-export default ExpirationMapTest;
+const ReviewStep2 = (props) => {
+  return (
+    <div>
+      <h1>TODO need explanation REVIEW step</h1>
+      <div className="row">
+        <div className="sixCol">Disable</div>
+        <div className="threeCol">List Item</div>
+        <div className="threeCol">Expiration Category</div>
+      </div>
+      <form>
+        {props.mappings.map((m, idx) => {
+          let keyBase = `expirationMapRow-`;
+          let outerKey = `${keyBase}${idx}`;
+          let checkboxIdx = `${keyBase}checkBox-${idx}`;
+          let inputTextIdx = `${keyBase}inputText-${idx}`;
+          let selectListIdx = `${keyBase}selectList-${idx}`;
+          return (
+            <div key={outerKey} className="row">
+              <Checkbox checkboxVal={m.disabled} onChangeHandler={props.checkboxChangeHandler} 
+                name="checkbox" id={checkboxIdx} checkClassName="sixCol" />
+              <InputText value={m.text} onChangeHandler={props.inputChangeHandler} 
+                name="inputText" id={inputTextIdx} inputClassName="threeCol"/>
+              <SelectList value={m.expirationCategory} options={props.expirationCategoryOptions} 
+                onChange={props.selectListChangeHandler} id={selectListIdx} selectClassName="threeCol"/>
+            </div>
+          )
+        })}
+        <Button label="Save" onClickHandler={props.stepTwoFormSubmitHandler} size="medium" />
+      </form>
+    </div>
+  )
+}
