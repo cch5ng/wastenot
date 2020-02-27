@@ -3,5 +3,5 @@ CREATE TABLE list_item_map(
   name VARCHAR(64),
   expiration_days INTEGER,
   user_id INTEGER,
-  FOREIGN KEY (user_id) REFERENCES list(wastenot_user)
+  FOREIGN KEY (user_id) REFERENCES wastenot_user(id)
 );
