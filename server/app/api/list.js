@@ -1,5 +1,4 @@
 const { Router } = require('express');
-//const passport = require('passport');
 const ListTable = require('../list/table');
 const ListItemTable = require('../list_item/table');
 const { hash } = require('../auth/helper');

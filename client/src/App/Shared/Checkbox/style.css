@@ -38,6 +38,6 @@ input:focus {
 
 :root input[type=checkbox]:checked + label:before {
   content: "\f14a";
-  font-size: 1.7em;
+  font-size: 1.8em;
   color: #8b8072;
 }

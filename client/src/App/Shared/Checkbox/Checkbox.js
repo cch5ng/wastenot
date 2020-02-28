@@ -1,12 +1,18 @@
 import React from 'react';
+import classNames from 'classnames';
 import './style.css';
 
 const Checkbox = (props) => {
-  let { checkboxVal, onChangeHandler, checkboxLabel, id, name} = props;
+  let { checkboxVal, onChangeHandler, checkboxLabel, id, name, checkClassName } = props;
+  let checkClass;
+
+  if (checkClassName) {
+    checkClass = `form ${checkClassName}`
+  }
 
   if (checkboxLabel) {
     return (
-      <div className="form-group">
+      <div className={checkClass}>
         <input type="checkbox" className="list-item-input"
           checked={checkboxVal}
           onChange={ev => onChangeHandler(ev)}
@@ -20,7 +26,7 @@ const Checkbox = (props) => {
   }
 
   return (
-    <div className="form-group">
+    <div className={checkClass}>
       <input checked={checkboxVal} type="checkbox" className="list-item-input"
         onChange={ev => onChangeHandler(ev)} name={name}
         />
