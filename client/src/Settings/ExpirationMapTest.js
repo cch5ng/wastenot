@@ -108,8 +108,22 @@ const ExpirationMapTest = (props) => {
 
   const stepTwoFormSubmitHandler = (ev) => {
     ev.preventDefault();
+    let mappingsWithExpiration = [];
 
     let cookie = getCookieStr();
+    mappings.forEach(item => {
+      if (item.disabled === false && item.text.length && item.expirationCategory.length) {
+        console.log('gets here')
+        console.log('item.text', item.text)
+        let obj = {}
+        obj.name = item.text;
+        obj.expirationDays = getExpirationDate(item.expirationCategory, EXPIRATION_DATES);
+        mappingsWithExpiration.push(obj);
+      }
+    })
+    console.log('mappingsWithExpiration', mappingsWithExpiration);
+
+
     // let mappedExpirationCategoriesAr = getMappedExpirationCategoriesAr();
     // let newMappings = [].concat(mappings);
     // mappedExpirationCategoriesAr.forEach((expirCategory, idx) => {
