@@ -21,8 +21,10 @@ router.post('/add', (req, res, next) => {
             })
           )
             .then(resp => {
-              console.log('resp store list item maps', resp);
-              res.json(resp);
+              let names = resp.map(nameObj => {
+                  return nameObj.name;
+              });
+              res.json({ names });
             })
             .catch(err => next(err));
         } else {
