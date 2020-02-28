@@ -70,7 +70,6 @@ const getExpirationDate = (category, EXPIRATION_DATES) => {
   return null;
 }
 
-//module.exports = {
 export {
   removePunctuationLowerCase,
   getSubstringMatchCount,
