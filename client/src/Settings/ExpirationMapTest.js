@@ -120,8 +120,14 @@ const ExpirationMapTest = (props) => {
         obj.expirationDays = getExpirationDate(item.expirationCategory, EXPIRATION_DATES);
         mappingsWithExpiration.push(obj);
       }
-    })
-    console.log('mappingsWithExpiration', mappingsWithExpiration);
+    });
+    http_requests.ListItemMap.postListItemMaps(cookie, mappingsWithExpiration)
+      .then(resp => {
+        console.log('resp', resp)
+      })
+      .catch(err => console.error('err', err));
+    ;
+    //console.log('mappingsWithExpiration', mappingsWithExpiration);
 
 
     // let mappedExpirationCategoriesAr = getMappedExpirationCategoriesAr();
