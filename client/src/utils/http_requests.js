@@ -5,6 +5,7 @@ const API_ROOT = process.env.API_ROOT;
 const API_LIST_MIDDLE = '/list';
 const API_AUTH_MIDDLE = '/auth';
 const API_SETTING_MIDDLE = '/setting';
+const API_LIST_ITEM_MAP_MIDDLE = '/listItemMap';
 //URL SUFFIXES
 const CREATE_TEMPLATE_LIST_SUFFIX = '/templateLists/add';
 const CREATE_SHOPPING_LIST_SUFFIX = '/shoppingLists/add';
@@ -18,6 +19,7 @@ const AUTH_LOGOUT_SUFFIX = '/logout';
 const AUTH_AUTHENTICATED_SUFFIX = '/authenticated';
 const SETTINGS_TIMEZONE_SUFFIX = '/settings/timezone';
 const SETTING_LIST_ITEM_MAP_SUFFIX = '/listItemMapping';
+const CREATE_SUFFIX = '/add';
 
 //let cookieStr = getCookieStr();
 
@@ -134,8 +136,15 @@ const Setting = {
   }
 }
 
+const ListItemMap = {
+  postListItemMaps: (cookie, listItemMaps) => {
+    return requests.post(`${API_ROOT}${API_LIST_ITEM_MAP_MIDDLE}${CREATE_SUFFIX}`, { cookieStr: cookie, listItemMaps });
+  }
+}
+
 export default {
   Lists,
   Auth,
   Setting,
+  ListItemMap,
 };
