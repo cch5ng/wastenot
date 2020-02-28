@@ -7,6 +7,7 @@ const path = require('path');
 const listRouter = require('./api/list');
 const authRouter = require('./api/auth');
 const settingRouter = require('./api/setting');
+const listItemMapRouter = require('./api/list_item_map');
 
 if (process.env.NODE_ENV !== 'production') {
 	const result = dotenv.config()
@@ -35,6 +36,7 @@ app.use(cookieParser());
 app.use('/api/list', listRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/setting', settingRouter);
+app.use('/api/listItemMap', listItemMapRouter);
 app.use((err, req, res, next) => {
 	const statusCode = err.statusCode || 500;
 
