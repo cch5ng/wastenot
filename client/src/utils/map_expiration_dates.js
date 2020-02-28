@@ -63,47 +63,11 @@ const getExpirationCategory = (item, EXPIRATION_DATES) => {
   }
 }
 
-const getExpirationDate = (item, EXPIRATION_DATES) => {
-  // let expirationKeys = Object.keys(EXPIRATION_DATES);
-  // let itemNoPunctuation;
-  // let highestSubstringMatchCount = 0;
-  // let highestSubstringMatchIdx;
-  let key = getExpirationCategory(item, EXPIRATION_DATES);
-  if (key !== 'none') {
-    console.log('key', key)
-    return EXPIRATION_DATES[key].refrigeratorInt;
+const getExpirationDate = (category, EXPIRATION_DATES) => {
+  if (EXPIRATION_DATES[category] && EXPIRATION_DATES[category].refrigeratorInt) {
+    return EXPIRATION_DATES[category].refrigeratorInt;
   }
   return null;
-
-  //case exact string match
-  // if (expirationKeys.indexOf(item) > -1) {
-  //   let idx = expirationKeys.indexOf(item);
-  //   key = expirationKeys[idx];
-  //   return EXPIRATION_DATES[key].refrigeratorInt;
-  // }
-
-  //highest substring match (does this need to be in order or just a combination)
-  //get 2 arrays where each string has been parsed using string.split('') but what to do about punctuation
-  //remove punctuation
-  //split string into array of indiv words
-  // itemNoPunctuation = removePunctuation(item);
-  // let itemWordAr = itemNoPunctuation.split(' ');
-  // for (let i = 0; i < expirationKeys.length; i++) {
-  //   let expirationKeyNoPunctuation = removePunctuation(expirationKeys[i]);
-  //   let expirationKeyWordAr = expirationKeyNoPunctuation.split(' ');
-  //   let substringMatchCount = getSubstringMatchCount(itemWordAr, expirationKeyWordAr);
-  //   if (substringMatchCount > highestSubstringMatchCount) {
-  //     highestSubstringMatchCount = substringMatchCount;
-  //     highestSubstringMatchIdx = i;
-  //   }
-  // }
-
-  // if (highestSubstringMatchIdx) {
-  //   key = expirationKeys[highestSubstringMatchIdx];
-  //   return EXPIRATION_DATES[key].refrigeratorInt;
-  // } else {
-  //   return null;
-  // }
 }
 
 //module.exports = {
