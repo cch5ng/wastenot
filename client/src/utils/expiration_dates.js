@@ -1,4 +1,9 @@
 const EXPIRATION_DATES = {
+  "no match": {
+    refrigerator: null,
+    refrigeratorInt: null,
+    freezer: null
+  },
   "fresh eggs in shell": {
     refrigerator: "21 - 35 days",
     refrigeratorInt: 21,
@@ -245,11 +250,6 @@ const EXPIRATION_DATES = {
     refrigerator: "3 - 4 days",
     refrigeratorInt: 3,
     freezer: "2 months"
-  },
-  "none": {
-    refrigerator: null,
-    refrigeratorInt: null,
-    freezer: null
   }
 }
 
