@@ -17,7 +17,7 @@ router.post('/add', (req, res, next) => {
           Promise.all(
             listItemMaps.map(listItemMap => {
               //let list_item_guid = uuidv4();
-              return ListItemMapTable.storeListItemMap({ listItemMap, owner_id: resp.account.id })
+              return ListItemMapTable.storeListItemMap({ listItemMap, user_id: resp.account.id })
             })
           )
             .then(resp => {
