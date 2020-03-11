@@ -2,14 +2,17 @@ import React, { useState, useEffect, Component } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import uuidv1 from 'uuid/v1';
-
+import CreatableSelect from 'react-select/creatable';
 import Button from '../App/Shared/Button/Button';
 import SelectList from '../App/Shared/SelectList/SelectList';
 import InputText from '../App/Shared/InputText/InputText';
 import '../App.css';
 import Checkbox from '../App/Shared/Checkbox/Checkbox';
+import ShoppingListFormNoExpiration from './ShoppingListFormNoExpiration';
+import ShoppingListFormExpiration from './ShoppingListFormExpiration';
 import http_requests from '../utils/http_requests';
 import { fetchShoppingListCreate, fetchShoppingListEdit } from '../actions/shoppingLists';
+import { isUsingExpiration } from '../actions/setting';
 import { objToArray, getCookieStr, arrayToObj } from '../utils/utils';
 
 const KEY_BASE = 'shoppingListItem';
@@ -28,6 +31,10 @@ const sectionOptions = [
       {label: 'bread', value: 'bread'},
 ]
 
+const listItemStyles = {
+  control: styles => ({ ...styles, width: '80%' })
+}
+
 const ShoppingListDetailForm = (props) => {
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [title, setTitle] = useState(props.mode === 'edit' ? 'Edit Shopping List' : 'Add Shopping List');
@@ -37,6 +44,7 @@ const ShoppingListDetailForm = (props) => {
   let curListTemplate;
 
   const [listName, setListName] = useState('');
+  const [mappedListItems, setMappedListItems] = useState([]);
 
   for (let i = 0; i < 50; i++) {
     let key = `${KEY_BASE}${i}`;
@@ -130,18 +138,22 @@ const ShoppingListDetailForm = (props) => {
     setFormSubmitted(true);
   }
 
+/*
+<SelectList value={listItemInputs[key].section} id={selectKey} 
+  options={sectionOptions} onChange={onChangeHandlerSelectSection} name={selectKey} />
+*/
+
   //renders all list items (text inp and select list)
   function renderForm() {
     let htmlResult = [];
-    let sortedObjects = [];
 
     if (Object.keys(listItemInputs).length) {
       let key;
-      let selectKey;
+      //let selectKey;
       for (let i = 0; i < 50; i++) {
         key = props.mode === 'add' ? `${KEY_BASE}${i.toString()}` : Object.keys(listItemInputs)[i];
         //TODO fix later when I handle select value/id pairs
-        selectKey = 'templateListItemSelect' + i.toString();
+        //selectKey = 'templateListItemSelect' + i.toString();
         let curInput =  listItemInputs[key];
 
         //TODO add some way to indicate that the list items were purchased
@@ -151,9 +163,7 @@ const ShoppingListDetailForm = (props) => {
             <InputText value={listItemInputs[key].name} placeholder="item name" 
               id={key} onChangeHandler={inputChangeHandler} name={key}
             />
-            <SelectList value={listItemInputs[key].section} id={selectKey} 
-              options={sectionOptions} onChange={onChangeHandlerSelectSection} name={selectKey}
-            />
+            
           </li>
         )
       }
@@ -162,6 +172,62 @@ const ShoppingListDetailForm = (props) => {
     return null;
   }
 
+  //methods specific to form using expiration notifications
+  //react select
+  function inputExpirationChangeHandler(newValue, actionMeta) {
+    console.log('newValue', newValue)
+    //this applies to changed values as well as new values
+    //__isNew__ === true
+  }
+  //react select new input
+  function handleCreatableInputChange(inputValue, actionMeta) {
+    console.log('inputValue', inputValue)
+  }
+
+  function formExpirationSubmitHandler(ev) {
+    ev.preventDefault();
+  }
+
+  function renderExpirationForm() {
+    let htmlResult = [];
+    let listItemOptions = [];
+    let key;
+
+    mappedListItems.forEach(item => {
+      let inObj = {};
+      inObj.value = item.name;
+      inObj.label = item.name;
+      listItemOptions.push(inObj);
+    })
+
+    for (let i = 0; i < 50; i++) {
+      key = props.mode === 'add' ? `${KEY_BASE}${i.toString()}` : Object.keys(listItemInputs)[i];
+      let curInput =  listItemInputs[key];
+
+      //TODO add some way to indicate that the list items were purchased
+      //issue here with form-row-inline
+      htmlResult.push(
+        <li key={key} className="">
+          <Checkbox checkboxVal={curInput.checked} onChangeHandler={inputChangeHandler} id={key}/>
+          <CreatableSelect
+            isClearable
+            onChange={inputExpirationChangeHandler}
+            onInputChange={handleCreatableInputChange}
+            options={listItemOptions}
+            styles={listItemStyles}
+          />          
+        </li>
+      )
+    }
+
+
+
+    return htmlResult;
+
+
+  }
+
+  //generic helper
   //TODO think clicking cancel btn on edit form mode maybe should not clear entire form
   function clearForm(clearMode = null) {
     let formClearMode = clearMode === "empty" ? clearMode : props.mode;
@@ -181,10 +247,24 @@ const ShoppingListDetailForm = (props) => {
   }
 
   useEffect(() => {
-    if (props.mode === 'edit') {
-      console.log('gets to use effect')
-      if (props.authenticate.authStr) {
-        http_requests.Lists.getTemplateList({ guid: props.listGuid, cookieStr: props.authenticate.authStr })
+    if (props.authenticate.authStr) {
+      let cookieStr = props.authenticate.authStr;
+      props.isUsingExpiration({cookieStr})
+
+      if (props.mode === 'add') {
+        //TODO
+        http_requests.ListItemMap.getListItemMaps(cookieStr)
+          .then(resp => {
+            console.log('resp', resp)
+            if (resp.length) {
+              setMappedListItems(resp);
+            }
+          })
+          .catch(err => console.error('err', err.message))
+      }
+  
+      if (props.mode === 'edit') {
+        http_requests.Lists.getTemplateList({ guid: props.listGuid, cookieStr })
           .then(resp => {
             if (resp && resp.type !== 'error') {
               setListName(resp.listTemplate.name);
@@ -193,41 +273,55 @@ const ShoppingListDetailForm = (props) => {
               setListItemInputs(listItemInputsObj);
             }
           })
-      }
+      }  
     }
-  }, []); //props.authenticate.authStr
+  }, [props.authenticate.authStr]); //
 
+  //TEST
+  //4 cases
+  //props.mode === 'add', setting.isUsingExpiration === true
+  //  new
+  //props.mode === 'edit', setting.isUsingExpiration === true
+  //  new
+  //props.mode === 'add', setting.isUsingExpiration === false
+  //  existing logic
+  //props.mode === 'edit', setting.isUsingExpiration === false
+  //  existing logic
+  console.log('mappedListItems', mappedListItems)
   return (
     <div className="main">
       {formSubmitted && (
         <Redirect to="/shoppingLists" />
       )}
 
-      <h3>{title}</h3>
-      <div>
-        <Button classVal="listDetailFormSaveBtn" onClickHandler={formSubmitHandler} label="Save" />
-        <Button label="Cancel" onClickHandler={clearForm} />
-      </div>
-      <br />
-      <InputText name="listNameInp" value={listName} placeholder="list name" onChangeHandler={inputChangeHandler} />
-      <ul className="list-no-style">
-        {renderForm()}
-      </ul>
-      <div>
-        <Button classVal="listDetailFormSaveBtn" onClickHandler={formSubmitHandler} label="Save" />
-        <Button label="Cancel" onClickHandler={clearForm} />
-      </div>
+      {props.setting.isUsingExpiration === true && mappedListItems.length > 0 &&(
+        <ShoppingListFormExpiration title={title} listName={listName}
+          onClickHander={clearForm} formSubmitHander={formExpirationSubmitHandler} 
+          inputChangeHandler={inputExpirationChangeHandler} renderForm={renderExpirationForm} />
+      )}
+
+      {(props.setting.isUsingExpiration === false || mappedListItems.length === 0) && (
+        <ShoppingListFormNoExpiration title={title} formSubmitHander={formSubmitHandler}
+          onClickHander={clearForm} listName={listName} inputChangeHandler={inputChangeHandler}
+          renderForm={renderForm} />
+      )}
+
     </div>
   )
 }
 
-const mapStateToProps = state => ({ authenticate: state.authenticate, shoppingLists: state.shoppingLists });
+const mapStateToProps = state => (
+  { authenticate: state.authenticate,
+    shoppingLists: state.shoppingLists,
+    setting: state.setting
+  });
 
 const mapDispatchToProps = dispatch => {
   return {
     fetchShoppingListCreate: ({ list, cookieStr }) => dispatch(fetchShoppingListCreate({ list, cookieStr })),
     //fetchListTemplate: ({ guid, cookieStr }) => dispatch(fetchListTemplate({ guid, cookieStr })),
-    fetchShoppingListEdit: ({ list, cookieStr }) => dispatch(fetchShoppingListEdit({ list, cookieStr }))
+    fetchShoppingListEdit: ({ list, cookieStr }) => dispatch(fetchShoppingListEdit({ list, cookieStr })),
+    isUsingExpiration: ({cookieStr}) => dispatch(isUsingExpiration({cookieStr}))
   }
 }
 
