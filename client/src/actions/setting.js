@@ -4,35 +4,36 @@ import { getCookieStr } from '../utils/utils';
 // action types
 export const SETTING_FETCH = 'SETTING_FETCH';
 export const SETTING_FETCH_ERR = 'SETTING_FETCH_ERR';
-export const SETTING_ITEMS_MAPPED_TO_EXPIRATION_SUCCESS = 'SETTING_ITEMS_MAPPED_TO_EXPIRATION_SUCCESS';
+export const SETTING_FETCH_SUCCESS = 'SETTING_FETCH_SUCCESS';
 
 //async
-export const areItemsMappedToExpiration = ({ email, password }) => dispatch => {
+export const isUsingExpiration = ({cookieStr}) => dispatch => {
     dispatch({ type: SETTING_FETCH });
-    //TODO update
-    //http_requests.Auth.postRegister(email, password)
-      .then(resp => {
-        if (resp.type === 'error') {
-          dispatch({
-            type: SETTING_FETCH_ERR,
-            message: resp.message
-          })
-        } else {
-          let cookieAr;
-  
-          if (resp.cookie && storageAvailable('sessionStorage')) {
-            cookieAr = resp.cookie.split('=');
-            sessionStorage.setItem(cookieAr[0], cookieAr[1]);
+    if (cookieStr) {
+      //TODO http get/post request
+      http_requests.Setting.postListItemMapSetting(cookieStr)
+        .then(resp => {
+          if (resp.type === 'error') {
+            dispatch({
+              type: SETTING_FETCH_ERR,
+              message: resp.message
+            })
+          } else {
+            dispatch({
+              type: SETTING_FETCH_SUCCESS,
+              message: resp.message,
+              isUsingExpiration: resp.mapped_items_to_categories
+            })
           }
-          dispatch({
-            type: SETTING_ITEMS_MAPPED_TO_EXPIRATION_SUCCESS,
-            message: resp.message,
-            authStr: cookieAr[1]
-          })
-        }
-      })
-      .catch(err => dispatch({
+        })
+        .catch(err => dispatch({
+          type: SETTING_FETCH_ERR,
+          message: err.message
+        }))
+    } else {
+      dispatch({
         type: SETTING_FETCH_ERR,
-        message: err.message
-      }))
+        message: 'settings could not be retrieve; auth issue'
+      })
+    }
   }
