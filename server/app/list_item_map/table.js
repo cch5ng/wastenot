@@ -2,7 +2,7 @@ const pool = require('../../databasePool');
 const uuidv4 = require('uuid/v4');
 
 class ListItemMapTable {
-  // list items for template list
+
   static storeListItemMap({ listItemMap, user_id }) {
     return new Promise((resolve, reject) => {
       const { name, expirationDays, skipNotification } = listItemMap;
@@ -13,6 +13,23 @@ class ListItemMapTable {
           if (error) return reject(error);
           if (response.rows.length) {
             resolve({ name });
+          }
+        }
+      )
+    })
+  }
+
+  static getMappedListItemsByUserId({ user_id }) {
+    return new Promise((resolve, reject) => {
+      console.log('user_id', user_id)
+      pool.query(
+        `SELECT name, expiration_days FROM list_item_map WHERE user_id=$1`,
+        [user_id],
+        (error, response) => {
+          if (error) return reject(error);
+          console.log('response', response)
+          if (response.rows.length) {
+            resolve(response.rows);
           }
         }
       )
