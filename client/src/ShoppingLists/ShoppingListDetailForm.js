@@ -287,7 +287,7 @@ const ShoppingListDetailForm = (props) => {
   //  existing logic
   //props.mode === 'edit', setting.isUsingExpiration === false
   //  existing logic
-  console.log('mappedListItems', mappedListItems)
+  //console.log('mappedListItems', mappedListItems)
   return (
     <div className="main">
       {formSubmitted && (
@@ -296,13 +296,13 @@ const ShoppingListDetailForm = (props) => {
 
       {props.setting.isUsingExpiration === true && mappedListItems.length > 0 &&(
         <ShoppingListFormExpiration title={title} listName={listName}
-          onClickHander={clearForm} formSubmitHander={formExpirationSubmitHandler} 
+          onClickHandler={clearForm} formSubmitHandler={formExpirationSubmitHandler} 
           inputChangeHandler={inputExpirationChangeHandler} renderForm={renderExpirationForm} />
       )}
 
       {(props.setting.isUsingExpiration === false || mappedListItems.length === 0) && (
-        <ShoppingListFormNoExpiration title={title} formSubmitHander={formSubmitHandler}
-          onClickHander={clearForm} listName={listName} inputChangeHandler={inputChangeHandler}
+        <ShoppingListFormNoExpiration title={title} formSubmitHandler={formSubmitHandler}
+          onClickHandler={clearForm} listName={listName} inputChangeHandler={inputChangeHandler}
           renderForm={renderForm} />
       )}
 
