@@ -13,7 +13,7 @@ import ShoppingListFormExpiration from './ShoppingListFormExpiration';
 import http_requests from '../utils/http_requests';
 import { fetchShoppingListCreate, fetchShoppingListEdit } from '../actions/shoppingLists';
 import { isUsingExpiration } from '../actions/setting';
-import { objToArray, getCookieStr, arrayToObj } from '../utils/utils';
+import { objToArray, getCookieStr, arrayToObj, mappedListItemsArToObj } from '../utils/utils';
 
 const KEY_BASE = 'shoppingListItem';
 const listType = 'shopping';
@@ -45,6 +45,7 @@ const ShoppingListDetailForm = (props) => {
 
   const [listName, setListName] = useState('');
   const [mappedListItems, setMappedListItems] = useState([]);
+  const [mappedListItemsObj, setMappedListItemsObj] = useState({});
 
   for (let i = 0; i < 50; i++) {
     let key = `${KEY_BASE}${i}`;
@@ -176,12 +177,25 @@ const ShoppingListDetailForm = (props) => {
   //react select
   function inputExpirationChangeHandler(newValue, actionMeta) {
     console.log('newValue', newValue)
+    console.log('actionMeta', actionMeta)
     //this applies to changed values as well as new values
     //__isNew__ === true
   }
   //react select new input
   function handleCreatableInputChange(inputValue, actionMeta) {
-    console.log('inputValue', inputValue)
+    //console.log('TODO test whether necessary');
+    //console.log('inputValue', inputValue)
+    console.log('actionMeta', actionMeta)
+  }
+
+  function selectClickHandler(ev) {
+    //console.log('ev.target.id', ev.target.id);
+    console.log('ev.target', ev.target)
+    //console.log('ev.target.name', ev.target.name)
+    let parent = ev.target;
+    let reactSelectInput = parent.querySelector('input');
+    let id = reactSelectInput.id;
+    console.log('id', id);
   }
 
   function formExpirationSubmitHandler(ev) {
@@ -202,12 +216,13 @@ const ShoppingListDetailForm = (props) => {
 
     for (let i = 0; i < 50; i++) {
       key = props.mode === 'add' ? `${KEY_BASE}${i.toString()}` : Object.keys(listItemInputs)[i];
+      console.log('key', key)
       let curInput =  listItemInputs[key];
 
       //TODO add some way to indicate that the list items were purchased
       //issue here with form-row-inline
       htmlResult.push(
-        <li key={key} className="">
+        <li key={key} id={key} className="" onClick={selectClickHandler}>
           <Checkbox checkboxVal={curInput.checked} onChangeHandler={inputChangeHandler} id={key}/>
           <CreatableSelect
             isClearable
@@ -215,6 +230,8 @@ const ShoppingListDetailForm = (props) => {
             onInputChange={handleCreatableInputChange}
             options={listItemOptions}
             styles={listItemStyles}
+            name={key}
+            inputId={key}
           />          
         </li>
       )
@@ -255,9 +272,9 @@ const ShoppingListDetailForm = (props) => {
         //TODO
         http_requests.ListItemMap.getListItemMaps(cookieStr)
           .then(resp => {
-            console.log('resp', resp)
             if (resp.length) {
               setMappedListItems(resp);
+              setMappedListItemsObj(mappedListItemsArToObj(resp));
             }
           })
           .catch(err => console.error('err', err.message))
@@ -287,7 +304,8 @@ const ShoppingListDetailForm = (props) => {
   //  existing logic
   //props.mode === 'edit', setting.isUsingExpiration === false
   //  existing logic
-  //console.log('mappedListItems', mappedListItems)
+  console.log('listItemInputs', listItemInputs)
+  console.log('mappedListItems', mappedListItems)
   return (
     <div className="main">
       {formSubmitted && (
@@ -297,7 +315,7 @@ const ShoppingListDetailForm = (props) => {
       {props.setting.isUsingExpiration === true && mappedListItems.length > 0 &&(
         <ShoppingListFormExpiration title={title} listName={listName}
           onClickHandler={clearForm} formSubmitHandler={formExpirationSubmitHandler} 
-          inputChangeHandler={inputExpirationChangeHandler} renderForm={renderExpirationForm} />
+          inputChangeHandler={inputChangeHandler} renderForm={renderExpirationForm} />
       )}
 
       {(props.setting.isUsingExpiration === false || mappedListItems.length === 0) && (
