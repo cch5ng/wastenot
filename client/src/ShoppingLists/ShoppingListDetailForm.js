@@ -44,12 +44,14 @@ const ShoppingListDetailForm = (props) => {
   let curListTemplate;
 
   const [listName, setListName] = useState('');
+  //expiration case specific
   const [mappedListItems, setMappedListItems] = useState([]);
   const [mappedListItemsObj, setMappedListItemsObj] = useState({});
+  const [curCreatableSelectIdx, setCreatableSelectIdx] = useState(null);
 
   for (let i = 0; i < 50; i++) {
     let key = `${KEY_BASE}${i}`;
-    let inputObj = {name: '', section: 'none', checked: false};
+    let inputObj = {name: '', section: 'none', checked: false, guid: null};
     initListItemInputs[key] = inputObj;
     initListItemInputs[key].sortOrder = i;
   }
@@ -189,13 +191,11 @@ const ShoppingListDetailForm = (props) => {
   }
 
   function selectClickHandler(ev) {
-    //console.log('ev.target.id', ev.target.id);
-    console.log('ev.target', ev.target)
-    //console.log('ev.target.name', ev.target.name)
     let parent = ev.target;
     let reactSelectInput = parent.querySelector('input');
-    let id = reactSelectInput.id;
-    console.log('id', id);
+    let idAr = reactSelectInput.id.split('shoppingListItem');
+    let idxStr = idAr[idAr.length - 1];
+    setCreatableSelectIdx(parseInt(idxStr, 10));
   }
 
   function formExpirationSubmitHandler(ev) {
@@ -299,6 +299,7 @@ const ShoppingListDetailForm = (props) => {
   //  existing logic
   console.log('listItemInputs', listItemInputs)
   console.log('mappedListItems', mappedListItems)
+  console.log('curCreatableSelectIdx', curCreatableSelectIdx)
   return (
     <div className="main">
       {formSubmitted && (
