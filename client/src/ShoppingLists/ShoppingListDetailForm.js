@@ -216,11 +216,9 @@ const ShoppingListDetailForm = (props) => {
 
     for (let i = 0; i < 50; i++) {
       key = props.mode === 'add' ? `${KEY_BASE}${i.toString()}` : Object.keys(listItemInputs)[i];
-      console.log('key', key)
       let curInput =  listItemInputs[key];
 
-      //TODO add some way to indicate that the list items were purchased
-      //issue here with form-row-inline
+      //TODO issue here with form-row-inline
       htmlResult.push(
         <li key={key} id={key} className="" onClick={selectClickHandler}>
           <Checkbox checkboxVal={curInput.checked} onChangeHandler={inputChangeHandler} id={key}/>
@@ -236,12 +234,7 @@ const ShoppingListDetailForm = (props) => {
         </li>
       )
     }
-
-
-
     return htmlResult;
-
-
   }
 
   //generic helper
