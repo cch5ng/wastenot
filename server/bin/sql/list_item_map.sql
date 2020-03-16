@@ -5,5 +5,6 @@ CREATE TABLE list_item_map(
   expiration_days INTEGER,
   skip_notification BOOLEAN,
   user_id INTEGER,
+  UNIQUE (guid),
   FOREIGN KEY (user_id) REFERENCES wastenot_user(id)
 );
