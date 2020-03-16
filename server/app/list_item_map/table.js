@@ -23,7 +23,7 @@ class ListItemMapTable {
     return new Promise((resolve, reject) => {
       console.log('user_id', user_id)
       pool.query(
-        `SELECT name, expiration_days FROM list_item_map WHERE user_id=$1`,
+        `SELECT name, expiration_days, guid FROM list_item_map WHERE user_id=$1`,
         [user_id],
         (error, response) => {
           if (error) return reject(error);
