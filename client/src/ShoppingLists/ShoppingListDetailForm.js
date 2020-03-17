@@ -110,30 +110,30 @@ const ShoppingListDetailForm = (props) => {
     let listGuid;
     let list = {};
     let cookieStr = (props.authenticate && props.authenticate.authStr) ? props.authenticate.authStr : null;
+    let copyListItemInputs = {...listItemInputs};
 
     if (props.mode === 'add') {
       listGuid = uuidv1();
-      for (let tempId in listItemInputs) {
-        listItemInputs[tempId].parentId = listGuid;
-      }
 
+      for (let tempId in copyListItemInputs) {
+        copyListItemInputs[tempId].parentId = listGuid;
+      }
+      setListItemInputs(copyListItemInputs);
       list.name = listName;
       list.type = listType;
       list.listItems = objToArray(listItemInputs);
-
       props.fetchShoppingListCreate({ list, cookieStr});
     } else if (props.mode === 'edit') {
       listGuid = props.listGuid;
 
-      for (let tempId in listItemInputs) {
-        listItemInputs[tempId].parentId = listGuid;
+      for (let tempId in copyListItemInputs) {
+        copyListItemInputs[tempId].parentId = listGuid;
       }
-
+      setListItemInputs(copyListItemInputs);
       list.name = listName;
       list.type = listType;
       list.listItems = objToArray(listItemInputs);
       list.guid = listGuid;
-
       props.fetchShoppingListEdit({ list, cookieStr })
     }
 
@@ -206,9 +206,9 @@ const ShoppingListDetailForm = (props) => {
     }
   }
 
-  function formExpirationSubmitHandler(ev) {
-    ev.preventDefault();
-  }
+  // function formExpirationSubmitHandler(ev) {
+  //   ev.preventDefault();
+  // }
 
   function renderExpirationForm() {
     let htmlResult = [];
@@ -318,7 +318,7 @@ const ShoppingListDetailForm = (props) => {
 
       {props.setting.isUsingExpiration === true && mappedListItems.length > 0 &&(
         <ShoppingListFormExpiration title={title} listName={listName}
-          onClickHandler={clearForm} formSubmitHandler={formExpirationSubmitHandler} 
+          onClickHandler={clearForm} formSubmitHandler={formSubmitHandler} 
           inputChangeHandler={inputChangeHandler} renderForm={renderExpirationForm} />
       )}
 
