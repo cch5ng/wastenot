@@ -38,7 +38,7 @@ class ListItemTable {
   static getListItemsByListGuid({ listGuid }) {
     return new Promise((resolve, reject) => {
       pool.query(
-        `SELECT list_item.guid, list_item.name, list_item.sort_order, list_item.list_guid, list_item.checked from list_item WHERE list_guid = $1 ORDER BY list_item.sort_order`,
+        `SELECT list_item.guid, list_item.name, list_item.sort_order, list_item.list_guid, list_item.checked, list_item.list_item_map_guid from list_item WHERE list_guid = $1 ORDER BY list_item.sort_order`,
         [listGuid],
         (error, response) => {
           if (error) return reject(error);
