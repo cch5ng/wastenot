@@ -47,7 +47,7 @@ const ShoppingListDetailForm = (props) => {
   //expiration case specific
   const [mappedListItems, setMappedListItems] = useState([]);
   const [mappedListItemsObj, setMappedListItemsObj] = useState({});
-  const [curCreatableSelectIdx, setCreatableSelectIdx] = useState(null);
+  const [creatableSelectKey, setCreatableSelectKey] = useState(null);
 
   for (let i = 0; i < 50; i++) {
     let key = `${KEY_BASE}${i}`;
@@ -178,24 +178,32 @@ const ShoppingListDetailForm = (props) => {
   //methods specific to form using expiration notifications
   //react select
   function inputExpirationChangeHandler(newValue, actionMeta) {
-    console.log('newValue', newValue)
-    console.log('actionMeta', actionMeta)
+    let val = newValue.value;
+    let guid = mappedListItemsObj[val].guid;
+
+    setListItemInputs({...listItemInputs, 
+      [creatableSelectKey]: {...listItemInputs[creatableSelectKey], guid}
+    });
     //this applies to changed values as well as new values
     //__isNew__ === true
   }
   //react select new input
   function handleCreatableInputChange(inputValue, actionMeta) {
     //console.log('TODO test whether necessary');
-    //console.log('inputValue', inputValue)
-    console.log('actionMeta', actionMeta)
   }
 
+  //ERR this doesn't work when user clicks the down arrow icon in the react select element
   function selectClickHandler(ev) {
     let parent = ev.target;
+    //console.log('parent', parent)
     let reactSelectInput = parent.querySelector('input');
-    let idAr = reactSelectInput.id.split('shoppingListItem');
-    let idxStr = idAr[idAr.length - 1];
-    setCreatableSelectIdx(parseInt(idxStr, 10));
+
+    if (reactSelectInput && reactSelectInput.id) {
+      let idStr = reactSelectInput.id;
+      //let idAr = idStr.split('shoppingListItem');
+      //let idxStr = idAr[idAr.length - 1];
+      setCreatableSelectKey(idStr);  
+    }
   }
 
   function formExpirationSubmitHandler(ev) {
@@ -299,7 +307,9 @@ const ShoppingListDetailForm = (props) => {
   //  existing logic
   console.log('listItemInputs', listItemInputs)
   console.log('mappedListItems', mappedListItems)
-  console.log('curCreatableSelectIdx', curCreatableSelectIdx)
+  console.log('mappedListItemsObj', mappedListItemsObj)
+  console.log('creatableSelectKey', creatableSelectKey)
+
   return (
     <div className="main">
       {formSubmitted && (
