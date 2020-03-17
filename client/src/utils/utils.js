@@ -33,7 +33,10 @@ export function mappedListItemsArToObj(ar) {
   let obj = {};
   ar.forEach(it => {
     let key = it.name;
-    obj[key] = { expiration_days: it.expiration_days };
+    obj[key] = { 
+      expiration_days: it.expiration_days,
+      guid: it.guid
+    };
   });
   return obj;
 }
