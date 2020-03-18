@@ -11,11 +11,12 @@ const setting = (state = { hasButtonClicked: false }, action) => {
           status: 'error',
           message: action.message
         }
-      case 'SETTING_ITEMS_MAPPED_TO_EXPIRATION_SUCCESS':
+      case 'SETTING_FETCH_SUCCESS':
         return {
             ...state,
             status: 'success',
-            message: action.message
+            message: action.message,
+            isUsingExpiration: action.isUsingExpiration
         }
       default:
         return state

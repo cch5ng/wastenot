@@ -139,6 +139,9 @@ const Setting = {
 const ListItemMap = {
   postListItemMaps: (cookie, listItemMaps) => {
     return requests.post(`${API_ROOT}${API_LIST_ITEM_MAP_MIDDLE}${CREATE_SUFFIX}`, { cookieStr: cookie, listItemMaps });
+  },
+  getListItemMaps: (cookie) => {
+    return requests.post(`${API_ROOT}${API_LIST_ITEM_MAP_MIDDLE}/`, { cookieStr: cookie });
   }
 }
 
