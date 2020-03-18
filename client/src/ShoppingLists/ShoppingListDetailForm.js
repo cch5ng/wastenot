@@ -214,6 +214,7 @@ const ShoppingListDetailForm = (props) => {
     let htmlResult = [];
     let listItemOptions = [];
     let key;
+    let dictListItemMapGuidToListItemMapName;
 
     mappedListItems.forEach(item => {
       let inObj = {};
@@ -222,9 +223,29 @@ const ShoppingListDetailForm = (props) => {
       listItemOptions.push(inObj);
     })
 
+    if (props.mode === 'edit') {
+      dictListItemMapGuidToListItemMapName = mappedListItems.reduce((accum, cur) => {
+        let guid = cur.guid;
+        accum[guid] = cur;
+        return accum;
+      }, {});
+
+      console.log('dictListItemMapGuidToListItemMapName', dictListItemMapGuidToListItemMapName)
+    }
+
     for (let i = 0; i < 50; i++) {
       key = props.mode === 'add' ? `${KEY_BASE}${i.toString()}` : Object.keys(listItemInputs)[i];
       let curInput =  listItemInputs[key];
+      let listItemMapGuid = curInput.list_item_map_guid;
+      console.log('listItemMapGuid', listItemMapGuid)
+      let value = undefined;
+      if (listItemMapGuid) {
+        let label = dictListItemMapGuidToListItemMapName[listItemMapGuid].name
+        value = {
+          label,
+          value: label
+        };
+      }
 
       //TODO issue here with form-row-inline
       htmlResult.push(
@@ -238,6 +259,7 @@ const ShoppingListDetailForm = (props) => {
             styles={listItemStyles}
             name={key}
             inputId={key}
+            defaultValue={value}
           />          
         </li>
       )
@@ -269,17 +291,14 @@ const ShoppingListDetailForm = (props) => {
       let cookieStr = props.authenticate.authStr;
       props.isUsingExpiration({cookieStr})
 
-      if (props.mode === 'add') {
-        //TODO
-        http_requests.ListItemMap.getListItemMaps(cookieStr)
-          .then(resp => {
-            if (resp.length) {
-              setMappedListItems(resp);
-              setMappedListItemsObj(mappedListItemsArToObj(resp));
-            }
-          })
-          .catch(err => console.error('err', err.message))
-      }
+      http_requests.ListItemMap.getListItemMaps(cookieStr)
+        .then(resp => {
+          if (resp.length) {
+            setMappedListItems(resp);
+            setMappedListItemsObj(mappedListItemsArToObj(resp));
+          }
+        })
+        .catch(err => console.error('err', err.message))
   
       if (props.mode === 'edit') {
         http_requests.Lists.getTemplateList({ guid: props.listGuid, cookieStr })
