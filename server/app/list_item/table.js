@@ -66,11 +66,11 @@ class ListItemTable {
     })
   }
 
-  static updateShoppingListItem({ name, guid, sort_order, checked }) {
+  static updateShoppingListItem({ name, guid, sort_order, checked, list_item_map_guid }) {
     return new Promise((resolve, reject) => {
       pool.query(
-        `UPDATE list_item SET name = $2, sort_order = $3, checked = $4 WHERE guid = $1 RETURNING guid`,
-        [guid, name, sort_order, checked],
+        `UPDATE list_item SET name=$2, sort_order=$3, checked=$4, list_item_map_guid=$5 WHERE guid = $1 RETURNING guid`,
+        [guid, name, sort_order, checked, list_item_map_guid],
         (error, response) => {
           if (error) return reject(error);
           if (response.rows.length) {
@@ -93,8 +93,9 @@ class ListItemTable {
   static updateShoppingListItems(listItems) {
     return Promise.all(
       listItems.map(listItem => {
-        const { name, guid, sort_order, checked } = listItem;
-        return ListItemTable.updateShoppingListItem({ name, guid, sort_order, checked })
+        console.log('listItem', listItem)
+        const { name, guid, sort_order, checked, list_item_map_guid } = listItem;
+        return ListItemTable.updateShoppingListItem({ name, guid, sort_order, checked, list_item_map_guid })
       })
     )
   }
