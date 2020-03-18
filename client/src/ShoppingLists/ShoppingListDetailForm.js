@@ -51,7 +51,7 @@ const ShoppingListDetailForm = (props) => {
 
   for (let i = 0; i < 50; i++) {
     let key = `${KEY_BASE}${i}`;
-    let inputObj = {name: '', section: 'none', checked: false, guid: null};
+    let inputObj = {name: '', section: 'none', checked: false, list_item_map_guid: null};
     initListItemInputs[key] = inputObj;
     initListItemInputs[key].sortOrder = i;
   }
@@ -190,9 +190,9 @@ const ShoppingListDetailForm = (props) => {
   //react select
   function inputExpirationChangeHandler(newValue, actionMeta) {
     let val = newValue.value;
-    let guid = mappedListItemsObj[val].guid;
+    //let guid = mappedListItemsObj[val].guid;
     let selectKey = createableSelectKey;
-    let newListItemInput = {...listItemInputs[createableSelectKey], list_item_map_guid: guid}
+    let newListItemInput = {...listItemInputs[createableSelectKey], list_item_map_guid: mappedListItemsObj[val].guid}
 
     setListItemInputs({...listItemInputs, 
       [createableSelectKey]: newListItemInput
@@ -230,7 +230,7 @@ const ShoppingListDetailForm = (props) => {
       let curInput =  listItemInputs[key];
       let listItemMapGuid = curInput.list_item_map_guid;
       let value = undefined;
-      if (listItemMapGuid) {
+      if (listItemMapGuid && props.mode === 'edit') {
         let label = dictListItemMapGuidToListItemMapName[listItemMapGuid].name
         value = {
           label,
@@ -337,7 +337,6 @@ const ShoppingListDetailForm = (props) => {
           onClickHandler={clearForm} listName={listName} inputChangeHandler={inputChangeHandler}
           renderForm={renderForm} />
       )}
-
     </div>
   )
 }
@@ -351,7 +350,6 @@ const mapStateToProps = state => (
 const mapDispatchToProps = dispatch => {
   return {
     fetchShoppingListCreate: ({ list, cookieStr }) => dispatch(fetchShoppingListCreate({ list, cookieStr })),
-    //fetchListTemplate: ({ guid, cookieStr }) => dispatch(fetchListTemplate({ guid, cookieStr })),
     fetchShoppingListEdit: ({ list, cookieStr }) => dispatch(fetchShoppingListEdit({ list, cookieStr })),
     isUsingExpiration: ({cookieStr}) => dispatch(isUsingExpiration({cookieStr}))
   }
