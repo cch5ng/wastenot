@@ -47,7 +47,7 @@ const ShoppingListDetailForm = (props) => {
   //expiration case specific
   const [mappedListItems, setMappedListItems] = useState([]);
   const [mappedListItemsObj, setMappedListItemsObj] = useState({});
-  const [creatableSelectKey, setCreatableSelectKey] = useState(null);
+  const [createableSelectKey, setCreateableSelectKey] = useState(null);
 
   for (let i = 0; i < 50; i++) {
     let key = `${KEY_BASE}${i}`;
@@ -110,11 +110,11 @@ const ShoppingListDetailForm = (props) => {
     let listGuid;
     let list = {};
     let cookieStr = (props.authenticate && props.authenticate.authStr) ? props.authenticate.authStr : null;
-    let copyListItemInputs = {...listItemInputs};
+    let copyListItemInputs;
 
     if (props.mode === 'add') {
       listGuid = uuidv1();
-
+      copyListItemInputs = {...listItemInputs};
       for (let tempId in copyListItemInputs) {
         copyListItemInputs[tempId].parentId = listGuid;
       }
@@ -125,7 +125,7 @@ const ShoppingListDetailForm = (props) => {
       props.fetchShoppingListCreate({ list, cookieStr});
     } else if (props.mode === 'edit') {
       listGuid = props.listGuid;
-
+      copyListItemInputs = {...listItemInputs};
       for (let tempId in copyListItemInputs) {
         copyListItemInputs[tempId].parentId = listGuid;
       }
@@ -175,40 +175,34 @@ const ShoppingListDetailForm = (props) => {
     return null;
   }
 
+  //ERR this doesn't work when user clicks the down arrow icon in the react select element
+  function selectClickHandler(ev) {
+    let parent = ev.target;
+    let reactSelectInput = parent.querySelector('input');
+
+    if (reactSelectInput && reactSelectInput.id) {
+      let idStr = reactSelectInput.id;
+      setCreateableSelectKey(idStr);  
+    }
+  }
+
   //methods specific to form using expiration notifications
   //react select
   function inputExpirationChangeHandler(newValue, actionMeta) {
     let val = newValue.value;
     let guid = mappedListItemsObj[val].guid;
+    let selectKey = createableSelectKey;
+    let newListItemInput = {...listItemInputs[createableSelectKey], list_item_map_guid: guid}
 
     setListItemInputs({...listItemInputs, 
-      [creatableSelectKey]: {...listItemInputs[creatableSelectKey], guid}
+      [createableSelectKey]: newListItemInput
     });
     //this applies to changed values as well as new values
     //__isNew__ === true
   }
   //react select new input
   function handleCreatableInputChange(inputValue, actionMeta) {
-    //console.log('TODO test whether necessary');
   }
-
-  //ERR this doesn't work when user clicks the down arrow icon in the react select element
-  function selectClickHandler(ev) {
-    let parent = ev.target;
-    //console.log('parent', parent)
-    let reactSelectInput = parent.querySelector('input');
-
-    if (reactSelectInput && reactSelectInput.id) {
-      let idStr = reactSelectInput.id;
-      //let idAr = idStr.split('shoppingListItem');
-      //let idxStr = idAr[idAr.length - 1];
-      setCreatableSelectKey(idStr);  
-    }
-  }
-
-  // function formExpirationSubmitHandler(ev) {
-  //   ev.preventDefault();
-  // }
 
   function renderExpirationForm() {
     let htmlResult = [];
@@ -229,15 +223,12 @@ const ShoppingListDetailForm = (props) => {
         accum[guid] = cur;
         return accum;
       }, {});
-
-      console.log('dictListItemMapGuidToListItemMapName', dictListItemMapGuidToListItemMapName)
     }
 
     for (let i = 0; i < 50; i++) {
       key = props.mode === 'add' ? `${KEY_BASE}${i.toString()}` : Object.keys(listItemInputs)[i];
       let curInput =  listItemInputs[key];
       let listItemMapGuid = curInput.list_item_map_guid;
-      console.log('listItemMapGuid', listItemMapGuid)
       let value = undefined;
       if (listItemMapGuid) {
         let label = dictListItemMapGuidToListItemMapName[listItemMapGuid].name
@@ -324,10 +315,10 @@ const ShoppingListDetailForm = (props) => {
   //  existing logic
   //props.mode === 'edit', setting.isUsingExpiration === false
   //  existing logic
-  console.log('listItemInputs', listItemInputs)
-  console.log('mappedListItems', mappedListItems)
-  console.log('mappedListItemsObj', mappedListItemsObj)
-  console.log('creatableSelectKey', creatableSelectKey)
+  // console.log('listItemInputs', listItemInputs)
+  // console.log('mappedListItems', mappedListItems)
+  //console.log('mappedListItemsObj', mappedListItemsObj)
+  //console.log('createableSelectKey', createableSelectKey)
 
   return (
     <div className="main">
