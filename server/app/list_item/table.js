@@ -93,7 +93,6 @@ class ListItemTable {
   static updateShoppingListItems(listItems) {
     return Promise.all(
       listItems.map(listItem => {
-        console.log('listItem', listItem)
         const { name, guid, sort_order, checked, list_item_map_guid } = listItem;
         return ListItemTable.updateShoppingListItem({ name, guid, sort_order, checked, list_item_map_guid })
       })
