@@ -175,14 +175,39 @@ const ShoppingListDetailForm = (props) => {
     return null;
   }
 
-  //ERR this doesn't work when user clicks the down arrow icon in the react select element
   function selectClickHandler(ev) {
     let parent = ev.target;
-    let reactSelectInput = parent.querySelector('input');
+    let reactSelectInput;
 
+    //case click the select element
+    reactSelectInput = parent.querySelector('input');
     if (reactSelectInput && reactSelectInput.id) {
       let idStr = reactSelectInput.id;
       setCreateableSelectKey(idStr);  
+    }
+
+    //2 cases; either click the svg
+    if (parent.tagName === 'svg') {
+      if (parent.parentNode.parentNode.parentNode) {
+        parent = parent.parentNode.parentNode.parentNode;
+        reactSelectInput = parent.querySelector('input');
+        if (reactSelectInput && reactSelectInput.id) {
+          let idStr = reactSelectInput.id;
+          setCreateableSelectKey(idStr);  
+        }
+      }
+    }
+
+    //case clicked parent of svg
+    if (parent.className && parent.className.indexOf('indicatorContainer') > -1) {
+      if (parent.parentNode.parentNode) {
+        parent = parent.parentNode.parentNode;
+        reactSelectInput = parent.querySelector('input');
+        if (reactSelectInput && reactSelectInput.id) {
+          let idStr = reactSelectInput.id;
+          setCreateableSelectKey(idStr);  
+        }
+      }
     }
   }
 
