@@ -1,7 +1,8 @@
 const webpack = require('webpack');
 const dotenv = require('dotenv');
-var HtmlWebpackPlugin = require('html-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const {InjectManifest} = require('workbox-webpack-plugin');
 
 const devMode = process.env.NODE_ENV !== 'production'
 
@@ -63,6 +64,9 @@ module.exports = () => {
         // both options are optional
         filename: "[name].css",
         chunkFilename: "[id].css"
+      }),
+      new InjectManifest({
+        swSrc: './src/sw.js',
       })
     ], 
 
