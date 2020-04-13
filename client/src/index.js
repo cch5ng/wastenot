@@ -25,19 +25,17 @@ ReactDOM.render(
     <App />
   </Provider>, document.getElementById('root'));
 
-// if (!('serviceWorker' in navigator)) {
+if (!('serviceWorker' in navigator)) {
 //   // Service Worker isn't supported on this browser, disable or hide UI.
 //   //return;
-//   alert("This browser does not support service workers");
-// } else if (!('PushManager' in window)) {
+  alert("This browser does not support service workers");
+} else if (!('PushManager' in window)) {
 //   // Push isn't supported on this browser, disable or hide UI.
 //   //return;
-//   alert("This browser does not support the push api");
-// } else 
-
-if (("Notification" in window)) {
-//   alert("This browser does not support desktop notification");
-// } else {
+  alert("This browser does not support the push api");
+} else if (!('Notification' in window)) {
+  alert("This browser does not support desktop notification");
+} else {
   serviceWorker.registerServiceWorker();
 }
 
