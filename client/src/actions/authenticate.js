@@ -1,5 +1,6 @@
 import http_requests from '../utils/http_requests';
 import { getCookieStr } from '../utils/utils';
+import * as serviceWorker from '../sw';
 
 // action types
 export const AUTH_FETCH = 'AUTH_FETCH';
@@ -48,6 +49,7 @@ export const register = ({ email, password }) => dispatch => {
     }))
 }
 
+//get/save push subscription
 export const login = ({ email, password }) => dispatch => {
   dispatch({ type: LOGIN_FETCH });
   http_requests.Auth.postLogin(email, password)
@@ -68,7 +70,8 @@ export const login = ({ email, password }) => dispatch => {
           type: AUTH_FETCH_SUCCESS,
           message: resp.message,
           authStr: cookieAr[1]
-        })
+        });
+        serviceWorker.subscribeUserToPush();
       }
     })
     .catch(err => dispatch({
@@ -77,11 +80,14 @@ export const login = ({ email, password }) => dispatch => {
     }))
 }
 
+//remove push subscription
 export const logout = () => dispatch => {
   let cookie;
   const cookieKey = 'sessionStr';
   let cookieVal = sessionStorage.getItem(cookieKey);
   cookie = `${cookieKey}=${cookieVal}`;
+  let cookieAr = cookieVal.split('|');
+  let email = cookieAr[0];
 
   dispatch({ type: AUTH_FETCH });
   http_requests.Auth.postLogout({ cookie })
@@ -96,14 +102,17 @@ export const logout = () => dispatch => {
         dispatch({
           type: LOGOUT_FETCH_SUCCESS,
           message: resp.message
-        })
-
+        });
+        serviceWorker.unsubscribeUserFromPush();
       }
     })
     .catch(err => dispatch({
       type: LOGOUT_FETCH_ERR,
       message: err.message
     }))
+  http_requests.Auth.putPushSubscription({email})
+    .then(resp => console.log('resp', resp))
+    .catch(err => console.error('error', err))
 }
 
 export const isAuthenticated = () => dispatch => {
