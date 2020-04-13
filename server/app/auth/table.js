@@ -21,6 +21,32 @@ class AuthTable {
     })
   }
 
+  static storePushSubscription({ emailHash, pushSubscription }) {
+    return new Promise((resolve, reject) => {
+      pool.query(
+        `UPDATE wastenot_user SET push_subscription=$1 WHERE "emailHash"=$2`,
+        [pushSubscription, emailHash],
+        (error, response) => {
+          if (error) return reject(error);
+            resolve({ message: 'user acct was updated with pushSubscription' });
+        }
+      )
+    })
+  }
+
+  static deletePushSubscription({ emailHash }) {
+    return new Promise((resolve, reject) => {
+      pool.query(
+        `UPDATE wastenot_user SET push_subscription=null WHERE "emailHash"=$1`,
+        [emailHash],
+        (error, response) => {
+          if (error) return reject(error);
+            resolve({ message: 'user acct was updated where pushSubscription was removed' });
+        }
+      )
+    })
+  }
+
   static getAccount({ emailHash }) {
     return new Promise((resolve, reject) => {
       pool.query(

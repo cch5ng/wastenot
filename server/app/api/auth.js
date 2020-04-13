@@ -157,4 +157,30 @@ router.post('/settings/timezone', (req, res, next) => {
   }
 })
 
+router.post('/pushSubscription', (req, res, next) => {
+  let { email,  pushSubscription } = req.body;
+  let emailHash = hash(email);
+
+  AuthTable.storePushSubscription({ emailHash, pushSubscription })
+    .then(({ message }) => {
+      if (message) {
+        res.json({ message });
+      }
+    })
+    .catch(err => next(err));
+})
+
+router.put('/removePushSubscription', (req, res, next) => {
+  let { email } = req.body;
+  let emailHash = hash(email);
+
+  AuthTable.deletePushSubscription({ emailHash })
+    .then(({ message }) => {
+      if (message) {
+        res.json({ message });
+      }
+    })
+    .catch(err => next(err));
+})
+
 module.exports = router;
