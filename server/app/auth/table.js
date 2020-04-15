@@ -47,6 +47,23 @@ class AuthTable {
     })
   }
 
+  static getPushSubscription({ emailHash }) {
+    return new Promise((resolve, reject) => {
+      pool.query(
+        `SELECT push_subscription FROM wastenot_user WHERE "emailHash"=$1`,
+        [emailHash],
+        (error, response) => {
+          if (error) return reject(error);
+          if (response.rows) {
+            resolve({
+              subscription: response.rows[0], 
+              message: 'user pushSubscription was retrieved' });
+          }
+        }
+      )
+    })
+  }
+
   static getAccount({ emailHash }) {
     return new Promise((resolve, reject) => {
       pool.query(

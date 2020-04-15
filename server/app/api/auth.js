@@ -4,6 +4,7 @@ const SettingTable = require('../setting/table');
 const Session = require('../auth/Session');
 const { hash } = require('../auth/helper');
 const { setSession } = require('./helper');
+const { triggerPushMsg } = require('../utils/pushMessage');
 
 const router = Router();
 
@@ -182,5 +183,37 @@ router.put('/removePushSubscription', (req, res, next) => {
     })
     .catch(err => next(err));
 })
+
+//TEMP test push message
+router.post('/testPush', (req, res, next) => {
+  let { email } = req.body;
+  let emailHash = hash(email);
+
+  console.log('gets here')
+
+  AuthTable.getPushSubscription({ emailHash })
+    .then(({ message, subscription }) => {
+      if (subscription) {
+        triggerPushMsg(subscription, 'test push message');
+      }
+    })
+    .then(() => {
+      res.setHeader('Content-Type', 'application/json');
+        res.send(JSON.stringify({ data: { success: true } }));
+    })
+    // .catch(function(err) {
+    //   res.status(500);
+    //   res.setHeader('Content-Type', 'application/json');
+    //   res.send(JSON.stringify({
+    //     error: {
+    //       id: 'unable-to-send-messages',
+    //       message: `We were unable to send messages to all subscriptions : ` +
+    //         `'${err.message}'`
+    //     }
+    //   }));
+    // });
+    .catch(err => next(err));
+})
+
 
 module.exports = router;
