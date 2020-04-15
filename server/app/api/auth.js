@@ -189,8 +189,6 @@ router.post('/testPush', (req, res, next) => {
   let { email } = req.body;
   let emailHash = hash(email);
 
-  console.log('gets here')
-
   AuthTable.getPushSubscription({ emailHash })
     .then(({ message, subscription }) => {
       if (subscription) {
@@ -201,18 +199,18 @@ router.post('/testPush', (req, res, next) => {
       res.setHeader('Content-Type', 'application/json');
         res.send(JSON.stringify({ data: { success: true } }));
     })
-    // .catch(function(err) {
-    //   res.status(500);
-    //   res.setHeader('Content-Type', 'application/json');
-    //   res.send(JSON.stringify({
-    //     error: {
-    //       id: 'unable-to-send-messages',
-    //       message: `We were unable to send messages to all subscriptions : ` +
-    //         `'${err.message}'`
-    //     }
-    //   }));
-    // });
-    .catch(err => next(err));
+    .catch(function(err) {
+      res.status(500);
+      res.setHeader('Content-Type', 'application/json');
+      res.send(JSON.stringify({
+        error: {
+          id: 'unable-to-send-messages',
+          message: `We were unable to send messages to all subscriptions : ` +
+            `'${err.message}'`
+        }
+      }));
+    });
+    //.catch(err => next(err));
 })
 
 
