@@ -21,6 +21,15 @@ const Settings = (props) => {
     }
   }
 
+  function testBtnClickHandler(ev) {
+    ev.preventDefault();
+    console.log('clicked testBtn')
+    if (props.authenticate && props.authenticate.authStr) {
+      let email = props.authenticate.authStr.split('|')[0];
+      http_requests.Auth.testPushSubscription({email})
+    }
+  }
+
   useEffect(() => {
     //get the user's timezone and if it exists set the timezone
     if (props.authenticate && props.authenticate.authStr) {
@@ -38,6 +47,8 @@ const Settings = (props) => {
     <div>
       <h1>Application Settings</h1>
       <form>
+        <Button label="Test Push Message" onClickHandler={testBtnClickHandler} />
+
         <Select
           value={timezone}
           onChange={onChangeHandler}
