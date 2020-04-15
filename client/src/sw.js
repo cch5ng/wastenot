@@ -46,7 +46,7 @@ export function subscribeUserToPush() {
       const subscribeOptions = {
         userVisibleOnly: true,
         applicationServerKey: urlBase64ToUint8Array(
-          'BDjo9Vgy4AEijfm0a0Re38fUSLLsJzn5l-4tVnbLFfSJsR0_iWL2qUT76hPYZifqx7t3djR1Xc4gMCPM0Yn2PU8'
+          'BFKDFhisj0ZdbdXBL3FvqPULSNZL0dVAh4ryEbQ_eFlyDkwmsoB6k7NZnlkqoBZFDjblfUAKoOb6oBuZz08qyPI'
         )
       };
   
@@ -81,6 +81,14 @@ export function unsubscribeUserFromPush() {
             .catch(err => console.error(`error: ${err}; pushSubscription could not be unsubscribed`))
     }
 }
+
+self.addEventListener('push', function(event) {
+    if (event.data) {
+      console.log('This push event has data: ', event.data.text());
+    } else {
+      console.log('This push event has no data.');
+    }
+});
 
 /**
  * urlBase64ToUint8Array
