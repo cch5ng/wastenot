@@ -19,6 +19,7 @@ const AUTH_LOGOUT_SUFFIX = '/logout';
 const AUTH_AUTHENTICATED_SUFFIX = '/authenticated';
 const AUTH_PUSH_SUBSCRIPTION_SUFFIX = '/pushSubscription';
 const AUTH_REMOVE_PUSH_SUBSCRIPTION_SUFFIX = '/removePushSubscription';
+const AUTH_TEST_PUSH_SUBSCRIPTION_SUFFIX = '/testPush';
 const SETTINGS_TIMEZONE_SUFFIX = '/settings/timezone';
 const SETTING_LIST_ITEM_MAP_SUFFIX = '/listItemMapping';
 const CREATE_SUFFIX = '/add';
@@ -132,6 +133,9 @@ const Auth = {
   },
   putPushSubscription: ({email}) => {
     return requests.put(`${API_ROOT}${API_AUTH_MIDDLE}${AUTH_REMOVE_PUSH_SUBSCRIPTION_SUFFIX}`, {email})
+  },
+  testPushSubscription: ({email}) => {
+    return requests.post(`${API_ROOT}${API_AUTH_MIDDLE}${AUTH_TEST_PUSH_SUBSCRIPTION_SUFFIX}`, {email})
   }
 }
 
