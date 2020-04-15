@@ -8,6 +8,7 @@ export function registerServiceWorker() {
     return navigator.serviceWorker.register('./sw.js')
     .then(function(registration) {
         console.log('Service worker successfully registered.');
+        console.log('registration', registration)
         curRegistration = registration
         return registration;
     })
@@ -82,9 +83,21 @@ export function unsubscribeUserFromPush() {
     }
 }
 
+export function sendNotification(data) {
+    const options = {
+        "body": "Simple piece of body text.\nSecond line of body text :)",
+        "data": data,
+        "requireInteraction": "false",
+        //"renotify": "true",          
+        "timestamp": "<Long>"
+    }
+    self.registration.showNotification('test notification title', options);
+}
+
 self.addEventListener('push', function(event) {
     if (event.data) {
       console.log('This push event has data: ', event.data.text());
+      sendNotification(event.data.text())
     } else {
       console.log('This push event has no data.');
     }
