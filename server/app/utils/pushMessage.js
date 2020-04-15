@@ -19,9 +19,10 @@ const triggerPushMsg = function(subscription, dataToSend) {
             if (err.statusCode === 404 || err.statusCode === 410) {
             console.log('Subscription has expired or is no longer valid: ', err);
             //return deleteSubscriptionFromDatabase(subscription._id);
-        } else {
-            throw err;
-        }
+            return
+            } else {
+                console.error('err', err);
+            }
         });
 };
 
