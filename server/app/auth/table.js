@@ -56,7 +56,7 @@ class AuthTable {
           if (error) return reject(error);
           if (response.rows) {
             resolve({
-              subscription: response.rows[0], 
+              subscription: JSON.parse(response.rows[0].push_subscription), 
               message: 'user pushSubscription was retrieved' });
           }
         }
