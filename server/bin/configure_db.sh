@@ -12,9 +12,10 @@ createdb -U ${DB_USER} waste_not_db
 psql -U ${DB_USER} waste_not_db < ./bin/sql/wastenot_user.sql
 psql -U ${DB_USER} waste_not_db < ./bin/sql/list.sql
 psql -U ${DB_USER} waste_not_db < ./bin/sql/section.sql
+psql -U ${DB_USER} waste_not_db < ./bin/sql/list_item_map.sql
 psql -U ${DB_USER} waste_not_db < ./bin/sql/list_item.sql
 psql -U ${DB_USER} waste_not_db < ./bin/sql/expiration.sql
 psql -U ${DB_USER} waste_not_db < ./bin/sql/setting.sql
-psql -U ${DB_USER} waste_not_db < ./bin/sql/list_item_map.sql
+psql -U ${DB_USER} waste_not_db < ./bin/sql/notification.sql
 
 echo 'waste_not_db configured'
