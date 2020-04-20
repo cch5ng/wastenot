@@ -121,7 +121,8 @@ const ShoppingListDetailForm = (props) => {
       setListItemInputs(copyListItemInputs);
       list.name = listName;
       list.type = listType;
-      list.listItems = objToArray(listItemInputs);
+      list.listItems = objToArray(copyListItemInputs)
+//        listItemInputs);
       props.fetchShoppingListCreate({ list, cookieStr});
     } else if (props.mode === 'edit') {
       listGuid = props.listGuid;
@@ -227,6 +228,17 @@ const ShoppingListDetailForm = (props) => {
   }
   //react select new input
   function handleCreatableInputChange(inputValue, actionMeta) {
+  }
+
+  function setNotificationClickHandler(ev) {
+    ev.preventDefault();
+    console.log('clicked set notification btn')
+    //1 populate notification table
+    console.log('mappedListItems', mappedListItems)
+    console.log('mappedListItemsObj', mappedListItemsObj)
+
+    //2 save list items
+    formSubmitHandler(ev);
   }
 
   function renderExpirationForm() {
@@ -354,7 +366,8 @@ const ShoppingListDetailForm = (props) => {
       {props.setting.isUsingExpiration === true && mappedListItems.length > 0 &&(
         <ShoppingListFormExpiration title={title} listName={listName}
           onClickHandler={clearForm} formSubmitHandler={formSubmitHandler} 
-          inputChangeHandler={inputChangeHandler} renderForm={renderExpirationForm} />
+          inputChangeHandler={inputChangeHandler} renderForm={renderExpirationForm} 
+          setNotificationClickHandler={setNotificationClickHandler} />
       )}
 
       {(props.setting.isUsingExpiration === false || mappedListItems.length === 0) && (
