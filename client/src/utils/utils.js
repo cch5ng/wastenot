@@ -40,3 +40,9 @@ export function mappedListItemsArToObj(ar) {
   });
   return obj;
 }
+
+export function daysToMilliseconds(daysNum) {
+  let msCnt = 1;
+  msCnt = daysNum * 1000 * 60 * 60 * 24;
+  return msCnt;
+}
