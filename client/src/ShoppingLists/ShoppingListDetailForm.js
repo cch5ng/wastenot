@@ -13,7 +13,7 @@ import ShoppingListFormExpiration from './ShoppingListFormExpiration';
 import http_requests from '../utils/http_requests';
 import { fetchShoppingListCreate, fetchShoppingListEdit } from '../actions/shoppingLists';
 import { isUsingExpiration } from '../actions/setting';
-import { objToArray, getCookieStr, arrayToObj, mappedListItemsArToObj } from '../utils/utils';
+import { objToArray, getCookieStr, arrayToObj, mappedListItemsArToObj, daysToMilliseconds } from '../utils/utils';
 
 const KEY_BASE = 'shoppingListItem';
 const listType = 'shopping';
@@ -122,7 +122,9 @@ const ShoppingListDetailForm = (props) => {
       list.name = listName;
       list.type = listType;
       list.listItems = objToArray(copyListItemInputs)
-//        listItemInputs);
+      list.listItems.forEach(item => {
+        item.timestamp = new Date();
+      })
       props.fetchShoppingListCreate({ list, cookieStr});
     } else if (props.mode === 'edit') {
       listGuid = props.listGuid;
@@ -134,6 +136,9 @@ const ShoppingListDetailForm = (props) => {
       list.name = listName;
       list.type = listType;
       list.listItems = objToArray(listItemInputs);
+      list.listItems.forEach(item => {
+        item.timestamp = new Date();
+      })
       list.guid = listGuid;
       props.fetchShoppingListEdit({ list, cookieStr })
     }
@@ -232,12 +237,30 @@ const ShoppingListDetailForm = (props) => {
 
   function setNotificationClickHandler(ev) {
     ev.preventDefault();
-    console.log('clicked set notification btn')
+    let dictListItemMapGuidToExpirationDays = {};
     //1 populate notification table
-    console.log('mappedListItems', mappedListItems)
+    console.log('listItemInputs', listItemInputs)
+    //console.log('mappedListItems', mappedListItems)
     console.log('mappedListItemsObj', mappedListItemsObj)
 
-    //2 save list items
+    for (const ky in mappedListItemsObj) {
+      let mappedListItem = mappedListItemsObj[ky];
+      let guid = mappedListItem.guid;
+      let expiration_days = mappedListItem.expiration_days;
+      dictListItemMapGuidToExpirationDays[guid] = expiration_days;
+    }
+
+    let copyListItemInputs = [...listItemInputs];
+    copyListItemInputs.forEach(item => {
+      if (item.list_item_map_guid) {
+        let mappedListItemGuid = item.list_item_map_guid;
+        let expirationMs = daysToMilliseconds(dictListItemMapGuidToExpirationDays[mappedListItemGuid]);
+        let timestampMs = item.timestamp ? daysToMilliseconds(item.timestamp) : Date.now();
+        let expirationDate = new Date(expirationMs + timestampMs);
+        item.notify_timestamp = expirationDate;
+      }
+    })
+    setListItemInputs(copyListItemInputs);
     formSubmitHandler(ev);
   }
 
