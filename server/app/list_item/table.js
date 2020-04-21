@@ -19,11 +19,11 @@ class ListItemTable {
     })
   }
 
-  static storeShoppingListItem({ name, list_guid, list_item_guid, sortOrder, checked, list_item_map_guid }) {
+  static storeShoppingListItem({ name, list_guid, list_item_guid, sortOrder, checked, list_item_map_guid, timestamp }) {
     return new Promise((resolve, reject) => {
       pool.query(
-        `INSERT INTO list_item (name, list_guid, guid, sort_order, checked, list_item_map_guid) VALUES ($1, $2, $3, $4, $5, $6) RETURNING list_guid`,
-        [name, list_guid, list_item_guid, sortOrder, checked, list_item_map_guid],
+        `INSERT INTO list_item (name, list_guid, guid, sort_order, checked, list_item_map_guid, timestamp) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING list_guid`,
+        [name, list_guid, list_item_guid, sortOrder, checked, list_item_map_guid, timestamp],
         (error, response) => {
           if (error) return reject(error);
           if (response.rows.length) {
@@ -50,7 +50,7 @@ class ListItemTable {
     })
   }
 
-  static updateListItem({ name, guid, sort_order }) {
+  static updateListItem({ name, guid, sort_order}) {
     //const { guid, name, sort_order } = listItem;
     return new Promise((resolve, reject) => {
       pool.query(
@@ -66,11 +66,11 @@ class ListItemTable {
     })
   }
 
-  static updateShoppingListItem({ name, guid, sort_order, checked, list_item_map_guid }) {
+  static updateShoppingListItem({ name, guid, sort_order, checked, list_item_map_guid, timestamp }) {
     return new Promise((resolve, reject) => {
       pool.query(
-        `UPDATE list_item SET name=$2, sort_order=$3, checked=$4, list_item_map_guid=$5 WHERE guid = $1 RETURNING guid`,
-        [guid, name, sort_order, checked, list_item_map_guid],
+        `UPDATE list_item SET name=$2, sort_order=$3, checked=$4, list_item_map_guid=$5, timestamp=$6 WHERE guid = $1 RETURNING guid`,
+        [guid, name, sort_order, checked, list_item_map_guid, timestamp],
         (error, response) => {
           if (error) return reject(error);
           if (response.rows.length) {
@@ -93,8 +93,8 @@ class ListItemTable {
   static updateShoppingListItems(listItems) {
     return Promise.all(
       listItems.map(listItem => {
-        const { name, guid, sort_order, checked, list_item_map_guid } = listItem;
-        return ListItemTable.updateShoppingListItem({ name, guid, sort_order, checked, list_item_map_guid })
+        const { name, guid, sort_order, checked, list_item_map_guid, timestamp } = listItem;
+        return ListItemTable.updateShoppingListItem({ name, guid, sort_order, checked, list_item_map_guid, timestamp })
       })
     )
   }
