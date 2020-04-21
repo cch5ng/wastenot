@@ -7,7 +7,8 @@ CREATE TABLE list_item(
   section_id INTEGER,
   checked BOOLEAN,
   list_item_map_guid VARCHAR(64),
-  timestamp TIMESTAMPTZ,
+  timestamp TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+  notify_timestamp TIMESTAMPTZ,
   FOREIGN KEY (list_guid) REFERENCES list(guid),
   FOREIGN KEY (section_id) REFERENCES section(id),
   FOREIGN KEY (list_item_map_guid) REFERENCES list_item_map(guid)
