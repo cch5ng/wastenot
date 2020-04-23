@@ -51,7 +51,7 @@ const ShoppingListDetailForm = (props) => {
 
   for (let i = 0; i < 50; i++) {
     let key = `${KEY_BASE}${i}`;
-    let inputObj = {name: '', section: 'none', checked: false, list_item_map_guid: null};
+    let inputObj = {name: '', section: 'none', checked: false, list_item_map_guid: null, notify_timestemp: null};
     initListItemInputs[key] = inputObj;
     initListItemInputs[key].sortOrder = i;
   }
@@ -250,16 +250,25 @@ const ShoppingListDetailForm = (props) => {
       dictListItemMapGuidToExpirationDays[guid] = expiration_days;
     }
 
-    let copyListItemInputs = [...listItemInputs];
-    copyListItemInputs.forEach(item => {
+    let copyListItemInputs = {...listItemInputs};
+    for (const k in copyListItemInputs) {
+      let item = copyListItemInputs[k];
       if (item.list_item_map_guid) {
         let mappedListItemGuid = item.list_item_map_guid;
         let expirationMs = daysToMilliseconds(dictListItemMapGuidToExpirationDays[mappedListItemGuid]);
-        let timestampMs = item.timestamp ? daysToMilliseconds(item.timestamp) : Date.now();
+
+        let timestampMs;
+        if (item.timestamp) {
+          timestampMs = daysToMilliseconds(item.timestamp)
+        } else {
+          timestampMs = Date.now();
+          item.timestamp = new Date(timestampMs);
+        }
         let expirationDate = new Date(expirationMs + timestampMs);
+        console.log('expirationDate', expirationDate)
         item.notify_timestamp = expirationDate;
       }
-    })
+    }
     setListItemInputs(copyListItemInputs);
     formSubmitHandler(ev);
   }
