@@ -51,7 +51,7 @@ const ShoppingListDetailForm = (props) => {
 
   for (let i = 0; i < 50; i++) {
     let key = `${KEY_BASE}${i}`;
-    let inputObj = {name: '', section: 'none', checked: false, list_item_map_guid: null, notify_timestemp: null};
+    let inputObj = {name: '', section: 'none', checked: false, list_item_map_guid: null, notify_timestamp: null};
     initListItemInputs[key] = inputObj;
     initListItemInputs[key].sortOrder = i;
   }
