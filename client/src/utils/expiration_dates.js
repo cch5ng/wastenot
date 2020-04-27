@@ -1,6 +1,6 @@
 //refrigeratorInt units in milliseconds
 
-EXPIRATION_DATES {
+const EXPIRATION_DATES = {
   'no match': { refrigerator: null, refrigeratorInt: null, freezer: null },
   'fresh eggs in shell': {
     refrigerator: '21 - 35 days',
