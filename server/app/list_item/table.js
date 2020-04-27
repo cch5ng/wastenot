@@ -20,7 +20,6 @@ class ListItemTable {
   }
 
   static storeShoppingListItem({ name, list_guid, list_item_guid, sortOrder, checked, list_item_map_guid, timestamp, notify_timestamp }) {
-    console.log('notify_timestamp', notify_timestamp)
     return new Promise((resolve, reject) => {
       pool.query(
         `INSERT INTO list_item (name, list_guid, guid, sort_order, checked, list_item_map_guid, timestamp, notify_timestamp) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING list_guid`,
