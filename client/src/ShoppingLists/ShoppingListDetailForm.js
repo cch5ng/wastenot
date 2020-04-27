@@ -237,17 +237,15 @@ const ShoppingListDetailForm = (props) => {
 
   function setNotificationClickHandler(ev) {
     ev.preventDefault();
-    let dictListItemMapGuidToExpirationDays = {};
-    //1 populate notification table
-    console.log('listItemInputs', listItemInputs)
-    //console.log('mappedListItems', mappedListItems)
-    console.log('mappedListItemsObj', mappedListItemsObj)
+    let dictListItemMapGuidToExpirationMs = {};
 
     for (const ky in mappedListItemsObj) {
       let mappedListItem = mappedListItemsObj[ky];
+      console.log('mappedListItem', mappedListItem)
       let guid = mappedListItem.guid;
-      let expiration_days = mappedListItem.expiration_days;
-      dictListItemMapGuidToExpirationDays[guid] = expiration_days;
+      let expiration_ms = mappedListItem.expiration_ms;
+      console.log('expiration_ms', expiration_ms)
+      dictListItemMapGuidToExpirationMs[guid] = expiration_ms;
     }
 
     let copyListItemInputs = {...listItemInputs};
@@ -255,18 +253,15 @@ const ShoppingListDetailForm = (props) => {
       let item = copyListItemInputs[k];
       if (item.list_item_map_guid) {
         let mappedListItemGuid = item.list_item_map_guid;
-        let expirationMs = daysToMilliseconds(dictListItemMapGuidToExpirationDays[mappedListItemGuid]);
-
+        let expirationMs = dictListItemMapGuidToExpirationMs[mappedListItemGuid];
         let timestampMs;
         if (item.timestamp) {
-          timestampMs = daysToMilliseconds(item.timestamp)
+          timestampMs = Date.parse(item.timestamp);
         } else {
           timestampMs = Date.now();
           item.timestamp = new Date(timestampMs);
         }
-        let expirationDate = new Date(expirationMs + timestampMs);
-        console.log('expirationDate', expirationDate)
-        item.notify_timestamp = expirationDate;
+        item.notify_timestamp = Date(expirationMs + timestampMs);
       }
     }
     setListItemInputs(copyListItemInputs);
@@ -374,34 +369,17 @@ const ShoppingListDetailForm = (props) => {
     }
   }, [props.authenticate.authStr]); //
 
-  //TEST
-  //4 cases
-  //props.mode === 'add', setting.isUsingExpiration === true
-  //  new
-  //props.mode === 'edit', setting.isUsingExpiration === true
-  //  new
-  //props.mode === 'add', setting.isUsingExpiration === false
-  //  existing logic
-  //props.mode === 'edit', setting.isUsingExpiration === false
-  //  existing logic
-  // console.log('listItemInputs', listItemInputs)
-  // console.log('mappedListItems', mappedListItems)
-  //console.log('mappedListItemsObj', mappedListItemsObj)
-  //console.log('createableSelectKey', createableSelectKey)
-
   return (
     <div className="main">
       {formSubmitted && (
         <Redirect to="/shoppingLists" />
       )}
-
       {props.setting.isUsingExpiration === true && mappedListItems.length > 0 &&(
         <ShoppingListFormExpiration title={title} listName={listName}
           onClickHandler={clearForm} formSubmitHandler={formSubmitHandler} 
           inputChangeHandler={inputChangeHandler} renderForm={renderExpirationForm} 
           setNotificationClickHandler={setNotificationClickHandler} />
       )}
-
       {(props.setting.isUsingExpiration === false || mappedListItems.length === 0) && (
         <ShoppingListFormNoExpiration title={title} formSubmitHandler={formSubmitHandler}
           onClickHandler={clearForm} listName={listName} inputChangeHandler={inputChangeHandler}
