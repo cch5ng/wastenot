@@ -34,7 +34,7 @@ export function mappedListItemsArToObj(ar) {
   ar.forEach(it => {
     let key = it.name;
     obj[key] = { 
-      expiration_ms: it.expiration_ms,
+      expiration_ms: parseInt(it.expiration_ms, 10),
       guid: it.guid
     };
   });
