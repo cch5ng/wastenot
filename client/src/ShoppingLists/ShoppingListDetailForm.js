@@ -241,10 +241,8 @@ const ShoppingListDetailForm = (props) => {
 
     for (const ky in mappedListItemsObj) {
       let mappedListItem = mappedListItemsObj[ky];
-      console.log('mappedListItem', mappedListItem)
       let guid = mappedListItem.guid;
       let expiration_ms = mappedListItem.expiration_ms;
-      console.log('expiration_ms', expiration_ms)
       dictListItemMapGuidToExpirationMs[guid] = expiration_ms;
     }
 
@@ -261,7 +259,9 @@ const ShoppingListDetailForm = (props) => {
           timestampMs = Date.now();
           item.timestamp = new Date(timestampMs);
         }
-        item.notify_timestamp = Date(expirationMs + timestampMs);
+        let dateForExpirationMs = new Date(timestampMs);
+        dateForExpirationMs.setMilliseconds(dateForExpirationMs.getMilliseconds() + expirationMs);
+        item.notify_timestamp = dateForExpirationMs;
       }
     }
     setListItemInputs(copyListItemInputs);
