@@ -19,11 +19,11 @@ class ListItemTable {
     })
   }
 
-  static storeShoppingListItem({ name, list_guid, list_item_guid, sortOrder, checked, list_item_map_guid, timestamp, notify_timestamp }) {
+  static storeShoppingListItem({ name, list_guid, list_item_guid, sortOrder, checked, list_item_map_guid, timestamp, notify_timestamp, notification_sent }) {
     return new Promise((resolve, reject) => {
       pool.query(
-        `INSERT INTO list_item (name, list_guid, guid, sort_order, checked, list_item_map_guid, timestamp, notify_timestamp) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING list_guid`,
-        [name, list_guid, list_item_guid, sortOrder, checked, list_item_map_guid, timestamp, notify_timestamp],
+        `INSERT INTO list_item (name, list_guid, guid, sort_order, checked, list_item_map_guid, timestamp, notify_timestamp, notification_sent) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING list_guid`,
+        [name, list_guid, list_item_guid, sortOrder, checked, list_item_map_guid, timestamp, notify_timestamp, notification_sent],
         (error, response) => {
           if (error) return reject(error);
           if (response.rows.length) {
@@ -66,11 +66,11 @@ class ListItemTable {
     })
   }
 
-  static updateShoppingListItem({ name, guid, sort_order, checked, list_item_map_guid, timestamp, notify_timestamp }) {
+  static updateShoppingListItem({ name, guid, sort_order, checked, list_item_map_guid, timestamp, notify_timestamp, notification_sent }) {
     return new Promise((resolve, reject) => {
       pool.query(
-        `UPDATE list_item SET name=$2, sort_order=$3, checked=$4, list_item_map_guid=$5, timestamp=$6, notify_timestamp=$7 WHERE guid = $1 RETURNING guid`,
-        [guid, name, sort_order, checked, list_item_map_guid, timestamp, notify_timestamp],
+        `UPDATE list_item SET name=$2, sort_order=$3, checked=$4, list_item_map_guid=$5, timestamp=$6, notify_timestamp=$7, notification_sent=$8 WHERE guid = $1 RETURNING guid`,
+        [guid, name, sort_order, checked, list_item_map_guid, timestamp, notify_timestamp, notification_sent],
         (error, response) => {
           if (error) return reject(error);
           if (response.rows.length) {
@@ -93,8 +93,8 @@ class ListItemTable {
   static updateShoppingListItems(listItems) {
     return Promise.all(
       listItems.map(listItem => {
-        const { name, guid, sort_order, checked, list_item_map_guid, timestamp, notify_timestamp } = listItem;
-        return ListItemTable.updateShoppingListItem({ name, guid, sort_order, checked, list_item_map_guid, timestamp, notify_timestamp })
+        const { name, guid, sort_order, checked, list_item_map_guid, timestamp, notify_timestamp, notification_sent } = listItem;
+        return ListItemTable.updateShoppingListItem({ name, guid, sort_order, checked, list_item_map_guid, timestamp, notify_timestamp, notification_sent })
       })
     )
   }
@@ -134,7 +134,6 @@ class ListItemTable {
       )
     })
   }
-
 }
 
 module.exports = ListItemTable;
