@@ -50,7 +50,8 @@ class ListTable {
             Promise.all(
               listItems.map(({ name, sortOrder, checked, list_item_map_guid, timestamp, notify_timestamp }) => {
                 let list_item_guid = uuidv4();
-                return ListItemTable.storeShoppingListItem({ name, list_guid, list_item_guid, sortOrder, checked, list_item_map_guid, timestamp, notify_timestamp })
+                let notification_sent = false;
+                return ListItemTable.storeShoppingListItem({ name, list_guid, list_item_guid, sortOrder, checked, list_item_map_guid, timestamp, notify_timestamp, notification_sent })
               })
             )
               .then(() => {
