@@ -1,6 +1,7 @@
 var CronJob = require('cron').CronJob;
 const { Pool } = require('pg');
 const dotenv = require('dotenv');
+const { triggerPushMsg } = require('./pushMessage');
 //const ListItemTable = require('../list_item/table');
 
 if (process.env.NODE_ENV !== 'production') {
@@ -50,7 +51,6 @@ const job = new CronJob('*/30 * * * * *', function() {
         .then(resp => {
             if (resp && resp.list_items) {
                 respNotifications = resp.list_items;
-                console.log('resp.list_items', resp.list_items)
                 Promise.all(
                     resp.list_items.map(listItem => {
                         let list_item_map_guid = listItem.list_item_map_guid
@@ -62,10 +62,8 @@ const job = new CronJob('*/30 * * * * *', function() {
                         if (resp2.length) {
                             respUser = resp2;
                             let uniqueUserIds = getUniqueUserIdsAr(respUser);
-                            console.log('uniqueUserIds', uniqueUserIds);
                             dictByListItemMapGuid = getObjByListItemMapGuid(resp2);
                             mergedNotifications = mergeRespNotificationsRespUsers(respNotifications, dictByListItemMapGuid);
-                            console.log('mergedNotifications', mergedNotifications);
                             Promise.all(
                                 uniqueUserIds.map(uid => {
                                     return getSubscriptionForUserId(uid)
@@ -73,11 +71,12 @@ const job = new CronJob('*/30 * * * * *', function() {
                             )
                                 .then(resp3 => {
                                     if (resp3.length) {
-                                        console.log('resp3', resp3)
                                         respUserSubscription = resp3;
                                         dictByUid = getObjByUserId(resp3);
-                                        mergedNotificationsSubscriptions = mergeNotificationsWithSubscriptions(mergedNotifications, dictByUid) 
-                                        console.log('mergedNotificationsSubscriptions', mergedNotificationsSubscriptions)
+                                        mergedNotificationsSubscriptions = mergeNotificationsWithSubscriptions(mergedNotifications, dictByUid);
+                                        mergedNotificationsSubscriptions.forEach(sub => {
+                                            triggerPushMsg(JSON.parse(sub.push_subscription), `Your ${sub.list_item_map_name} is about to expire.`);
+                                        })
                                     }
                                 })
                                 .catch(err => console.error('error', err))
