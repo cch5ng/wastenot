@@ -133,9 +133,6 @@ const Auth = {
   },
   putPushSubscription: ({email}) => {
     return requests.put(`${API_ROOT}${API_AUTH_MIDDLE}${AUTH_REMOVE_PUSH_SUBSCRIPTION_SUFFIX}`, {email})
-  },
-  testPushSubscription: ({email}) => {
-    return requests.post(`${API_ROOT}${API_AUTH_MIDDLE}${AUTH_TEST_PUSH_SUBSCRIPTION_SUFFIX}`, {email})
   }
 }
 

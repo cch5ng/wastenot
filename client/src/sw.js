@@ -54,9 +54,7 @@ export function subscribeUserToPush() {
       return registration.pushManager.subscribe(subscribeOptions);
     })
     .then(function(pushSubscription) {
-      console.log('Received PushSubscription: ', JSON.stringify(pushSubscription));
       curPushSubscription = pushSubscription;
-
       let sessionStr = sessionStorage.getItem('sessionStr');
       let sessionStrAr;
       if (sessionStr) {
@@ -85,13 +83,13 @@ export function unsubscribeUserFromPush() {
 
 export function sendNotification(data) {
     const options = {
-        "body": "Simple piece of body text.\nSecond line of body text :)",
+        "body": `${data}`,
         "data": data,
         "requireInteraction": "false",
         //"renotify": "true",          
         "timestamp": "<Long>"
     }
-    self.registration.showNotification('test notification title', options);
+    self.registration.showNotification('Food Expiration Warning', options);
 }
 
 self.addEventListener('push', function(event) {

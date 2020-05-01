@@ -115,7 +115,7 @@ const ExpirationMapTest = (props) => {
       if (item.text.length && item.expirationCategory.length) {
         let obj = {}
         obj.name = item.text;
-        obj.expirationDays = getExpirationDate(item.expirationCategory, EXPIRATION_DATES);
+        obj.expirationMs = getExpirationDate(item.expirationCategory, EXPIRATION_DATES);
         obj.skipNotification = item.disabled;
         mappingsWithExpiration.push(obj);
       }

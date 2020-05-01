@@ -11,14 +11,15 @@ import { objToArray, getCookieStr, arrayToObj } from '../utils/utils';
 import { render } from 'react-dom';
 
 const ShoppingListFormExpiration = (props) => {
-    const { title, formSubmitHandler, listName, inputChangeHandler, onClickHandler, renderForm } = props;
+    const { title, formSubmitHandler, listName, inputChangeHandler, onClickHandler, renderForm, setNotificationClickHandler } = props;
     return (
         <div>TODO ShoppingListFormExpiration
             <h3>{title}</h3>
             <div>
                 <Button classVal="listDetailFormSaveBtn" onClickHandler={formSubmitHandler} label="Save" />
                 <Button label="Cancel" onClickHandler={onClickHandler} />
-            </div>
+                <Button label="Set Notification" onClickHandler={setNotificationClickHandler} />
+             </div>
             <br />
             <InputText name="listNameInp" value={listName} placeholder="list name" onChangeHandler={inputChangeHandler} />
             <ul className="list-no-style">
@@ -27,6 +28,7 @@ const ShoppingListFormExpiration = (props) => {
             <div>
                 <Button classVal="listDetailFormSaveBtn" onClickHandler={formSubmitHandler} label="Save" />
                 <Button label="Cancel" onClickHandler={onClickHandler} />
+                <Button label="Set Notification" onClickHandler={setNotificationClickHandler} />
             </div>
         </div>
     )
