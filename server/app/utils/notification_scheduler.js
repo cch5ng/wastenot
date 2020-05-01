@@ -21,7 +21,7 @@ const pool = new Pool({
 })
 
 console.log('Before job instantiation');
-const job = new CronJob('* * 12 * * *', function() {
+const job = new CronJob('* * 12 * * *', function() { //CronJob('*/30 * * * * *', function() {
     let respNotifications;
     let respUser;
     let respUserSubscription;
