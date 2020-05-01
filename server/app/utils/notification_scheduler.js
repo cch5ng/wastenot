@@ -20,22 +20,8 @@ const pool = new Pool({
   port: process.env.PGPORT,
 })
 
-//create a daily schedule which triggers sql query
-//get list of list_items 
-
-// var job = new CronJob(
-// 	'1 * * * * *',
-// 	function() {
-// 		console.log('You will see this message every second');
-// 	},
-// 	null,
-// 	true,
-// 	'America/Los_Angeles'
-// );
-// job.start();
-
 console.log('Before job instantiation');
-const job = new CronJob('*/30 * * * * *', function() {
+const job = new CronJob('* * 12 * * *', function() {
     let respNotifications;
     let respUser;
     let respUserSubscription;
