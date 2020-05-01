@@ -94,8 +94,8 @@ export function sendNotification(data) {
 
 self.addEventListener('push', function(event) {
     if (event.data) {
-      console.log('This push event has data: ', event.data.text());
-      sendNotification(event.data.text())
+        let { message, list_item_id } = event.data.json();
+        sendNotification(message);
     } else {
       console.log('This push event has no data.');
     }
