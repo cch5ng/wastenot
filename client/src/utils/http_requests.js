@@ -112,11 +112,11 @@ const Lists = {
   getRecentListItemNotifications: ({cookieStr}) => {
     return requests.post(`${API_ROOT}${API_LIST_MIDDLE}/notifications`, {cookieStr});
   },
-  putPostponeListItemNotification: ({list_item_id, cookieStr}) => {
-    return requests.put(`${API_ROOT}${API_LIST_MIDDLE}/notifications/postpone/${list_item_id}`, { cookieStr });
+  putPostponeListItemNotification: ({list_item_guid, timestamp, cookieStr}) => {
+    return requests.put(`${API_ROOT}${API_LIST_MIDDLE}/notifications/postpone/${list_item_guid}`, { timestamp, cookieStr });
   },
-  putCancelListItemNotification: ({list_item_id, cookieStr}) => {
-    return requests.put(`${API_ROOT}${API_LIST_MIDDLE}/notifications/cancel/${list_item_id}`, { cookieStr });
+  putCancelListItemNotification: ({list_item_guid, cookieStr}) => {
+    return requests.put(`${API_ROOT}${API_LIST_MIDDLE}/notifications/cancel/${list_item_guid}`, { cookieStr });
   }
 };
 
