@@ -99,6 +99,25 @@ class ListItemTable {
     )
   }
 
+  //ListItemTable.updateNotificationSent({id: list_item_id})
+  static updateNotificationSent({ id }) {
+    return new Promise((resolve, reject) => {
+      const notification_sent = true;
+      pool.query(
+        `UPDATE list_item SET notification_sent=$1 WHERE id = $2 RETURNING id`,
+        [notification_sent, id],
+        (error, response) => {
+          if (error) return reject(error);
+          if (response.rows.length) {
+            resolve({list_item_id: response.rows[0].id});
+          }
+        }
+      )
+    })
+  }
+
+
+
   static deleteListItemByItemGuid(itemGuid) {
     return new Promise((resolve, reject) => {
       pool.query(
@@ -134,6 +153,25 @@ class ListItemTable {
       )
     })
   }
+
+// section for food expiration notifications
+  static getRecentNotificationsByEmail(emailHash) {
+    return new Promise((resolve, reject) => {
+      pool.query(
+        `SELECT lim.name, li.notify_timestamp, li.guid
+         FROM wastenot_user u, list_item_map lim, list_item li
+         WHERE u.id=lim.user_id AND u."emailHash"=$1 AND lim.guid=li.list_item_map_guid`,
+        [emailHash],
+        (error, response) => {
+          if (error) return reject(error);
+          if (response.rows.length) {
+            resolve({notifications: response.rows});
+          }
+        }
+      )
+    })
+  }
+
 }
 
 module.exports = ListItemTable;
