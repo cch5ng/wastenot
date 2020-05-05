@@ -21,14 +21,12 @@ const Alerts = (props) => {
         const guid = classAr[classAr.length - 1];
         let notify_timestamp = alertsObj[guid].notify_timestamp;
         let newNotifyTimestamp = new Date(notify_timestamp);
-        console.log('old newNotifyTimestamp', newNotifyTimestamp)
-
         newNotifyTimestamp.setDate(newNotifyTimestamp.getDate() + 1);
-        console.log('new newNotifyTimestamp', newNotifyTimestamp)
+
         if (props.authenticate && props.authenticate.authStr) {
             http_requests.Lists.putPostponeListItemNotification({
                 list_item_guid: guid,
-                timestamp: newNotifyTimestamp,
+                timestamp: newNotifyTimestamp, //newNotifyTimestamp,
                 cookieStr: props.authenticate.authStr
             })
                 .then(resp => console.log('resp', resp))
