@@ -3,6 +3,7 @@ import http_requests from './utils/http_requests';
 //workbox.precaching.precacheAndRoute(self.__WB_MANIFEST || []);
 let curRegistration;
 let curPushSubscription;
+let email;
 
 export function registerServiceWorker() {
     return navigator.serviceWorker.register('./sw.js')
@@ -59,7 +60,7 @@ export function subscribeUserToPush() {
       let sessionStrAr;
       if (sessionStr) {
           sessionStrAr = sessionStr.split('|');
-          let email = sessionStrAr[0];
+          email = sessionStrAr[0];
           http_requests.Auth.postPushSubscription({email, pushSubscription: JSON.stringify(pushSubscription)})
 
       } else {
@@ -86,20 +87,110 @@ export function sendNotification(data) {
         "body": `${data}`,
         "data": data,
         "requireInteraction": "false",
-        //"renotify": "true",          
         "timestamp": "<Long>"
+        // actions: [
+        //     {
+        //       action: 'postpone-action',
+        //       title: 'Remind me tomorrow.'
+        //     },
+        //     {
+        //       action: 'stop-action',
+        //       title: 'Stop this notification.'
+        //     }
+        // ]
     }
     self.registration.showNotification('Food Expiration Warning', options);
 }
 
 self.addEventListener('push', function(event) {
-    if (event.data) {
+    //event.waitUntil(function() {
         let { message, list_item_id } = event.data.json();
-        sendNotification(message);
-    } else {
-      console.log('This push event has no data.');
-    }
+        const options = {
+            "body": `${message}`,
+            "data": event.data.text(),
+            "list_item_id": list_item_id,
+            "requireInteraction": "false",
+            "timestamp": "<Long>"//,
+            // actions: [
+            //     {
+            //       action: 'postpone-action',
+            //       title: 'Remind me tomorrow.'
+            //     },
+            //     {
+            //       action: 'stop-action',
+            //       title: 'Stop this notification.'
+            //     }
+            // ]
+        }
+    
+        self.registration.showNotification('Food Expiration Warning', options);
+
+    //})
+    // if (event.data) {
+
+    //     //TEST need to uncomment
+    //     //sendNotification(message);
+
+    //     //TODO
+    //     // event.waitUntil(
+    //     //     sendNotification(event.data)
+
+    //         // self.registration.showNotification("test notification", {
+    //         //     body: "New push notification",
+    //         //     //icon: "/images/logo@2x.png",
+    //         //     tag:  "push-notification-tag",
+    //         //     data: {
+    //         //     list_item_id: JSON.parse(event.data).list_item_id
+    //         //     }
+    //         // })
+    //     //)
+    // } else {
+    //  console.log('This push event has no data.');
+    // }
 });
+
+// self.addEventListener('notificationclick', function(event) {
+
+//     //const promiseChain = function(event) {
+//         console.log('Notification Click.');
+//         const clickedNotification = event.notification;
+//         clickedNotification.close();
+    
+//         if (!event.action) {
+//           // Was a normal notification click
+//           console.log('Notification Click.');
+//           return;
+//         }
+//         console.log('event.notification', event.notification)
+//         if (event.notification.data) {
+//             console.log('notification data', event.notification.data)
+//             console.log('notification list_item_id', JSON.parse(event.notification.data).list_item_id)
+//         }
+//         console.log('notification options', event.notification.options)
+//         switch (event.action) {
+//           case 'postpone-action':
+//             console.log('user postpones notification');
+//             break;
+//           case 'stop-action':
+//             console.log('user stops notification');
+//             http_requests.Lists.putListItemNotificationSent({list_item_id})
+//                 .then(resp => console.log('notification sent resp', resp))
+//                 .catch(err => console.error('error', err))
+    
+//             break;
+//           default:
+//             console.log(`Unknown action clicked: '${event.action}'`);
+//             break;
+//         }
+//     //};
+
+//     //event.waitUntil(promiseChain);
+//   });
+
+  self.addEventListener('notificationclose', function(event) {
+    console.log('notification data', event.notification.data)
+    console.log('user closes notification')    
+  });
 
 /**
  * urlBase64ToUint8Array
@@ -121,10 +212,8 @@ function urlBase64ToUint8Array(base64String) {
     return outputArray;
 }
 
-// export {
-//     registerServiceWorker,
-//     askPermission
-// }
-
-// module.exports = {registerServiceWorker,
-//     askPermission}
+function getCookie() {
+    if (sessionStorage) {
+        return sessionStorage.getItem('sessionStr');
+    }
+}
