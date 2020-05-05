@@ -367,7 +367,7 @@ const ShoppingListDetailForm = (props) => {
           })
       }  
     }
-  }, [props.authenticate.authStr]); //
+  }, [props.authenticate.authStr]);
 
   return (
     <div className="main">
