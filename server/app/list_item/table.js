@@ -172,6 +172,39 @@ class ListItemTable {
     })
   }
 
+  static putPostponeNotificationByListItemId(timestamp, guid) {
+    return new Promise((resolve, reject) => {
+      pool.query(
+        `UPDATE list_item SET notify_timestamp=$1
+         WHERE guid=$2 RETURNING id`,
+        [timestamp, guid],
+        (error, response) => {
+          if (error) return reject(error);
+          if (response.rows.length) {
+            resolve({message: `List item notification was postponed.`});
+          }
+        }
+      )
+    })
+  }
+
+  static putCancelNotificationByListItemId(guid) {
+    const notification_sent = true;
+    return new Promise((resolve, reject) => {
+      pool.query(
+        `UPDATE list_item SET notification_sent=$1
+         WHERE guid=$2 RETURNING id`,
+        [notification_sent, guid],
+        (error, response) => {
+          if (error) return reject(error);
+          if (response.rows.length) {
+            resolve({message: `List item notification was cancelled.`});
+          }
+        }
+      )
+    })
+  }
+
 }
 
 module.exports = ListItemTable;
