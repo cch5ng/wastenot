@@ -298,7 +298,6 @@ router.post('/notifications', (req, res, next) => {
         ListItemTable.getRecentNotificationsByEmail(emailHash)
           .then(resp => res.json(resp))
           .catch(err => next(err))
-
       } else {
         let error = new Error('User is not logged in.');
         error.statusCode = 401;
@@ -308,17 +307,19 @@ router.post('/notifications', (req, res, next) => {
     .catch(error => next(error));
 })
 
-router.put('/notifications/postpone/:list_item_id', (req, res, next) => {
-  const {list_item_id} = req.params;
+router.put('/notifications/postpone/:list_item_guid', (req, res, next) => {
+  const {list_item_guid} = req.params;
   const cookieStr = req.body.cookieStr;
+  const timestamp = req.body;
   let { email, id } = Session.parse(cookieStr);
   let emailHash = hash(email);
 
   AuthTable.isAuthenticated({ sessionId: id, emailHash })
     .then(resp => {
       if (resp) {
-
-
+        ListItemTable.putPostponeNotificationByListItemId(timestamp, list_item_guid)
+        .then(resp => res.json(resp))
+        .catch(err => next(err))
       } else {
         let error = new Error('User is not logged in.');
         error.statusCode = 401;
@@ -328,8 +329,8 @@ router.put('/notifications/postpone/:list_item_id', (req, res, next) => {
     .catch(error => next(error));
 })
 
-router.put('/notifications/cancel/:list_item_id', (req, res, next) => {
-  const {list_item_id} = req.params;
+router.put('/notifications/cancel/:list_item_guid', (req, res, next) => {
+  const {list_item_guid} = req.params;
   const cookieStr = req.body.cookieStr;
   let { email, id } = Session.parse(cookieStr);
   let emailHash = hash(email);
@@ -337,8 +338,9 @@ router.put('/notifications/cancel/:list_item_id', (req, res, next) => {
   AuthTable.isAuthenticated({ sessionId: id, emailHash })
     .then(resp => {
       if (resp) {
-
-
+        ListItemTable.putCancelNotificationByListItemId(list_item_guid)
+        .then(resp => res.json(resp))
+        .catch(err => next(err))
       } else {
         let error = new Error('User is not logged in.');
         error.statusCode = 401;
