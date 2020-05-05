@@ -310,7 +310,7 @@ router.post('/notifications', (req, res, next) => {
 router.put('/notifications/postpone/:list_item_guid', (req, res, next) => {
   const {list_item_guid} = req.params;
   const cookieStr = req.body.cookieStr;
-  const timestamp = req.body;
+  const { timestamp } = req.body;
   let { email, id } = Session.parse(cookieStr);
   let emailHash = hash(email);
 
