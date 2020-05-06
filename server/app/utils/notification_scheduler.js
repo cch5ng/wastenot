@@ -21,7 +21,7 @@ const pool = new Pool({
 })
 
 console.log('Before job instantiation');
-const job = new CronJob('*/30 * * * * *', function() {
+const job = new CronJob('* * 12 * * *', function() {
     //prod
     //new CronJob('* * 12 * * *', function() {
     //dev
