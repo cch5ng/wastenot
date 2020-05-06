@@ -157,14 +157,21 @@ class ListItemTable {
 // section for food expiration notifications
   static getRecentNotificationsByEmail(emailHash) {
     const notification_sent = false;
+    let curTimestampMs = Date.now();
+    let lastWeekTimestamp = new Date(curTimestampMs);
+    lastWeekTimestamp.setDate(lastWeekTimestamp.getDate() - 7);
+    let nextDayTimestamp = new Date(curTimestampMs);
+    nextDayTimestamp.setDate(nextDayTimestamp.getDate() + 1);
     return new Promise((resolve, reject) => {
       pool.query(
         `SELECT lim.name, li.notify_timestamp, li.guid
          FROM wastenot_user u, list_item_map lim, list_item li
          WHERE u.id=lim.user_id AND u."emailHash"=$1 AND lim.guid=li.list_item_map_guid
          AND li.notification_sent=$2
+         AND li.notify_timestamp > $3
+         AND li.notify_timestamp < $4
          ORDER BY li.notify_timestamp`,
-        [emailHash, notification_sent],
+        [emailHash, notification_sent, lastWeekTimestamp, nextDayTimestamp],
         (error, response) => {
           if (error) return reject(error);
           if (response.rows.length) {
