@@ -29,7 +29,12 @@ const Alerts = (props) => {
                 timestamp: newNotifyTimestamp, //newNotifyTimestamp,
                 cookieStr: props.authenticate.authStr
             })
-                .then(resp => console.log('resp', resp))
+                .then(resp => {
+                    let guid = resp.guid;
+                    let notify_timestamp = resp.notify_timestamp;
+                    let oldAlertsObj = Object.assign({}, alertsObj);
+                    setAlertsObj({...oldAlertsObj, [guid]: {...oldAlertsObj[guid], notify_timestamp }})
+                })
                 .catch(err => console.error('err', err))
         }
     }
@@ -45,7 +50,12 @@ const Alerts = (props) => {
                 list_item_guid: guid,
                 cookieStr: props.authenticate.authStr
             })
-                .then(resp => console.log('resp', resp))
+                .then(resp => {
+                    let guidToRemove = resp.guid;
+                    let newAlertsObj = {...alertsObj};
+                    delete newAlertsObj[guidToRemove]
+                    setAlertsObj(newAlertsObj);
+                })
                 .catch(err => console.error('err', err))
         }
     }
@@ -64,7 +74,6 @@ const Alerts = (props) => {
         if (props.authenticate && props.authenticate.authStr) {
             http_requests.Lists.getRecentListItemNotifications({cookieStr: props.authenticate.authStr})
             .then(resp => {
-                console.log('resp', resp);
                 if (resp && resp.notifications) {
                     setAlertsAr(resp.notifications);
                     let alertsObj = getAlertsObj(resp.notifications);
@@ -74,6 +83,11 @@ const Alerts = (props) => {
             .catch(err => console.error('err', err))
         }
     }, [props.authenticate.authStr]);
+
+    useEffect(() => {
+        let newAlertsAr = getAlertsArFromObj(alertsObj)
+        setAlertsAr(newAlertsAr);    
+    }, [alertsObj])
 
     return (
         <div>
@@ -89,6 +103,14 @@ const Alerts = (props) => {
 
         </div>
     )
+}
+
+function getAlertsArFromObj(alertsObj) {
+    let alertsAr = [];
+    for (let guid in alertsObj) {
+        alertsAr.push(alertsObj[guid]);
+    }
+    return alertsAr;
 }
 
 const mapStateToProps = state => ({ 
