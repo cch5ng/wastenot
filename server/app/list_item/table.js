@@ -162,7 +162,8 @@ class ListItemTable {
         `SELECT lim.name, li.notify_timestamp, li.guid
          FROM wastenot_user u, list_item_map lim, list_item li
          WHERE u.id=lim.user_id AND u."emailHash"=$1 AND lim.guid=li.list_item_map_guid
-         AND li.notification_sent=$2`,
+         AND li.notification_sent=$2
+         ORDER BY li.notify_timestamp`,
         [emailHash, notification_sent],
         (error, response) => {
           if (error) return reject(error);
@@ -175,16 +176,19 @@ class ListItemTable {
   }
 
   static putPostponeNotificationByListItemId(timestamp, guid) {
-    console.log('timestamp', timestamp)
     return new Promise((resolve, reject) => {
       pool.query(
         `UPDATE list_item SET notify_timestamp=$1
-         WHERE guid=$2 RETURNING id`,
+         WHERE guid=$2 RETURNING guid, notify_timestamp`,
         [timestamp, guid],
         (error, response) => {
           if (error) return reject(error);
           if (response.rows.length) {
-            resolve({message: `List item notification was postponed.`});
+            resolve({
+              message: `List item notification was postponed.`, 
+              guid: response.rows[0].guid, 
+              notify_timestamp: response.rows[0].notify_timestamp
+            });
           }
         }
       )
@@ -196,12 +200,12 @@ class ListItemTable {
     return new Promise((resolve, reject) => {
       pool.query(
         `UPDATE list_item SET notification_sent=$1
-         WHERE guid=$2 RETURNING id`,
+         WHERE guid=$2 RETURNING guid`,
         [notification_sent, guid],
         (error, response) => {
           if (error) return reject(error);
           if (response.rows.length) {
-            resolve({message: `List item notification was cancelled.`});
+            resolve({message: `List item notification was cancelled.`, guid});
           }
         }
       )
