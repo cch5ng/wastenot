@@ -99,6 +99,25 @@ class ListItemTable {
     )
   }
 
+  //ListItemTable.updateNotificationSent({id: list_item_id})
+  static updateNotificationSent({ id }) {
+    return new Promise((resolve, reject) => {
+      const notification_sent = true;
+      pool.query(
+        `UPDATE list_item SET notification_sent=$1 WHERE id = $2 RETURNING id`,
+        [notification_sent, id],
+        (error, response) => {
+          if (error) return reject(error);
+          if (response.rows.length) {
+            resolve({list_item_id: response.rows[0].id});
+          }
+        }
+      )
+    })
+  }
+
+
+
   static deleteListItemByItemGuid(itemGuid) {
     return new Promise((resolve, reject) => {
       pool.query(
@@ -134,6 +153,72 @@ class ListItemTable {
       )
     })
   }
+
+// section for food expiration notifications
+  static getRecentNotificationsByEmail(emailHash) {
+    const notification_sent = false;
+    let curTimestampMs = Date.now();
+    let lastWeekTimestamp = new Date(curTimestampMs);
+    lastWeekTimestamp.setDate(lastWeekTimestamp.getDate() - 7);
+    let nextDayTimestamp = new Date(curTimestampMs);
+    nextDayTimestamp.setDate(nextDayTimestamp.getDate() + 1);
+    return new Promise((resolve, reject) => {
+      pool.query(
+        `SELECT lim.name, li.notify_timestamp, li.guid
+         FROM wastenot_user u, list_item_map lim, list_item li
+         WHERE u.id=lim.user_id AND u."emailHash"=$1 AND lim.guid=li.list_item_map_guid
+         AND li.notification_sent=$2
+         AND li.notify_timestamp > $3
+         AND li.notify_timestamp < $4
+         ORDER BY li.notify_timestamp`,
+        [emailHash, notification_sent, lastWeekTimestamp, nextDayTimestamp],
+        (error, response) => {
+          if (error) return reject(error);
+          if (response.rows.length) {
+            resolve({notifications: response.rows});
+          }
+        }
+      )
+    })
+  }
+
+  static putPostponeNotificationByListItemId(timestamp, guid) {
+    return new Promise((resolve, reject) => {
+      pool.query(
+        `UPDATE list_item SET notify_timestamp=$1
+         WHERE guid=$2 RETURNING guid, notify_timestamp`,
+        [timestamp, guid],
+        (error, response) => {
+          if (error) return reject(error);
+          if (response.rows.length) {
+            resolve({
+              message: `List item notification was postponed.`, 
+              guid: response.rows[0].guid, 
+              notify_timestamp: response.rows[0].notify_timestamp
+            });
+          }
+        }
+      )
+    })
+  }
+
+  static putCancelNotificationByListItemId(guid) {
+    const notification_sent = true;
+    return new Promise((resolve, reject) => {
+      pool.query(
+        `UPDATE list_item SET notification_sent=$1
+         WHERE guid=$2 RETURNING guid`,
+        [notification_sent, guid],
+        (error, response) => {
+          if (error) return reject(error);
+          if (response.rows.length) {
+            resolve({message: `List item notification was cancelled.`, guid});
+          }
+        }
+      )
+    })
+  }
+
 }
 
 module.exports = ListItemTable;

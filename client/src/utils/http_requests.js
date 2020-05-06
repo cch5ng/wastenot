@@ -105,6 +105,18 @@ const Lists = {
   //this DELETE is used for templates and shopping lists because done by id
   deleteTemplateList: ({ guid, cookieStr }) => {
     return requests.delete(`${API_ROOT}${API_LIST_MIDDLE}${LIST_DETAIL_SUFFIX}/${guid}`, { cookieStr });
+  },
+  putListItemNotificationSent: ({ list_item_id, email }) => {
+    return requests.put(`${API_ROOT}${API_LIST_MIDDLE}/sentNotification/${list_item_id}`, { email });
+  },
+  getRecentListItemNotifications: ({cookieStr}) => {
+    return requests.post(`${API_ROOT}${API_LIST_MIDDLE}/notifications`, {cookieStr});
+  },
+  putPostponeListItemNotification: ({list_item_guid, timestamp, cookieStr}) => {
+    return requests.put(`${API_ROOT}${API_LIST_MIDDLE}/notifications/postpone/${list_item_guid}`, { timestamp, cookieStr });
+  },
+  putCancelListItemNotification: ({list_item_guid, cookieStr}) => {
+    return requests.put(`${API_ROOT}${API_LIST_MIDDLE}/notifications/cancel/${list_item_guid}`, { cookieStr });
   }
 };
 
@@ -158,5 +170,5 @@ export default {
   Lists,
   Auth,
   Setting,
-  ListItemMap,
+  ListItemMap
 };

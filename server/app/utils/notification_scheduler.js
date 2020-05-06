@@ -21,7 +21,11 @@ const pool = new Pool({
 })
 
 console.log('Before job instantiation');
-const job = new CronJob('* * 12 * * *', function() { //CronJob('*/30 * * * * *', function() {
+const job = new CronJob('* * 12 * * *', function() {
+    //prod
+    //new CronJob('* * 12 * * *', function() {
+    //dev
+    //new CronJob('*/30 * * * * *', function() {
     let respNotifications;
     let respUser;
     let respUserSubscription;
@@ -36,6 +40,7 @@ const job = new CronJob('* * 12 * * *', function() { //CronJob('*/30 * * * * *',
     getNextDayNotifications(d)
         .then(resp => {
             if (resp && resp.list_items) {
+                console.log('resp.list_items', resp.list_items);
                 respNotifications = resp.list_items;
                 Promise.all(
                     resp.list_items.map(listItem => {
@@ -60,8 +65,13 @@ const job = new CronJob('* * 12 * * *', function() { //CronJob('*/30 * * * * *',
                                         respUserSubscription = resp3;
                                         dictByUid = getObjByUserId(resp3);
                                         mergedNotificationsSubscriptions = mergeNotificationsWithSubscriptions(mergedNotifications, dictByUid);
+                                        console.log('mergedNotificationsSubscriptions', mergedNotificationsSubscriptions)
                                         mergedNotificationsSubscriptions.forEach(sub => {
-                                            triggerPushMsg(JSON.parse(sub.push_subscription), `Your ${sub.list_item_map_name} is about to expire.`);
+                                            let data = {
+                                                list_item_id: sub.list_item_id,
+                                                message: `Your ${sub.list_item_map_name} is about to expire.`
+                                            }
+                                            triggerPushMsg(JSON.parse(sub.push_subscription), JSON.stringify(data));
                                         })
                                     }
                                 })
@@ -81,13 +91,13 @@ console.log('After job instantiation');
 job.start();
 
 /*
-    data needed: name of list item; owner of list item; notify_timestamp; list_item_map_guid
+    data needed: name of list item; owner of list item; notify_timestamp; list_item_map_guid; list_item_id
     subscription data for the owner
 */
 function getNextDayNotifications(time, notification_sent=false) {
     return new Promise((resolve, reject) => {
       pool.query(
-        `SELECT list_item_map_guid, notify_timestamp from list_item WHERE notify_timestamp <= $1 AND notification_sent=$2`,
+        `SELECT list_item_map_guid, notify_timestamp, id AS list_item_id from list_item WHERE notify_timestamp <= $1 AND notification_sent=$2`,
         [time, notification_sent],
         (error, response) => {
           if (error) return reject(error);
@@ -144,8 +154,8 @@ function getUniqueUserIdsAr(ar) {
 function getObjByListItemMapGuid(ar) {
     let resultObj = {};
     ar.forEach(el => {
-        let guid = el.guid;
-        resultObj[guid] = el;
+        let list_item_map_guid = el.guid;
+        resultObj[list_item_map_guid] = el;
     })
     return resultObj;
 }
@@ -165,6 +175,7 @@ function mergeRespNotificationsRespUsers(respNotifications, dictByListItemMapGui
         if (dictByListItemMapGuid[map_guid]) {
             resp.list_item_map_name = dictByListItemMapGuid[map_guid].name;
             resp.user_id = dictByListItemMapGuid[map_guid].user_id;
+            //resp.list_item_id = resp.id;
             return resp;
         }
     })

@@ -10,7 +10,8 @@ const Button = (props) => {
       [`${size}`]: size && true,
       [`${type}`]: type && true,
       'small': !size,
-      'basic': !type
+      'basic': !type,
+      [`${classVal}`]: classVal && true
   });
 
   return (

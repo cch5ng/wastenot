@@ -228,6 +228,33 @@ router.put('/shoppingListDetail/:listGuid', (req, res, next) => {
     .catch(error => next(error));
 });
 
+//handle sw request to update sent_notification on list_item
+router.put('/sentNotification/:list_item_id', (req, res, next) => {
+  const { list_item_id } = req.params;
+  //let email = req.body;
+  //let emailHash = hash(email);
+
+  //FU how to handle auth since cannot access localstorage from sw
+  //AuthTable.isAuthenticated({ emailHash })
+    //.then(resp => {
+      //if (resp) {
+          ListItemTable.updateNotificationSent({id: list_item_id})
+            .then(values => {
+              if (values.length) {
+                res.json({ message: `list_item with id, ${id} was updated`,
+                            type: 'success'
+                })
+              }
+            })
+            .catch(err => next(err));
+      //} else {
+      //  let error = new Error('User is not logged in.');
+      //  error.statusCode = 401;
+      //  next(error);
+      //}
+    //})
+    //.catch(error => next(error));
+});
 
 //TEST should apply to both template list and shopping list
 router.delete('/listDetail/:listGuid', (req, res, next) => {
@@ -257,6 +284,70 @@ router.delete('/listItemDetail/:listItemGuid', (req, res, next) => {
   ListItemTable.deleteListItemByItemGuid(listItemGuid)
     .then(list_item_guid => res.json(list_item_guid))
     .catch(err => next(err))
+})
+
+//section for notification related changes
+router.post('/notifications', (req, res, next) => {
+  const cookieStr = req.body.cookieStr;
+  let { email, id } = Session.parse(cookieStr);
+  let emailHash = hash(email);
+
+  AuthTable.isAuthenticated({ sessionId: id, emailHash })
+    .then(resp => {
+      if (resp) {
+        ListItemTable.getRecentNotificationsByEmail(emailHash)
+          .then(resp => res.json(resp))
+          .catch(err => next(err))
+      } else {
+        let error = new Error('User is not logged in.');
+        error.statusCode = 401;
+        next(error);
+      }
+    })
+    .catch(error => next(error));
+})
+
+router.put('/notifications/postpone/:list_item_guid', (req, res, next) => {
+  const {list_item_guid} = req.params;
+  const cookieStr = req.body.cookieStr;
+  const { timestamp } = req.body;
+  let { email, id } = Session.parse(cookieStr);
+  let emailHash = hash(email);
+
+  AuthTable.isAuthenticated({ sessionId: id, emailHash })
+    .then(resp => {
+      if (resp) {
+        ListItemTable.putPostponeNotificationByListItemId(timestamp, list_item_guid)
+        .then(resp => res.json(resp))
+        .catch(err => next(err))
+      } else {
+        let error = new Error('User is not logged in.');
+        error.statusCode = 401;
+        next(error);
+      }
+    })
+    .catch(error => next(error));
+})
+
+router.put('/notifications/cancel/:list_item_guid', (req, res, next) => {
+  const {list_item_guid} = req.params;
+  const cookieStr = req.body.cookieStr;
+  let { email, id } = Session.parse(cookieStr);
+  let emailHash = hash(email);
+
+  AuthTable.isAuthenticated({ sessionId: id, emailHash })
+    .then(resp => {
+      if (resp) {
+        ListItemTable.putCancelNotificationByListItemId(list_item_guid)
+        .then(resp => res.json(resp))
+        .catch(err => next(err))
+      } else {
+        let error = new Error('User is not logged in.');
+        error.statusCode = 401;
+        next(error);
+      }
+    })
+    .catch(error => next(error));
 })
 
 module.exports = router;

@@ -15,6 +15,7 @@ import config from './config';
 import AuthForm from './Auth/AuthForm';
 import Settings from './Auth/Settings';
 import ExpirationMapTest from './Settings/ExpirationMapTest';
+import Alerts from './Alerts/Alerts';
 
 function App(props) {
 
@@ -78,8 +79,10 @@ function App(props) {
             component={ExpirationMapTest}
           />
           <Route exact path="/settings"
-            render={(props) => (<Settings {...props}
-            />
+            render={(props) => (<Settings {...props}/>
+          )} />
+          <Route exact path="/alerts"
+            render={(props) => (<Alerts {...props}/>
           )} />
         </div>
       </Router>
