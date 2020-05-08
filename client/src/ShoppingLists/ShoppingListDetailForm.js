@@ -121,7 +121,7 @@ const ShoppingListDetailForm = (props) => {
       setListItemInputs(copyListItemInputs);
       list.name = listName;
       list.type = listType;
-      list.listItems = objToArray(copyListItemInputs)
+      list.listItems = objToArray(copyListItemInputs);
       list.listItems.forEach(item => {
         item.timestamp = new Date();
       })
@@ -147,32 +147,22 @@ const ShoppingListDetailForm = (props) => {
     setFormSubmitted(true);
   }
 
-/*
-<SelectList value={listItemInputs[key].section} id={selectKey} 
-  options={sectionOptions} onChange={onChangeHandlerSelectSection} name={selectKey} />
-*/
-
   //renders all list items (text inp and select list)
   function renderForm() {
     let htmlResult = [];
 
     if (Object.keys(listItemInputs).length) {
       let key;
-      //let selectKey;
       for (let i = 0; i < 50; i++) {
         key = props.mode === 'add' ? `${KEY_BASE}${i.toString()}` : Object.keys(listItemInputs)[i];
-        //TODO fix later when I handle select value/id pairs
-        //selectKey = 'templateListItemSelect' + i.toString();
         let curInput =  listItemInputs[key];
 
-        //TODO add some way to indicate that the list items were purchased
         htmlResult.push(
           <li key={key} className="form-row-inline">
             <Checkbox checkboxVal={curInput.checked} onChangeHandler={inputChangeHandler} id={key}/>
             <InputText value={listItemInputs[key].name} placeholder="item name" 
               id={key} onChangeHandler={inputChangeHandler} name={key}
             />
-            
           </li>
         )
       }
@@ -184,47 +174,52 @@ const ShoppingListDetailForm = (props) => {
   function selectClickHandler(ev) {
     let parent = ev.target;
     let reactSelectInput;
+    let idStr;
 
     //case click the select element
     reactSelectInput = parent.querySelector('input');
     if (reactSelectInput && reactSelectInput.id) {
-      let idStr = reactSelectInput.id;
+      idStr = reactSelectInput.id;
       setCreateableSelectKey(idStr);  
     }
 
     //2 cases; either click the svg
-    if (parent.tagName === 'svg') {
+    else if (parent.tagName === 'svg') {
       if (parent.parentNode.parentNode.parentNode) {
         parent = parent.parentNode.parentNode.parentNode;
         reactSelectInput = parent.querySelector('input');
         if (reactSelectInput && reactSelectInput.id) {
-          let idStr = reactSelectInput.id;
+          idStr = reactSelectInput.id;
           setCreateableSelectKey(idStr);  
         }
       }
     }
 
     //case clicked parent of svg
-    if (parent.className && parent.className.indexOf('indicatorContainer') > -1) {
+    else if (parent.className && parent.className.indexOf('indicatorContainer') > -1) {
       if (parent.parentNode.parentNode) {
         parent = parent.parentNode.parentNode;
         reactSelectInput = parent.querySelector('input');
         if (reactSelectInput && reactSelectInput.id) {
-          let idStr = reactSelectInput.id;
+          idStr = reactSelectInput.id;
           setCreateableSelectKey(idStr);  
         }
       }
     }
+    console.log('idStr', idStr)
   }
 
   //methods specific to form using expiration notifications
   //react select
   function inputExpirationChangeHandler(newValue, actionMeta) {
     let val = newValue.value;
-    //let guid = mappedListItemsObj[val].guid;
+    let guid = mappedListItemsObj[val] && mappedListItemsObj[val].guid ? mappedListItemsObj[val].guid : null;
+    let name = !guid ? val : null;
     let selectKey = createableSelectKey;
-    let newListItemInput = {...listItemInputs[createableSelectKey], list_item_map_guid: mappedListItemsObj[val].guid}
-
+    let newListItemInput = {...listItemInputs[createableSelectKey], list_item_map_guid: guid, name}
+    let updatedListItemInputs = {...listItemInputs, 
+      [createableSelectKey]: newListItemInput
+    }
     setListItemInputs({...listItemInputs, 
       [createableSelectKey]: newListItemInput
     });
@@ -294,8 +289,15 @@ const ShoppingListDetailForm = (props) => {
       let curInput =  listItemInputs[key];
       let listItemMapGuid = curInput.list_item_map_guid;
       let value = undefined;
-      if (listItemMapGuid && props.mode === 'edit') {
-        let label = dictListItemMapGuidToListItemMapName[listItemMapGuid].name
+      if (props.mode === 'edit') {
+        let label;
+        if (listItemMapGuid) {
+          label = dictListItemMapGuidToListItemMapName[listItemMapGuid].name
+        } else {
+          console.log('gets here unmapped')
+          label = curInput.name;
+        }
+        
         value = {
           label,
           value: label
@@ -361,7 +363,6 @@ const ShoppingListDetailForm = (props) => {
             if (resp && resp.type !== 'error') {
               setListName(resp.listTemplate.name);
               let listItemInputsObj = resp.listTemplate.listItems.length ? resp.listTemplate.listItems : {};
-              //arrayToObj(resp.listTemplate.listItems)
               setListItemInputs(listItemInputsObj);
             }
           })
