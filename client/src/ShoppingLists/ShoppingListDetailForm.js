@@ -121,7 +121,7 @@ const ShoppingListDetailForm = (props) => {
       setListItemInputs(copyListItemInputs);
       list.name = listName;
       list.type = listType;
-      list.listItems = objToArray(copyListItemInputs)
+      list.listItems = objToArray(copyListItemInputs);
       list.listItems.forEach(item => {
         item.timestamp = new Date();
       })
@@ -221,10 +221,13 @@ const ShoppingListDetailForm = (props) => {
   //react select
   function inputExpirationChangeHandler(newValue, actionMeta) {
     let val = newValue.value;
-    //let guid = mappedListItemsObj[val].guid;
+    let guid = mappedListItemsObj[val] && mappedListItemsObj[val].guid ? mappedListItemsObj[val].guid : null;
+    let name = !guid ? val : null;
     let selectKey = createableSelectKey;
-    let newListItemInput = {...listItemInputs[createableSelectKey], list_item_map_guid: mappedListItemsObj[val].guid}
-
+    let newListItemInput = {...listItemInputs[createableSelectKey], list_item_map_guid: guid, name}
+    let updatedListItemInputs = {...listItemInputs, 
+      [createableSelectKey]: newListItemInput
+    }
     setListItemInputs({...listItemInputs, 
       [createableSelectKey]: newListItemInput
     });
