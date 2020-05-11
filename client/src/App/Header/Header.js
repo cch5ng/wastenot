@@ -59,8 +59,8 @@ const Header = (props) => {
               <ul className="submenu">
                 <li className="submenu-item"><Link to="/shoppingLists">Shopping Lists</Link></li>
                 <li className="submenu-item"><Link to="/shoppingLists/new">New List</Link></li>
-                <li className="submenu-item"><Link to="/settings/listTemplatesNew">New Template</Link></li>
                 <li className="submenu-item"><Link to="/settings/listTemplates">Templates</Link></li>
+                <li className="submenu-item"><Link to="/settings/listTemplatesNew">New Template</Link></li>
               </ul>
 
             </div>
@@ -106,16 +106,14 @@ const Header = (props) => {
               <ul className="submenu">
                 <li className="submenu-item"><Link to="/shoppingLists">Shopping Lists</Link></li>
                 <li className="submenu-item"><Link to="/shoppingLists/new">New List</Link></li>
-                <li className="submenu-item"><Link to="/settings/listTemplatesNew">New Template</Link></li>
                 <li className="submenu-item"><Link to="/settings/listTemplates">Templates</Link></li>
+                <li className="submenu-item"><Link to="/settings/listTemplatesNew">New Template</Link></li>
               </ul>
-
             </div>
           </div>
           <div className="menu-link-item">
             <div className="nav-heading"><Link to="/alerts">Alerts</Link></div>
           </div>
-
           <div className="menu-link-col">
             <div className="menu-link-item">
               <div className="nav-heading"><Link to="/settings">Settings</Link></div>
@@ -132,39 +130,6 @@ const Header = (props) => {
             <Link to="/support">Support</Link>
           </p>
         </div>
-
-
-
-
-        {/* <div className="menu-links">
-          <p className="menu-link-item">
-            <Link to="/shoppingLists">Shopping Lists</Link>
-          </p>
-          <p className="menu-link-item">
-            <Link to="/shoppingLists/new">New Shopping List</Link>
-          </p>
-          <p className="menu-link-item">
-            <Link to="/alerts">Alerts</Link>
-          </p>
-          <p className="menu-link-item menu-link-top">
-            <Link to="/settings">Settings</Link>
-          </p>
-          <p className="menu-link-item">
-            <Link to="/settings/expirationMapTest">Expiration Map Test</Link>
-          </p>
-          <p className="menu-link-item">
-            <Link to="/settings/listTemplatesNew">New Template</Link>
-          </p>
-          <p className="menu-link-item">
-            <Link to="/settings/listTemplates">Templates</Link>
-          </p>
-          <p className="menu-link-item menu-link-top">
-            <Link to="/about">About</Link>
-          </p>
-          <p className="menu-link-item">
-            <Link to="/support">Support</Link>
-          </p>
-        </div> */}
         <div className="menu-buttons">
           <div className="div-button log-in-button" onClick={logOutHandler} >Log Out</div>
         </div>
