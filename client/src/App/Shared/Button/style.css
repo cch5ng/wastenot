@@ -5,8 +5,6 @@
   padding: 0 5px;
   border-radius: 5px;
   border-style: none;
-  background-color: #6e614f;
-  color: #fff;
 }
 
 .button:hover {
@@ -44,6 +42,20 @@
   color: #4c4c4c;
 }
 
+.dark {
+  background-color: #6e614f;
+  color: #fff;
+}
+
+.light {
+  background-color: #b6b0a7;
+  color: #000;
+}
+
 .important {
   background-color: #F1665D;
+}
+
+.center {
+  text-align: center;
 }
