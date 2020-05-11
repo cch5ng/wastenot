@@ -8,6 +8,10 @@
   margin: 15px 15px;
 }
 
+.center {
+  text-align: center;
+}
+
 .list-no-style {
   list-style: none;
   /*padding-left: 8px;*/
@@ -26,7 +30,7 @@
 .row,
 .form-row-inline {
   display: flex;
-  flex-flow: row no-wrap;
+  flex-flow: row nowrap;
 }
 
 /* form */
