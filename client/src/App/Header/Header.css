@@ -113,6 +113,11 @@ a.title:active {
   padding: 16px 0;
 }
 
+.menu-link-top {
+  border-top: 1px solid #ccc;
+  padding-top: 16px 0;
+}
+
 .div-button {
   height: 22px;
   border: 1px solid #ccc;
@@ -141,8 +146,18 @@ a.title:active {
 
 .menu-link-item {
   padding-left: 12px;
+  font-size: 1.2em;
 }
 
+.menu-link-item:hover {
+  color: #1d6b63;
+  /* text-decoration: underline; */
+}
+
+ul.submenu {
+  list-style: none;
+  font-size: 1rem;
+}
 
 @media (min-width: 768px) {
 
@@ -172,10 +187,48 @@ a.title:active {
 
   .menu-links-medium {
     display: flex;
-    flex-flow: row no-wrap;
-    width: 50%;
+    flex-flow: row nowrap;
+    width: 70%;
     margin: 20px auto 0;
     justify-content: center;
+  }
+
+  .menu-link-item {
+    padding: 0 30px;
+  }
+
+  .menu-link-col .menu-link-item ul.submenu {
+    visibility: hidden;
+    opacity: 0;
+    position: relative;
+    z-index: 10;
+    transition: all 0.5s ease;
+    margin-top: 1.2rem;
+    left: 0;
+    width: 100%;
+    background-color: #9deae2;
+    padding: 0 25px 0 10px;
+    text-decoration: none;
+    /* padding-left: 5px; */
+    display: none;
+  }
+
+  .menu-link-col .menu-link-item:hover ul.submenu,
+  .menu-link-col .menu-link-item ul.submenu:hover {
+    visibility: visible;
+    opacity: 1;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: start;
+  }
+
+  .submenu-item:hover {
+    text-decoration: underline;
+  }
+
+  .submenu-item {
+    text-align: left;
+    /* padding-left: 30px; */
   }
 
 
