@@ -96,8 +96,9 @@ const Alerts = (props) => {
                 (<div>
                     <p>{alert.name} will expire on {alert.notify_timestamp}</p>
                     <Button onClickHandler={handlePostponeAlert} label="Postpone (1 day)" classVal={alert.guid}
-                        size="medium" />
-                    <Button onClickHandler={handleCancelAlert} label="Cancel alert" classVal={alert.guid}/>
+                        size="medium" color="light" />
+                    <Button onClickHandler={handleCancelAlert} label="Cancel alert" classVal={alert.guid}
+                         color="light"/>
                 </div>)
             )}
 
