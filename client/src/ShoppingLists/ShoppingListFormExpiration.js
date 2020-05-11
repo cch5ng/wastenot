@@ -13,7 +13,7 @@ import { render } from 'react-dom';
 const ShoppingListFormExpiration = (props) => {
     const { title, formSubmitHandler, listName, inputChangeHandler, onClickHandler, renderForm, setNotificationClickHandler } = props;
     return (
-        <div>TODO ShoppingListFormExpiration
+        <div>
             <h3>{title}</h3>
             <div>
                 <Button classVal="listDetailFormSaveBtn" onClickHandler={formSubmitHandler} label="Save" />
