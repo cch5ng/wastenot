@@ -35,7 +35,7 @@ const Settings = (props) => {
 
   //reformat the data source for consumption by react select
   return (
-    <div>
+    <div className="main center">
       <h1>Application Settings</h1>
       <form>
         <Select
@@ -44,7 +44,7 @@ const Settings = (props) => {
           options={dbTimezoneAr}
         />
 
-        <Button label="Save" onClickHandler={formSubmitHandler} />
+        <Button label="Save" onClickHandler={formSubmitHandler} size="medium" />
       </form>
     </div>
   )
