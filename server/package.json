@@ -9,8 +9,8 @@
   "scripts": {
     "start": "node ./bin/server",
     "dev": "nodemon ./bin/server",
-    "configure": "./bin/configure_db.sh && node seed_db.js",
-    "configure-dev": "yarn run configure && yarn run dev",
+    "configure": "./bin/configure_db.sh",
+    "configure-dev": "npm run configure && npm run dev",
     "test": "jest"
   },
   "license": "MIT",
