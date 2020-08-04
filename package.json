@@ -1,7 +1,9 @@
 {
   "name": "wastenot",
   "version": "1.0.0",
-  "engines" : { "node" : ">=8.12.0" }, 
+  "engines": {
+    "node": ">=8.12.0"
+  },
   "main": "index.js",
   "license": "MIT"
 }
