@@ -28,7 +28,7 @@
     "jsonwebtoken": "^8.5.1",
     "pg": "^7.12.1",
     "uuid": "^3.3.3",
-    "web-push": "^3.4.3"
+    "web-push": "^3.4.4"
   },
   "devDependencies": {
     "jest": "^24.9.0",
