@@ -16,12 +16,7 @@ router.post('/register', (req, res, next) => {
   AuthTable.getAccount({ emailHash })
     .then(({ account }) => {
       if (!account) {
-        //Promise.all([
-          return AuthTable.storeAccount({ emailHash, passwordHash })
-          //TODO fix how to send parameter
-          //SettingTable.storeMappedItemsSetting()
-        //])
-    
+        return AuthTable.storeAccount({ emailHash, passwordHash })    
       } else {
         let error = new Error('This user already exists.');
         error.statusCode = 409;
