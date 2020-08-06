@@ -15,6 +15,7 @@ router.post('/register', (req, res, next) => {
 
   AuthTable.getAccount({ emailHash })
     .then(({ account }) => {
+      console.log('account', account)
       if (!account) {
         return AuthTable.storeAccount({ emailHash, passwordHash })    
       } else {
