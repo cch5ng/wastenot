@@ -1,14 +1,6 @@
-//const { Pool } = require('pg');
-//const db = require('../../db');
 const uuidv4 = require('uuid/v4');
 const { hash } = require('./helper');
 const pool = require('../../databasePool');
-
-// require('dotenv').config()
-// const connectionString = `postgresql://${process.env.PGUSER}:${process.env.PGPASSWORD}@${process.env.PGHOST}:${process.env.PGPORT}/${process.env.PGDATABASE}`;
-// const pool = new Pool({
-//   connectionString,
-// })
 
 class AuthTable {
   static storeAccount({ emailHash, passwordHash }) {
@@ -73,10 +65,7 @@ class AuthTable {
   }
 
   static getAccount({ emailHash }) {
-    console.log('gets here')
-    console.log('pool', pool)
     return new Promise((resolve, reject) => {
-      //db.query(
       pool.query(
         `SELECT id, "passwordHash", "sessionId" from wastenot_user WHERE "emailHash"=$1`,
         [emailHash],
