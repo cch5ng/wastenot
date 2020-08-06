@@ -1,8 +1,12 @@
 const { Pool } = require('pg');
-let databaseConfiguration = {}
-let connectionString;
+require('dotenv').config()
 
-const pool = new Pool()
+const connectionString = `postgresql://${process.env.PGHOST}:${process.env.PGPORT}/${process.env.PGDATABASE}`;
+
+const pool = new Pool({
+ connectionString,
+})
+//const pool = new Pool();
 
 //if (process.env.NODE_ENV === 'production') {
 //	connectionString = process.env.DATABASE_URL;
