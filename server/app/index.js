@@ -34,10 +34,12 @@ app.use(function(req, res, next) {
 //app.use(cors({ origin: allowed, credentials: true }));
 app.use(bodyParser.json());
 app.use(cookieParser());
+
 app.use('/api/list', listRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/setting', settingRouter);
 app.use('/api/listItemMap', listItemMapRouter);
+
 app.use((err, req, res, next) => {
 	const statusCode = err.statusCode || 500;
 
