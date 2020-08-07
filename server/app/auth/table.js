@@ -1,12 +1,14 @@
 const uuidv4 = require('uuid/v4');
 const { hash } = require('./helper');
-const pool = require('../../databasePool');
+//const db = require('../../db');
+
+const db = require('../../databasePool');
 
 class AuthTable {
   static storeAccount({ emailHash, passwordHash }) {
     let guid = uuidv4();
     return new Promise((resolve, reject) => {
-      pool.query(
+      db.query(
         `INSERT INTO wastenot_user ("emailHash", "passwordHash", guid) VALUES ($1, $2, $3) RETURNING id`,
         [emailHash, passwordHash, guid],
         (error, response) => {
@@ -23,7 +25,7 @@ class AuthTable {
 
   static storePushSubscription({ emailHash, pushSubscription }) {
     return new Promise((resolve, reject) => {
-      pool.query(
+      db.query(
         `UPDATE wastenot_user SET push_subscription=$1 WHERE "emailHash"=$2`,
         [pushSubscription, emailHash],
         (error, response) => {
@@ -36,7 +38,7 @@ class AuthTable {
 
   static deletePushSubscription({ emailHash }) {
     return new Promise((resolve, reject) => {
-      pool.query(
+      db.query(
         `UPDATE wastenot_user SET push_subscription=null WHERE "emailHash"=$1`,
         [emailHash],
         (error, response) => {
@@ -49,7 +51,7 @@ class AuthTable {
 
   static getPushSubscription({ emailHash }) {
     return new Promise((resolve, reject) => {
-      pool.query(
+      db.query(
         `SELECT push_subscription FROM wastenot_user WHERE "emailHash"=$1`,
         [emailHash],
         (error, response) => {
@@ -65,22 +67,25 @@ class AuthTable {
   }
 
   static getAccount({ emailHash }) {
+    console.log('gets here')
+    console.log('db', db)
     return new Promise((resolve, reject) => {
-      pool.query(
+      db.query(
         `SELECT id, "passwordHash", "sessionId" from wastenot_user WHERE "emailHash"=$1`,
         [emailHash],
         (error, response) => {
-          if (error) console.error('Error trying to check redundant registration', error);
-
-          resolve({ account: response.rows[0] })
+          if (error) return reject(error);
+          if (response.rows) {
+           resolve({ account: response.rows[0] })
+          }
         }
       )
-    })
+    //})
   }
 
   static updateSessionId({ sessionId, emailHash }) {
     return new Promise((resolve, reject) => {
-      pool.query(
+      db.query(
         `UPDATE wastenot_user SET "sessionId"=$1 WHERE "emailHash"=$2`,
         [sessionId, emailHash],
         (error, response) => {
@@ -93,7 +98,7 @@ class AuthTable {
 
   static isAuthenticated({ sessionId, emailHash }) {
     return new Promise((resolve, reject) => {
-      pool.query(
+      db.query(
         `SELECT id, "emailHash", "sessionId" from wastenot_user WHERE ("emailHash"=$2 AND "sessionId"=$1)`,
         [sessionId, emailHash],
         (error, response) => {
@@ -107,7 +112,7 @@ class AuthTable {
   //doublecheck where user_id is currently stored
   static storeUserTimezone({ timezone, emailHash }) {
     return new Promise((resolve, reject) => {
-      pool.query(
+      db.query(
         `UPDATE wastenot_user SET time_zone=$1 WHERE "emailHash"=$2`,
         [timezone, emailHash],
         (error, response) => {
@@ -121,7 +126,7 @@ class AuthTable {
   //doublecheck where user_id is currently stored
   static getUserTimezone({ emailHash }) {
     return new Promise((resolve, reject) => {
-      pool.query(
+      db.query(
         `SELECT time_zone FROM wastenot_user WHERE "emailHash"=$1`,
         [emailHash],
         (error, response) => {
