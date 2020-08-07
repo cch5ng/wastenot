@@ -80,7 +80,7 @@ class AuthTable {
           }
         }
       )
-    //})
+    })
   }
 
   static updateSessionId({ sessionId, emailHash }) {
