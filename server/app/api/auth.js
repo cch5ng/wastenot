@@ -1,7 +1,4 @@
 const { Router } = require('express');
-//const Router = require('express-promise-router');
-const db = require('../../db');
-
 const AuthTable = require('../auth/table');
 const SettingTable = require('../setting/table');
 const Session = require('../auth/Session');
@@ -27,7 +24,6 @@ router.post('/register', (req, res, next) => {
       }
     })
     .then(resp => {
-      console.log('resp', resp)
       SettingTable.storeMappedItemsSetting({user_id: resp.userId})
     })
     .then(() => {
