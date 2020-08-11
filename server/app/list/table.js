@@ -13,7 +13,6 @@ class ListTable {
           if (error) return reject(error);
           if (response.rows.length) {
             const listId = response.rows[0].id;
-
             Promise.all(
               listItems.map(({ name, sortOrder }) => {
                 let list_item_guid = uuidv4();
@@ -45,7 +44,6 @@ class ListTable {
           if (error) return reject(error);
           if (response.rows.length) {
             const listId = response.rows[0].id;
-
             Promise.all(
               listItems.map(({ name, sortOrder, checked, list_item_map_guid, timestamp, notify_timestamp }) => {
                 let list_item_guid = uuidv4();
