@@ -1,33 +1,10 @@
 const { Pool } = require('pg');
-require('dotenv').config()
-
-//const connectionString = `postgresql://${process.env.PGHOST}:${process.env.PGPORT}/${process.env.PGDATABASE}`;
-
-const pool = new Pool({
-	user: process.env.PGUSER,
-  host: process.env.PGHOST,
-  database: process.env.PGDATABASE,
-  //password: process.env.PGPASSWORD,
-	port: process.env.PGPORT,
-	max: 20,
-  idleTimeoutMillis: 30000,
-  connectionTimeoutMillis: 2000,
-})
-//const pool = new Pool();
-
-//if (process.env.NODE_ENV === 'production') {
-//	connectionString = process.env.DATABASE_URL;
-//	pool = new Pool({ connectionString });
-//} else {
-	//databaseConfiguration = require('./secrets/databaseConfiguration');
-//	pool = new Pool(); //databaseConfiguration
-//}
-
-//module.exports = pool;
-
+require('dotenv').config();
+const connectionString = `postgresql://${process.env.PGHOST}:${process.env.PGPORT}/${process.env.PGDATABASE}`;
+const pool = new Pool(connectionString);
 module.exports = {
   query: (text, params, callback) => {
-		const start = Date.now()
+    const start = Date.now()
     return pool.query(text, params, (err, res) => {
       const duration = Date.now() - start
       console.log('executed query', { text, duration, rows: res.rowCount })
