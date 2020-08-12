@@ -26,10 +26,7 @@ class ListItemMapTable {
         [user_id],
         (error, response) => {
           if (error) return reject(error);
-          console.log('response', response)
-          if (response.rows.length) {
-            resolve(response.rows);
-          }
+          resolve(response);
         }
       )
     })
