@@ -46,11 +46,11 @@ router.post('/', (req, res, next) => {
       if (resp) {
         ListItemMapTable.getMappedListItemsByUserId({ user_id: resp.account.id })
           .then(resp2 => {
-            console.log('resp2', resp2)
-            // let names = resp.map(nameObj => {
-            //     return nameObj.name;
-            // });
-            res.json(resp2);
+            if (resp2 && resp2.rows) {
+              res.json({mapped_list_items: resp2.rows});
+            } else {
+              res.json({mapped_list_items: []});
+            }
           })
           .catch(err => next(err));
       } else {
