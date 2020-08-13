@@ -296,7 +296,13 @@ router.post('/notifications', (req, res, next) => {
     .then(resp => {
       if (resp) {
         ListItemTable.getRecentNotificationsByEmail(emailHash)
-          .then(resp => res.json(resp))
+          .then(resp => {
+            if (resp.rows.length) {
+              res.status(200).json({notifications: resp.rows, message: 'Notifications were successfully retrieved.'})
+            } else {
+              res.status(200).json({notifications: [], message: 'No notifications were found.'})
+            }
+          })
           .catch(err => next(err))
       } else {
         let error = new Error('User is not logged in.');
