@@ -174,8 +174,8 @@ class ListItemTable {
         [emailHash, notification_sent, lastWeekTimestamp, nextDayTimestamp],
         (error, response) => {
           if (error) return reject(error);
-          if (response.rows.length) {
-            resolve({notifications: response.rows});
+          if (response) {
+            resolve(response);
           }
         }
       )
