@@ -112,7 +112,7 @@ router.post('/listDetail/:listGuid', (req, res, next) => {
               listTemplate = {...listTemplate, ...obj}
             })
             listTemplate.guid = listGuid;
-            res.json({ listTemplate, message: 'list was successfully retrieved' });
+            res.status(200).json({ listTemplate, message: 'List was successfully retrieved', type: 'success' });
           })
           .catch(err => next(err));
       } else {
@@ -131,7 +131,6 @@ router.put('/listDetail/:listGuid', (req, res, next) => {
   let cookieStr = req.body.cookieStr;
   let { email, id } = Session.parse(cookieStr);
   let emailHash = hash(email);
-
 
   AuthTable.isAuthenticated({ sessionId: id, emailHash })
     .then(resp => {
@@ -298,9 +297,11 @@ router.post('/notifications', (req, res, next) => {
         ListItemTable.getRecentNotificationsByEmail(emailHash)
           .then(resp => {
             if (resp.rows.length) {
-              res.status(200).json({notifications: resp.rows, message: 'Notifications were successfully retrieved.'})
+              res.status(200)
+                .json({notifications: resp.rows, message: 'Notifications were successfully retrieved.', type: 'success'})
             } else {
-              res.status(200).json({notifications: [], message: 'No notifications were found.'})
+              res.status(200)
+                .json({notifications: [], message: 'No notifications were found.', type: 'success'})
             }
           })
           .catch(err => next(err))
