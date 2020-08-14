@@ -15,7 +15,6 @@ class AuthTable {
           if (error) return reject(error);
           if (response.rows.length) {
             const userId = response.rows[0].id;
-            console.log('userId', userId)
             resolve({ userId });
           }
         }
@@ -30,7 +29,7 @@ class AuthTable {
         [pushSubscription, emailHash],
         (error, response) => {
           if (error) return reject(error);
-            resolve({ message: 'user acct was updated with pushSubscription' });
+          resolve({ message: 'user acct was updated with pushSubscription' });
         }
       )
     })
@@ -43,7 +42,7 @@ class AuthTable {
         [emailHash],
         (error, response) => {
           if (error) return reject(error);
-            resolve({ message: 'user acct was updated where pushSubscription was removed' });
+          resolve({ message: 'user acct was updated where pushSubscription was removed' });
         }
       )
     })
