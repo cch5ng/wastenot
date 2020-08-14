@@ -40,11 +40,7 @@ class SettingTable {
             [user_id],
             (error, response) => {
               if (error) return reject(error);
-              resolve({ message: 'setting was updated' })
-              // if (response.rows.length) {
-              //   const mapped_items_to_categories = response.rows[0].mapped_items_to_categories;
-              //   resolve({ mapped_items_to_categories });
-              // }
+              resolve({ type: 'success', message: 'Mapping for shopping list to expiration dates setting was updated' })
             }
         )
     })
