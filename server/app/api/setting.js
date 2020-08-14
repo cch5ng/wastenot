@@ -16,7 +16,7 @@ router.post('/listItemMapping', (req, res, next) => {
       .then(resp => {
         if (resp) {
           SettingTable.getListItemMapping({ user_id: resp.account.id })
-            .then(resp => res.json(resp))
+            .then(resp => res.status(200).json(resp))
             .catch(err => next(err));
          } else {
            let error = new Error('User is not logged in.');
