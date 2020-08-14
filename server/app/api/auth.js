@@ -109,7 +109,7 @@ router.put('/settings/timezone', (req, res, next) => {
     AuthTable.storeUserTimezone( { timezone, emailHash })
       .then(resp => {
         if (resp) {
-          res.json(resp)
+          res.status(201).json(resp)
         } else {
           error = new Error('Invalid session');
           error.statusCode = 400;
@@ -136,7 +136,7 @@ router.post('/settings/timezone', (req, res, next) => {
     AuthTable.getUserTimezone( { emailHash })
       .then((resp) => {
         if (resp.time_zone) {
-          res.json(resp)
+          res.status(200).json(resp)
         } else {
           error = new Error('Invalid session');
           error.statusCode = 400;
