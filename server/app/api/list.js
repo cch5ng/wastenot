@@ -17,7 +17,7 @@ router.post('/templateLists/add', (req, res, next) => {
     .then(resp => {
       if (resp) {
         ListTable.storeList({name, type, listItems, owner_id: resp.account.id})
-          .then(resp => res.json(resp))
+          .then(resp => res.status(201).json(resp))
           .catch(err => next(err));
        } else {
          let error = new Error('User is not logged in.');
@@ -37,7 +37,7 @@ router.post('/shoppingLists/add', (req, res, next) => {
     .then(resp => {
       if (resp) {
         ListTable.storeShoppingList({name, type, listItems, owner_id: resp.account.id})
-          .then(resp => res.json(resp))
+          .then(resp => res.status(201).json(resp))
           .catch(err => next(err));
        } else {
          let error = new Error('User is not logged in.');
@@ -80,7 +80,7 @@ router.post('/templateLists', (req, res, next) => {
     .then(resp => {
       if (resp) {
         ListTable.getListsByType({ listType: 'template', owner_id: resp.account.id })
-          .then(lists => res.json(lists))
+          .then(lists => res.status(200).json(lists))
           .catch(err => next(err));
       } else {
         let error = new Error('User is not logged in.');
@@ -112,7 +112,7 @@ router.post('/listDetail/:listGuid', (req, res, next) => {
               listTemplate = {...listTemplate, ...obj}
             })
             listTemplate.guid = listGuid;
-            res.json({ listTemplate, message: 'list was successfully retrieved' });
+            res.status(200).json({ listTemplate, message: 'List was successfully retrieved', type: 'success' });
           })
           .catch(err => next(err));
       } else {
@@ -131,7 +131,6 @@ router.put('/listDetail/:listGuid', (req, res, next) => {
   let cookieStr = req.body.cookieStr;
   let { email, id } = Session.parse(cookieStr);
   let emailHash = hash(email);
-
 
   AuthTable.isAuthenticated({ sessionId: id, emailHash })
     .then(resp => {
@@ -296,7 +295,15 @@ router.post('/notifications', (req, res, next) => {
     .then(resp => {
       if (resp) {
         ListItemTable.getRecentNotificationsByEmail(emailHash)
-          .then(resp => res.json(resp))
+          .then(resp => {
+            if (resp.rows.length) {
+              res.status(200)
+                .json({notifications: resp.rows, message: 'Notifications were successfully retrieved.', type: 'success'})
+            } else {
+              res.status(200)
+                .json({notifications: [], message: 'No notifications were found.', type: 'success'})
+            }
+          })
           .catch(err => next(err))
       } else {
         let error = new Error('User is not logged in.');

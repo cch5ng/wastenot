@@ -1,12 +1,12 @@
 const uuidv4 = require('uuid/v4');
-const pool = require('../../databasePool');
+const db = require('../../databasePool');
 const { section_name_to_id } = require('../utils/constants');
 
 class ListItemTable {
   // list items for template list
   static storeListItem({ name, list_guid, list_item_guid, sortOrder }) {
     return new Promise((resolve, reject) => {
-      pool.query(
+      db.query(
         `INSERT INTO list_item (name, list_guid, guid, sort_order) VALUES ($1, $2, $3, $4) RETURNING list_guid`,
         [name, list_guid, list_item_guid, sortOrder],
         (error, response) => {
@@ -21,13 +21,13 @@ class ListItemTable {
 
   static storeShoppingListItem({ name, list_guid, list_item_guid, sortOrder, checked, list_item_map_guid, timestamp, notify_timestamp, notification_sent }) {
     return new Promise((resolve, reject) => {
-      pool.query(
+      db.query(
         `INSERT INTO list_item (name, list_guid, guid, sort_order, checked, list_item_map_guid, timestamp, notify_timestamp, notification_sent) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING list_guid`,
         [name, list_guid, list_item_guid, sortOrder, checked, list_item_map_guid, timestamp, notify_timestamp, notification_sent],
         (error, response) => {
           if (error) return reject(error);
           if (response.rows.length) {
-            resolve({ list_guid });
+            resolve(response);
           }
         }
       )
@@ -37,7 +37,7 @@ class ListItemTable {
   //probably want to get everything like name plus the list items
   static getListItemsByListGuid({ listGuid }) {
     return new Promise((resolve, reject) => {
-      pool.query(
+      db.query(
         `SELECT list_item.guid, list_item.name, list_item.sort_order, list_item.list_guid, list_item.checked, list_item.list_item_map_guid from list_item WHERE list_guid = $1 ORDER BY list_item.sort_order`,
         [listGuid],
         (error, response) => {
@@ -53,7 +53,7 @@ class ListItemTable {
   static updateListItem({ name, guid, sort_order}) {
     //const { guid, name, sort_order } = listItem;
     return new Promise((resolve, reject) => {
-      pool.query(
+      db.query(
         `UPDATE list_item SET name = $2, sort_order = $3 WHERE guid = $1 RETURNING guid`,
         [guid, name, sort_order],
         (error, response) => {
@@ -68,7 +68,7 @@ class ListItemTable {
 
   static updateShoppingListItem({ name, guid, sort_order, checked, list_item_map_guid, timestamp, notify_timestamp, notification_sent }) {
     return new Promise((resolve, reject) => {
-      pool.query(
+      db.query(
         `UPDATE list_item SET name=$2, sort_order=$3, checked=$4, list_item_map_guid=$5, timestamp=$6, notify_timestamp=$7, notification_sent=$8 WHERE guid = $1 RETURNING guid`,
         [guid, name, sort_order, checked, list_item_map_guid, timestamp, notify_timestamp, notification_sent],
         (error, response) => {
@@ -103,7 +103,7 @@ class ListItemTable {
   static updateNotificationSent({ id }) {
     return new Promise((resolve, reject) => {
       const notification_sent = true;
-      pool.query(
+      db.query(
         `UPDATE list_item SET notification_sent=$1 WHERE id = $2 RETURNING id`,
         [notification_sent, id],
         (error, response) => {
@@ -120,7 +120,7 @@ class ListItemTable {
 
   static deleteListItemByItemGuid(itemGuid) {
     return new Promise((resolve, reject) => {
-      pool.query(
+      db.query(
         `DELETE from list_item WHERE guid = $1 RETURNING guid`,
         [itemGuid],
         (error, response) => {
@@ -141,7 +141,7 @@ class ListItemTable {
 
   static deleteListItemByListGuid(guid) {
     return new Promise((resolve, reject) => {
-      pool.query(
+      db.query(
         `DELETE from list_item WHERE list_guid = $1 RETURNING guid`,
         [guid],
         (error, response) => {
@@ -163,7 +163,7 @@ class ListItemTable {
     let nextDayTimestamp = new Date(curTimestampMs);
     nextDayTimestamp.setDate(nextDayTimestamp.getDate() + 1);
     return new Promise((resolve, reject) => {
-      pool.query(
+      db.query(
         `SELECT lim.name, li.notify_timestamp, li.guid
          FROM wastenot_user u, list_item_map lim, list_item li
          WHERE u.id=lim.user_id AND u."emailHash"=$1 AND lim.guid=li.list_item_map_guid
@@ -174,8 +174,8 @@ class ListItemTable {
         [emailHash, notification_sent, lastWeekTimestamp, nextDayTimestamp],
         (error, response) => {
           if (error) return reject(error);
-          if (response.rows.length) {
-            resolve({notifications: response.rows});
+          if (response) {
+            resolve(response);
           }
         }
       )
@@ -184,7 +184,7 @@ class ListItemTable {
 
   static putPostponeNotificationByListItemId(timestamp, guid) {
     return new Promise((resolve, reject) => {
-      pool.query(
+      db.query(
         `UPDATE list_item SET notify_timestamp=$1
          WHERE guid=$2 RETURNING guid, notify_timestamp`,
         [timestamp, guid],
@@ -205,7 +205,7 @@ class ListItemTable {
   static putCancelNotificationByListItemId(guid) {
     const notification_sent = true;
     return new Promise((resolve, reject) => {
-      pool.query(
+      db.query(
         `UPDATE list_item SET notification_sent=$1
          WHERE guid=$2 RETURNING guid`,
         [notification_sent, guid],

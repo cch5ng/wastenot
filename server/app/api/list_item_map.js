@@ -16,7 +16,6 @@ router.post('/add', (req, res, next) => {
         if (resp) {
           Promise.all(
             listItemMaps.map(listItemMap => {
-              //let list_item_guid = uuidv4();
               return ListItemMapTable.storeListItemMap({ listItemMap, user_id: resp.account.id })
             })
           )
@@ -24,7 +23,11 @@ router.post('/add', (req, res, next) => {
               let names = resp.map(nameObj => {
                   return nameObj.name;
               });
-              res.json({ names });
+              res.status(201).json({ 
+                                    names,
+                                    type: 'success',
+                                    message: 'Shopping list items were mapped to expiration dates'
+                                   });
             })
             .catch(err => next(err));
         } else {
@@ -46,11 +49,11 @@ router.post('/', (req, res, next) => {
       if (resp) {
         ListItemMapTable.getMappedListItemsByUserId({ user_id: resp.account.id })
           .then(resp2 => {
-            console.log('resp2', resp2)
-            // let names = resp.map(nameObj => {
-            //     return nameObj.name;
-            // });
-            res.json(resp2);
+            if (resp2 && resp2.rows) {
+              res.status(200).json({mapped_list_items: resp2.rows, type: 'success', message: 'User has mapped shopping list to expiration dates.'});
+            } else {
+              res.status(200).json({mapped_list_items: [], type: 'success', message: 'User has not mapped shopping list to expiration dates.'});
+            }
           })
           .catch(err => next(err));
       } else {
