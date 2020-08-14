@@ -17,7 +17,7 @@ router.post('/templateLists/add', (req, res, next) => {
     .then(resp => {
       if (resp) {
         ListTable.storeList({name, type, listItems, owner_id: resp.account.id})
-          .then(resp => res.json(resp))
+          .then(resp => res.status(201).json(resp))
           .catch(err => next(err));
        } else {
          let error = new Error('User is not logged in.');
@@ -37,7 +37,7 @@ router.post('/shoppingLists/add', (req, res, next) => {
     .then(resp => {
       if (resp) {
         ListTable.storeShoppingList({name, type, listItems, owner_id: resp.account.id})
-          .then(resp => res.json(resp))
+          .then(resp => res.status(201).json(resp))
           .catch(err => next(err));
        } else {
          let error = new Error('User is not logged in.');
