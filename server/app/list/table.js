@@ -78,8 +78,11 @@ class ListTable {
           let key = listType === 'template' ? 'listTemplates' : 'shoppingLists';
           if (response.rows.length === 0) {
             message = 'No lists were found.'
+          } else {
+            let type = key === 'listTemplates' ? 'List templates': 'Shopping lists';
+            message = `${type} were retrieved.`
           }
-          resolve({[key]: response.rows, message});
+          resolve({[key]: response.rows, message, status: 'success'});
         }
       )
     })
