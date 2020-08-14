@@ -2,6 +2,7 @@ const db = require('../../databasePool');
 const uuidv4 = require('uuid/v4');
 const ListItemTable = require('../list_item/table');
 
+//stores template list
 class ListTable {
   static storeList({ name, type, listItems, owner_id }) {
     let list_guid = uuidv4();
@@ -21,7 +22,7 @@ class ListTable {
             )
               .then(() => {
                 resolve(
-                  { message: `templateList with guid, ${list_guid}, was added`,
+                  { message: `A template list with guid, ${list_guid}, was added.`,
                     listTemplate: {[list_guid]: { name, type, listItems } },
                     type: 'success'
                   }
@@ -53,7 +54,7 @@ class ListTable {
             )
               .then(() => {
                 resolve(
-                  { message: `templateList with guid, ${list_guid}, was added`,
+                  { message: `A shopping list with guid, ${list_guid}, was added.`,
                     shoppingList: {[list_guid]: { name, type, listItems } },
                     type: 'success'
                   }
