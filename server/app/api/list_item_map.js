@@ -50,9 +50,9 @@ router.post('/', (req, res, next) => {
         ListItemMapTable.getMappedListItemsByUserId({ user_id: resp.account.id })
           .then(resp2 => {
             if (resp2 && resp2.rows) {
-              res.json({mapped_list_items: resp2.rows});
+              res.status(200).json({mapped_list_items: resp2.rows, type: 'success', message: 'User has mapped shopping list to expiration dates.'});
             } else {
-              res.json({mapped_list_items: []});
+              res.status(200).json({mapped_list_items: [], type: 'success', message: 'User has not mapped shopping list to expiration dates.'});
             }
           })
           .catch(err => next(err));
