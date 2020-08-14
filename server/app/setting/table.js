@@ -26,7 +26,7 @@ class SettingTable {
               if (error) return reject(error);
               if (response.rows.length) {
                 const mapped_items_to_categories = response.rows[0].mapped_items_to_categories;
-                resolve({ mapped_items_to_categories });
+                resolve({ mapped_items_to_categories, type: 'success', message: 'Retrieved status for shopping list items mapped to expiration dates.' });
               }
             }
         )
