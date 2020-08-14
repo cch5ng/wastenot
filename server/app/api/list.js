@@ -80,7 +80,7 @@ router.post('/templateLists', (req, res, next) => {
     .then(resp => {
       if (resp) {
         ListTable.getListsByType({ listType: 'template', owner_id: resp.account.id })
-          .then(lists => res.json(lists))
+          .then(lists => res.status(200).json(lists))
           .catch(err => next(err));
       } else {
         let error = new Error('User is not logged in.');
