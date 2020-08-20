@@ -12,11 +12,10 @@ class AuthForm extends Component {
     super(props);
     this.state = {
       email: '',
-      password: ''
+      password: '',
+      passwordConfirm: '',
+      inputValidationErrors: [],
     }
-  }
-
-  componentDidMount() {
   }
 
   updateInput = ev => {
@@ -26,8 +25,9 @@ class AuthForm extends Component {
   }
 
   logInBtnClick = (ev) => {
-    const { email, password } = this.state;
     ev.preventDefault();
+    const { email, password } = this.state;
+    this.validateEmail();
     this.props.login({ email, password });
   }
 
@@ -37,9 +37,65 @@ class AuthForm extends Component {
   }
 
   signInBtnClick = (ev) => {
-    const { email, password } = this.state;
     ev.preventDefault();
+    const { email, password, passwordConfirm } = this.state;
+    //email errors
+    const emailErrors = ['Email is required.', 'Email must be valid. Please check spelling and try again.'];
+    //password errors
+    const passwordErrors = ['Password and confirmation password values are required.', 
+      'Password and confirmation password must be at least 8 characters long, contain one lower-case letter, contain one upper-case letter, contain one number, and container one special character (!, @, #, $, %, ^, &, *, or -).',
+      'Password and confirmation password values must match.']
+    this.setState({inputValidationErrors: []}); //clear old errors
+    if (!this.isEmailValid() && !this.isPasswordValid()) {
+      let combinedErrors = emailErrors.concat(passwordErrors);
+      this.setState({inputValidationErrors: combinedErrors});
+      return;
+    } else if (!this.isEmailValid()) {
+      this.setState({inputValidationErrors: emailErrors});
+      return;
+    } else if (!this.isPasswordValid()) {
+      this.setState({inputValidationErrors: passwordErrors});
+      return;
+    }
     this.props.register({ email, password });
+  }
+
+  isEmailValid = () => {
+    const {email} = this.state;
+    //valid email is not empty
+    if (!email.length) {
+      return false;
+    }
+    //validate email valid
+    const regex = /^(?=.*?[A-Za-z])(?=.*?[@])(?=.*?[\.]).{6,}$/gm
+    return this.doesStrMatchPattern(email, regex);
+  }
+
+  isPasswordValid = () => {
+    const {password, passwordConfirm} = this.state;
+    //validate password is not empty
+    if (!password.length || !passwordConfirm.length) {
+      return false;
+    }
+    //validate password and passwordConfirm match
+    if (password !== passwordConfirm) {
+      return false;
+    }
+
+    //validate password and passwordConfirm valid
+    const regex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/gm
+    if (!this.doesStrMatchPattern(password, regex) || !this.doesStrMatchPattern(passwordConfirm, regex)) {
+      return false;
+    }
+    return true;
+  }
+
+  doesStrMatchPattern(str, pattern) {
+    let matcher = str.match(pattern);
+    if (matcher && matcher.length && matcher[0] === str) {
+      return true;
+    }
+    return false;
   }
 
   get Error() {
@@ -59,6 +115,14 @@ class AuthForm extends Component {
         <form>
           {this.Error}
 
+          {this.state.inputValidationErrors.length > 0 && (
+            <ul>
+              {this.state.inputValidationErrors.map(err => {
+                return (<li>{err}</li>)
+              })}
+            </ul>
+          )}
+
           <InputText
             name="email" id="email"
             value={this.state.email}
@@ -71,7 +135,16 @@ class AuthForm extends Component {
             placeholder="password"
             onChange={this.updateInput} />
           <div />
-
+          {this.props.title === 'Sign Up' && (
+            <React.Fragment>
+              <input type="password"
+                name="passwordConfirm"
+                value={this.state.passwordConfirm}
+                placeholder="confirm password"
+                onChange={this.updateInput} />
+              <div />
+            </React.Fragment>
+          )}
           {this.props.title === 'Login' && (
             <Button label="Log In" onClickHandler={this.logInBtnClick} />
           )}
