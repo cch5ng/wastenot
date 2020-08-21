@@ -31,7 +31,7 @@ router.post('/register', (req, res, next) => {
       return setSession({ email, res});      
     })
     .then(({ message, cookie }) => {
-      res.json({ message, cookie }) //reusing the message returned from setSession
+      res.status(201).json({ message, cookie }) //reusing the message returned from setSession
     })
     .catch(error => next(error));
 });

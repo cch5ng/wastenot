@@ -2,6 +2,7 @@
   height: 25px;
   font-size: 14px;
   margin: 12px;
+  margin-left: 5%;
   padding: 0 5px;
   border-radius: 5px;
   border-style: none;
@@ -46,4 +47,10 @@
 
 .important {
   background-color: #F1665D;
+}
+
+@media (min-width: 768px) {
+  .button {
+    margin-left: 20%;
+  }
 }

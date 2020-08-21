@@ -4,7 +4,7 @@ import './style.css';
 import '../../../App.css';
 
 const InputText = (props) => {
-  let {value, options, placeholder, id, onChangeHandler, name, inputClassName, readOnly } = props;
+  let {value, options, placeholder, id, onChangeHandler, name, inputClassName, readOnly, type } = props;
   let inputClass;
 
   if (inputClassName) {
@@ -13,7 +13,7 @@ const InputText = (props) => {
 
   return (
     <div className={inputClass}>
-      <input type="text" className={inputClass} id={id} value={value} 
+      <input type={type} className={inputClass} id={id} value={value} 
         onChange={ev => onChangeHandler(ev)}
         placeholder={placeholder} name={name}
         readOnly={readOnly ? readOnly : false} />

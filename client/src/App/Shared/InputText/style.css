@@ -1,5 +1,6 @@
 input {
-  width: calc(100% - 34px);
+  min-width: 100%;
+  /* calc(100% - 34px); */
   height: 25px;
   padding-left: 8px;
   font-size: 14px;
@@ -13,7 +14,7 @@ input[readonly] {
 
 @media (min-width: 768px) {
 
-  input {
+  /* input {
     width: 50%;
-  }
+  } */
 }
