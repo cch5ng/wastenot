@@ -30,7 +30,7 @@
 }
 
 h1 {
-  padding-left: 5%;
+  margin-left: 5%;
 }
 
 /* form */
@@ -87,15 +87,11 @@ h1 {
   }
 
   .formGroup {
-    display: flex;
-    flex-flow: column nowrap;
-    justify-content: center;
     width: 60%;
-    margin: 8px auto;
   }
 
   h1 {
-    margin-left: calc(20% - 40px);
+    margin-left: 20%;
   }
 
 }
