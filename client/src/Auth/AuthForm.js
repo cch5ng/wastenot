@@ -110,7 +110,7 @@ class AuthForm extends Component {
 
   render() {
     return (
-      <div>
+      <div className="main">
         <h1>{this.props.title}</h1>
         <form>
           {this.Error}
@@ -123,27 +123,34 @@ class AuthForm extends Component {
             </ul>
           )}
 
-          <InputText
+          <div className="formGroup">
+            <label htmlFor="email">Email</label>
+            <InputText
             name="email" id="email"
             value={this.state.email}
+            type="text"
             placeholder="email"
             onChangeHandler={this.updateInput} />
-          <div />
-          <input type="password"
+          </div>
+          <div className="formGroup">
+            <label htmlFor="password">Password</label>
+            <InputText type="password"
             name="password"
+            id="password"
             value={this.state.password}
             placeholder="password"
-            onChange={this.updateInput} />
-          <div />
+            onChangeHandler={this.updateInput} />
+          </div>
           {this.props.title === 'Sign Up' && (
-            <React.Fragment>
-              <input type="password"
+            <div  className="formGroup">
+              <label htmlFor="passwordConfirm">Confirm Password</label>
+              <InputText type="password"
+                id="passwordConfirm"
                 name="passwordConfirm"
                 value={this.state.passwordConfirm}
                 placeholder="confirm password"
-                onChange={this.updateInput} />
-              <div />
-            </React.Fragment>
+                onChangeHandler={this.updateInput} />
+            </div>
           )}
           {this.props.title === 'Login' && (
             <Button label="Log In" onClickHandler={this.logInBtnClick} />

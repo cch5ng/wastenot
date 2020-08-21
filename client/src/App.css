@@ -1,5 +1,5 @@
 .App {
-  text-align: center;
+  /* text-align: center; */
 }
 
 .main {
@@ -29,10 +29,18 @@
   flex-flow: row no-wrap;
 }
 
+h1 {
+  padding-left: 5%;
+}
+
 /* form */
 
 .formGroup {
-  margin: 8px 0;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  width: 90%;
+  margin: 8px auto;
 }
 
 .div-control {
@@ -78,5 +86,16 @@
     width: 15%;
   }
 
+  .formGroup {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    width: 60%;
+    margin: 8px auto;
+  }
+
+  h1 {
+    margin-left: calc(20% - 40px);
+  }
 
 }
