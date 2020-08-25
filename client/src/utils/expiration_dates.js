@@ -26,6 +26,65 @@ const EXPIRATION_DATES = {
     freezer: '1 year',
     keyWords: [ 'liquid eggs', 'egg substitutes' ]
   },
+  'Lunch meats, opened package': {
+    refrigerator: '3 - 5 days',
+    refrigeratorInt: 259200000,
+    freezer: '1 - 2 months',
+    keyWords: [
+      'lunch meats, opened',
+      'sliced turkey, opened',
+      'sliced ham, opened',
+      'sliced roast beef, opened',
+      'sliced pastrami, opened',
+      'sliced pepperoni, opened',
+      'sliced salami, opened'
+    ]
+  },
+  'Lunch meats unopened package': {
+    refrigerator: '2 weeks',
+    refrigeratorInt: 1209600000,
+    freezer: '1 - 2 months',
+    keyWords: [
+      'lunch meats, unopened',
+      'sliced turkey, unopened',
+      'sliced ham, unopened',
+      'sliced roast beef, unopened',
+      'sliced pastrami, unopened',
+      'sliced pepperoni, unopened',
+      'sliced salami, unopened',
+      'roast beef'
+    ]
+  },
+  'Raw Hamburger, Ground & Stew Meat, Hamburger & stew meats': {
+    refrigerator: '1 - 2 days',
+    refrigeratorInt: 86400000,
+    freezer: '3 - 4 months',
+    keyWords: [ 'raw hamburger', 'raw ground beef', 'raw meat', 'raw stew meat' ]
+  },
+  'Ground turkey, chicken, pork, veal, lamb': {
+    refrigerator: '1 - 2 days',
+    refrigeratorInt: 86400000,
+    freezer: '3 - 4 months',
+    keyWords: [
+      'raw ground turkey',
+      'raw ground chicken',
+      'raw ground pork',
+      'raw ground veal',
+      'raw ground lamb'
+    ]
+  },
+  'hamburger, meat, beef, steak (cooked)': {
+    refrigerator: '3 - 4 days',
+    refrigeratorInt: 259200000,
+    freezer: '2 weeks',
+    keyWords: [ 'cooked hamburger', 'cooked beef', 'cooked steak', 'cooked roast', 'cooked meat', 'steak' ]
+  },
+  'turkey, chicken, pork, veal, lamb, chops (cooked)': {
+    refrigerator: '3 - 4 days',
+    refrigeratorInt: 259200000,
+    freezer: '2 weeks',
+    keyWords: [ 'cooked turkey', 'cooked chicken', 'cooked pork', 'cooked veal', 'cooked lamb' ]
+  },
   'TV Dinners, Frozen Casseroles': {
     refrigerator: null,
     refrigeratorInt: null,
@@ -68,36 +127,6 @@ const EXPIRATION_DATES = {
     refrigeratorInt: 1209600000,
     freezer: null,
     keyWords: []
-  },
-  'Raw Hamburger, Ground & Stew Meat, Hamburger & stew meats': {
-    refrigerator: '1 - 2 days',
-    refrigeratorInt: 86400000,
-    freezer: '3 - 4 months',
-    keyWords: [ 'raw hamburger', 'raw ground beef', 'raw meat', 'raw stew meat' ]
-  },
-  'Ground turkey, chicken, pork, veal, lamb': {
-    refrigerator: '1 - 2 days',
-    refrigeratorInt: 86400000,
-    freezer: '3 - 4 months',
-    keyWords: [
-      'raw ground turkey',
-      'raw ground chicken',
-      'raw ground pork',
-      'raw ground veal',
-      'raw ground lamb'
-    ]
-  },
-  'hamburger, meat (cooked)': {
-    refrigerator: '3 - 4 days',
-    refrigeratorInt: 259200000,
-    freezer: '2 weeks',
-    keyWords: [ 'cooked hamburger', 'cooked beef', 'cooked steak', 'cooked roast', 'cooked meat' ]
-  },
-  'turkey, chicken, pork, veal, lamb (cooked)': {
-    refrigerator: '3 - 4 days',
-    refrigeratorInt: 259200000,
-    freezer: '2 weeks',
-    keyWords: [ 'cooked turkey', 'cooked chicken', 'cooked pork', 'cooked veal', 'cooked lamb' ]
   },
   'Ham, Corned Beef, Corned beef in pouch, with pickling juices Drained': {
     refrigerator: '5 - 7 days',
@@ -147,40 +176,12 @@ const EXPIRATION_DATES = {
     freezer: '1 - 2 months',
     keyWords: [ 'hot dogs' ]
   },
-  'Lunch meats, opened package': {
-    refrigerator: '3 - 5 days',
-    refrigeratorInt: 259200000,
-    freezer: '1 - 2 months',
-    keyWords: [
-      'lunch meats, opened',
-      'sliced turkey, opened',
-      'sliced ham, opened',
-      'sliced roast beef, opened',
-      'sliced pastrami, opened',
-      'sliced pepperoni, opened',
-      'sliced salami, opened'
-    ]
-  },
-  'Lunch meats unopened package': {
-    refrigerator: '2 weeks',
-    refrigeratorInt: 1209600000,
-    freezer: '1 - 2 months',
-    keyWords: [
-      'lunch meats, unopened',
-      'sliced turkey, unopened',
-      'sliced ham, unopened',
-      'sliced roast beef, unopened',
-      'sliced pastrami, unopened',
-      'sliced pepperoni, unopened',
-      'sliced salami, unopened'
-    ]
-  },
   'Soups & Stews, Vegetable or meat-added & mixtures of them': {
     refrigerator: '3 - 4 days',
     refrigeratorInt: 259200000,
     freezer: '2 - 3 months'
   },
-  Bacon: {
+  'Bacon': {
     refrigerator: '7 days',
     refrigeratorInt: 604800000,
     freezer: '1 month'
