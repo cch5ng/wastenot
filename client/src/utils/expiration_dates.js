@@ -316,6 +316,80 @@ const EXPIRATION_DATES = {
       'cooked pasta (refrigerated)'
     ]
   },
+  'apples': {
+    refrigerator: '4-8 weeks',
+    refrigeratorInt: 2592000000,
+    freezer: null,
+  },
+  'blueberries': {
+    refrigerator: '1-2 weeks',
+    refrigeratorInt: 604800000,
+    freezer: null,
+  },
+  'broccoli': {
+    refrigerator: '1-2 weeks',
+    refrigeratorInt: 604800000,
+    freezer: null,
+  },
+  'carrots': {
+    refrigerator: '3-4 weeks',
+    refrigeratorInt: 1814400000,
+    freezer: null,
+  },
+  'cucumbers': {
+    refrigerator: '7 days',
+    refrigeratorInt: 604800000,
+    freezer: null,
+  },
+  'lettuce (iceberg, romaine)': {
+    refrigerator: '7-10 days',
+    refrigeratorInt: 604800000,
+    freezer: null,
+    keyWords: [
+      'iceberg lettuce', 
+      'romaine lettuce'
+    ]
+  },
+  'lemons': {
+    refrigerator: '3-4 weeks',
+    refrigeratorInt: 1814400000,
+    freezer: null,
+  },
+  'oranges': {
+    refrigerator: '3-4 weeks',
+    refrigeratorInt: 1814400000,
+    freezer: null,
+  },
+  'strawberries': {
+    refrigerator: '3-7 days',
+    refrigeratorInt: 259200000,
+    freezer: null
+  },
+  'string beans': {
+    refrigerator: '3-5 days',
+    refrigeratorInt: 259200000,
+    freezer: null
+  },
+  'peas (snow, sugar)': {
+    refrigerator: '3-5 days',
+    refrigeratorInt: 259200000,
+    freezer: null,
+    keyWords: [
+      'snow peas',
+      'sugar peas',
+      'sugar snap peas'
+    ]
+  },
+  'mushrooms (whole)': {
+    refrigerator: '7-10 days',
+    refrigeratorInt: 604800000,
+    freezer: null
+  },
+  'zucchini': {
+    refrigerator: '4-5 days',
+    refrigeratorInt: 345600000,
+    freezer: null
+  },
   test_1: { refrigerator: '1 min', refrigeratorInt: 60000, freezer: null },
   test_2: { refrigerator: '2 min', refrigeratorInt: 120000, freezer: null },
   test_4: { refrigerator: '4 min', refrigeratorInt: 240000, freezer: null }
