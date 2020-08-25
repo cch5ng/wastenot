@@ -29,11 +29,11 @@ class AuthForm extends Component {
     const { email, password } = this.state;
     const emailErrors = ['Email is required.', 'Email must be valid. Please check spelling and try again.'];
     this.setState({inputValidationErrors: []}); //clear old errors
-    if (this.isEmailValid()) {
-      this.props.login({ email, password });
-    } else {
+    if (!this.isEmailValid()) {
       this.setState({inputValidationErrors: emailErrors});
+      return;
     }
+    this.props.login({ email, password });  
   }
 
   logOutBtnClick = (ev) => {
