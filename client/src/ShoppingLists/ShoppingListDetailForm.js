@@ -206,7 +206,6 @@ const ShoppingListDetailForm = (props) => {
         }
       }
     }
-    console.log('idStr', idStr)
   }
 
   //methods specific to form using expiration notifications
@@ -294,7 +293,6 @@ const ShoppingListDetailForm = (props) => {
         if (listItemMapGuid) {
           label = dictListItemMapGuidToListItemMapName[listItemMapGuid].name
         } else {
-          console.log('gets here unmapped')
           label = curInput.name;
         }
         
@@ -350,9 +348,9 @@ const ShoppingListDetailForm = (props) => {
 
       http_requests.ListItemMap.getListItemMaps(cookieStr)
         .then(resp => {
-          if (resp.length) {
-            setMappedListItems(resp);
-            setMappedListItemsObj(mappedListItemsArToObj(resp));
+          if (resp && resp.mapped_list_items && resp.mapped_list_items.length) {
+            setMappedListItems(resp.mapped_list_items);
+            setMappedListItemsObj(mappedListItemsArToObj(resp.mapped_list_items));
           }
         })
         .catch(err => console.error('err', err.message))
