@@ -122,8 +122,9 @@ const ShoppingListDetailForm = (props) => {
       list.name = listName;
       list.type = listType;
       list.listItems = objToArray(copyListItemInputs);
+      let d = new Date();
       list.listItems.forEach(item => {
-        item.timestamp = new Date();
+        item.timestamp = d.toISOString();
       })
       props.fetchShoppingListCreate({ list, cookieStr});
     } else if (props.mode === 'edit') {
@@ -136,8 +137,9 @@ const ShoppingListDetailForm = (props) => {
       list.name = listName;
       list.type = listType;
       list.listItems = objToArray(listItemInputs);
+      let d = new Date();
       list.listItems.forEach(item => {
-        item.timestamp = new Date();
+        item.timestamp = d.toISOString();
       })
       list.guid = listGuid;
       props.fetchShoppingListEdit({ list, cookieStr })
@@ -246,16 +248,17 @@ const ShoppingListDetailForm = (props) => {
       if (item.list_item_map_guid) {
         let mappedListItemGuid = item.list_item_map_guid;
         let expirationMs = dictListItemMapGuidToExpirationMs[mappedListItemGuid];
-        let timestampMs;
+        let timeISO;
         if (item.timestamp) {
-          timestampMs = Date.parse(item.timestamp);
+          timeISO = item.timestamp;
         } else {
-          timestampMs = Date.now();
-          item.timestamp = new Date(timestampMs);
+          let d = new Date();
+          timeISO = d.toISOString();
+          item.timestamp = timeISO;
         }
-        let dateForExpirationMs = new Date(timestampMs);
-        dateForExpirationMs.setMilliseconds(dateForExpirationMs.getMilliseconds() + expirationMs);
-        item.notify_timestamp = dateForExpirationMs;
+        let expireDate = new Date(timeISO)
+        expireDate.setMilliseconds(expireDate.getMilliseconds() + expirationMs);
+        item.notify_timestamp = expireDate.toISOString();
       }
     }
     setListItemInputs(copyListItemInputs);
