@@ -92,15 +92,15 @@ const Alerts = (props) => {
     return (
         <div>
             <h1>Alerts</h1>
-            {alertsAr.map(alert =>
-                (<div>
-                    <p>{alert.name} will expire on {alert.notify_timestamp}</p>
+            {alertsAr.map(alert => {
+                let displayDate = new Date(alert.notify_timestamp);
+                return (<div>
+                    <p>{alert.name} will expire on {displayDate.toString()}</p>
                     <Button onClickHandler={handlePostponeAlert} label="Postpone (1 day)" classVal={alert.guid}
                         size="medium" />
                     <Button onClickHandler={handleCancelAlert} label="Cancel alert" classVal={alert.guid}/>
                 </div>)
-            )}
-
+            })}
         </div>
     )
 }
