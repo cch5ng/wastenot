@@ -1,0 +1,16 @@
+
+input {
+  min-width: 50%;
+}
+
+.form_group {
+  display: flex;
+  flex-flow: row wrap;
+  align-content: center;
+}
+
+@media (min-width: 768px) {
+  input {
+    min-width: 200px;
+  }
+}
