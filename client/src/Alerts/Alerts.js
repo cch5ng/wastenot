@@ -132,7 +132,7 @@ const Alerts = (props) => {
                 </div>
             </div>
             {filteredAlerts.map(alert =>
-                (<div className="row">
+                (<div className="row" key={alert.guid}>
                     <p>{alert.name} will expire on {alert.notify_timestamp}</p>
                     <Button onClickHandler={handlePostponeAlert} label="+1 day" classVal={alert.guid}/>
                     <Button onClickHandler={handleCancelAlert} label="Cancel" classVal={alert.guid}/>
