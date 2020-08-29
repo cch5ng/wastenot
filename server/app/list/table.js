@@ -1,5 +1,5 @@
-const db = require('../../databasePool');
 const uuidv4 = require('uuid/v4');
+const db = require('../../databasePool');
 const ListItemTable = require('../list_item/table');
 
 //stores template list
