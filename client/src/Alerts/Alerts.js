@@ -119,7 +119,6 @@ const Alerts = (props) => {
     }, [alertsObj])
 
     let filteredAlerts = daysUntilExpiration === 7 ? alertsAr : getFilteredAlerts();
-    console.log('alerts count', filteredAlerts.length)
     return (
         <div className="main">
             <h1>Alerts</h1>
