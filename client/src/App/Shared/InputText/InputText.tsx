@@ -3,12 +3,22 @@ import classNames from 'classnames';
 import './style.css';
 import '../../../App.css';
 
-const InputText = (props) => {
-  let {value, options, placeholder, id, onChangeHandler, name, inputClassName, readOnly, type } = props;
-  let inputClass;
+type InputTextProps = { 
+  value: string, 
+  placeholder: string, 
+  id: string, 
+  onChangeHandler: any, 
+  name: string, 
+  inputClassName: string, 
+  readOnly: boolean, 
+  type: string
+};
+const InputText = (props: InputTextProps) => {
+  let {value, placeholder, id, onChangeHandler, name, inputClassName, readOnly, type } = props;
+  let inputClass: string;
 
   if (inputClassName) {
-    inputClass = `formGroup ${inputClassName}`
+    inputClass = `formGroup ${inputClassName}`;
   }
 
   return (
