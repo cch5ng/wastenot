@@ -2,10 +2,18 @@ import React from 'react';
 import classNames from 'classnames';
 import './style.css';
 
-const Button = (props) => {
+type ButtonProps = { 
+  label: string, 
+  onClickHandler: any, 
+  classVal: string, 
+  idVal: string, 
+  size: string, 
+  type: string, 
+  noMargin: boolean
+};
+const Button = (props: ButtonProps) => {
   let { label, onClickHandler, classVal, idVal, size, type, noMargin } = props;
-
-  var btnClass = classNames({
+  var btnClass : string = classNames({
       button: true,
       [`${size}`]: size && true,
       [`${type}`]: type && true,
