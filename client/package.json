@@ -15,7 +15,8 @@
   "babel": {
     "presets": [
       "@babel/preset-env",
-      "@babel/preset-react"
+      "@babel/preset-react",
+      "@babel/preset-typescript"
     ],
     "plugins": [
       "@babel/plugin-proposal-class-properties"
@@ -29,6 +30,7 @@
     "@babel/plugin-proposal-class-properties": "^7.7.0",
     "@babel/preset-env": "^7.6.2",
     "@babel/preset-react": "^7.0.0",
+    "@babel/preset-typescript": "^7.10.4",
     "babel-loader": "^8.0.6",
     "css-loader": "^3.2.0",
     "html-webpack-plugin": "^3.2.0",
