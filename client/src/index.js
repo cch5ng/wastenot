@@ -38,4 +38,3 @@ if (!('serviceWorker' in navigator)) {
 } else {
   serviceWorker.registerServiceWorker();
 }
-
