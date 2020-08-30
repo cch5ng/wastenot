@@ -139,6 +139,7 @@ const Alerts = (props) => {
                         classVal={alert.guid} size="extra-small" noMargin={true}/>
                     <Button onClickHandler={handleCancelAlert} label="Cancel" 
                         classVal={alert.guid} size="extra-small" noMargin={true}/>
+
                 </div>)
             })}
         </div>
