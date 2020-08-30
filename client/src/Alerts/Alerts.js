@@ -131,13 +131,16 @@ const Alerts = (props) => {
                     <label htmlFor="days_until_expiration">Days until expiration ({daysUntilExpiration})</label>
                 </div>
             </div>
-            {filteredAlerts.map(alert =>
-                (<div className="row" key={alert.guid}>
-                    <p>{alert.name} will expire on {alert.notify_timestamp}</p>
-                    <Button onClickHandler={handlePostponeAlert} label="+1 day" classVal={alert.guid}/>
-                    <Button onClickHandler={handleCancelAlert} label="Cancel" classVal={alert.guid}/>
+            {filteredAlerts.map(alert => {
+                let newDate = new Date(alert.notify_timestamp);
+                return (<div className="row row-left" key={alert.guid}>
+                    <p>{alert.name} will expire on {newDate.toDateString()}</p>
+                    <Button onClickHandler={handlePostponeAlert} label="+1 day" 
+                        classVal={alert.guid} size="extra-small" noMargin={true}/>
+                    <Button onClickHandler={handleCancelAlert} label="Cancel" 
+                        classVal={alert.guid} size="extra-small" noMargin={true}/>
                 </div>)
-            )}
+            })}
         </div>
     )
 }

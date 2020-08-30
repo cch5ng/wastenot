@@ -24,12 +24,6 @@
   margin-left: 10px;
 }
 
-.row,
-.form-row-inline {
-  display: flex;
-  flex-flow: row no-wrap;
-}
-
 h1 {
   margin-left: 5%;
 }
@@ -49,11 +43,21 @@ h1 {
 }
 
 /* global grid */
-
-.row {
+/* .row {
   display: flex;
   flex-flow: column nowrap;
   justify-content: center;
+} */
+
+.row,
+.form-row-inline {
+  display: flex;
+  flex-flow: row no-wrap;
+  align-items: center;
+}
+
+.row-left {
+  justify-content: flex-start;
 }
 
 .oneCol, 
@@ -72,7 +76,10 @@ h1 {
   .row {
     display: flex;
     flex-flow: row nowrap;
-    /* justify-content: flex-start; */
+  }
+
+  .row-left {
+    justify-content: flex-start;
   }
 
   .twoCol {
