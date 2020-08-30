@@ -72,16 +72,6 @@ const AuthHeader = (props) => {
   }
 }
 
-/*
-          <Link to="/signup">
-            <div className="div-button sign-up-button">Sign Up</div>
-          </Link>
-          <Link to="/">
-            <div className="div-button log-in-button">Log In</div>
-          </Link>
-
-*/
-
 const mapStateToProps = state => ({
   authenticate: state.authenticate
 });
