@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import './style.css';
 
 const Button = (props) => {
-  let { label, onClickHandler, classVal, idVal, size, type } = props;
+  let { label, onClickHandler, classVal, idVal, size, type, noMargin } = props;
 
   var btnClass = classNames({
       button: true,
@@ -11,7 +11,8 @@ const Button = (props) => {
       [`${type}`]: type && true,
       'small': !size,
       'basic': !type,
-      [`${classVal}`]: classVal && true
+      [`${classVal}`]: classVal && true,
+      'no-margin': noMargin
   });
 
   return (

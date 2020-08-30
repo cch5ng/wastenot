@@ -14,6 +14,10 @@
   background-color: #9e968a;
 }
 
+.extra-small {
+  width: 75px;
+}
+
 .small {
   width: 20%;
 }
@@ -49,8 +53,17 @@
   background-color: #F1665D;
 }
 
+.no-margin {
+  margin-left: 10px;
+}
+
 @media (min-width: 768px) {
   .button {
     margin-left: 20%;
   }
+
+  .no-margin {
+    margin-left: 10px;
+  }
+  
 }

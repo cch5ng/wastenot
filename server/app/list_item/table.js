@@ -160,6 +160,8 @@ class ListItemTable {
     let curTimestampMs = Date.now();
     let lastWeekTimestamp = new Date(curTimestampMs);
     lastWeekTimestamp.setDate(lastWeekTimestamp.getDate() - 7);
+    let nextWeekTimestamp = new Date(curTimestampMs);
+    nextWeekTimestamp.setDate(nextWeekTimestamp.getDate() + 7);
     return new Promise((resolve, reject) => {
       db.query(
         `SELECT lim.name, li.notify_timestamp, li.guid
@@ -168,7 +170,7 @@ class ListItemTable {
          AND li.notification_sent=$2
          AND li.notify_timestamp > $3
          ORDER BY li.notify_timestamp`,
-        [emailHash, notification_sent, lastWeekTimestamp],
+        [emailHash, notification_sent, lastWeekTimestamp, nextWeekTimestamp],
         (error, response) => {
           if (error) return reject(error);
           if (response) {
