@@ -29,29 +29,21 @@ module.exports = () => {
           exclude: /node_modules/,
           use: ['babel-loader']
         },
+        { test: /\.tsx?$/, loader: 'ts-loader' },
         {
           test: /\.(sa|sc|c)ss$/,
-          // use: [
-          //   devMode ? 'style-loader' : MiniCssExtractPlugin.loader,
-          //   //'style-loader',
-          //   { loader: 'css-loader', options: { modules: true, importLoaders: 1 } },
-          //   'postcss-loader'
-          // ]
           use: [
             devMode ? 'style-loader' : MiniCssExtractPlugin.loader,
             'css-loader',
-            'postcss-loader',
+            //'postcss-loader',
             //'sass-loader',
           ]
         }
       ],
-      
     },
-
     resolve: {
-      extensions: ['*', '.js', '.jsx']
+      extensions: ['*', '.ts', '.tsx', '.js', '.jsx']
     },
-
     plugins: [
       new webpack.HotModuleReplacementPlugin(),
       new webpack.DefinePlugin(envKeys),
@@ -69,7 +61,6 @@ module.exports = () => {
         swSrc: './src/sw.js',
       })
     ], 
-
     devServer: {
       contentBase: './dist',
       stats: "errors-only",
