@@ -7,25 +7,44 @@ import InternalNotification from '../InternalNotification/InternalNotification';
 import http_requests from '../../utils/http_requests';
 import { getCookieStr } from '../../utils/utils';
 
-const Header = (props) => {
+type HeaderProps = {
+  logout: any,
+  authenticate: {
+    isLoggedIn: boolean,
+    hasButtonClicked: boolean,
+    status: string,
+    message: string,
+    authStr: string,
+  }
+}
+const Header = (props: HeaderProps) => {
   const [menuDisplayed, setMenuDisplayed] = useState(false);
   const [globalHideInternalNotification, setGlobalHideInternalNotification] = useState(false);
     //refactor so when user runs first mapping test, this should update the database and that should update the globalHideInternalNotification setting on render
   const [sessionHideInternalNotification, setSessionHideInternalNotification] = useState(false);
-
-  const logOutHandler = (ev) => {
+  
+  let logOutHandler = function(
+    event: React.MouseEvent<HTMLDivElement>
+  ): void {
     props.logout();
-  }
+  };
 
-  const toggleMenu = (ev) => {
+  const toggleMenu = function(
+    event: React.MouseEvent<HTMLDivElement>
+  ): void {
     setMenuDisplayed(!menuDisplayed)
-  }
+  };
 
-  const notificationCloseHandler = (ev) => {
+  const notificationCloseHandler = function(
+    event: React.MouseEvent<HTMLDivElement>
+  ): void {
     setSessionHideInternalNotification(true);
   }
 
-  const notificationCloseGlobalHandler = (ev) => {
+  const notificationCloseGlobalHandler = function(
+    //not sure of HTMLDivElement
+    event: React.MouseEvent<HTMLDivElement>
+  ): void {
     let cookie = getCookieStr();
     http_requests.Setting.putListItemMapSetting(cookie)
       .then(resp => {
