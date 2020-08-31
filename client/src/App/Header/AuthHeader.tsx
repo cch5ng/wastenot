@@ -3,23 +3,39 @@ import { Link, useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
 import './Header.css';
 import { logout } from '../../actions/authenticate';
-import Button from '../../App/Shared/Button/Button';
+import Button from '../Shared/Button/Button';
 
-const AuthHeader = (props) => {
+type AuthHeaderProps = {
+  logout: any,
+  authenticate: {
+    isLoggedIn: boolean,
+    hasButtonClicked: boolean,
+    status: string,
+    message: string,
+    authStr: string,
+  }
+}
+const AuthHeader = (props: AuthHeaderProps) => {
   const [menuDisplayed, setMenuDisplayed] = useState(false);
   let history = useHistory();
 
-  const toggleMenu = (ev) => {
+  let toggleMenu = function(
+    event: React.MouseEvent<HTMLDivElement>
+  ): void {  
     setMenuDisplayed(!menuDisplayed);
   }
 
-  const handleSignUpBtn = (ev) => {
-    toggleMenu(ev);
+  let handleSignUpBtn = function(
+    event: React.MouseEvent<HTMLDivElement>
+  ): void {    
+    toggleMenu(event);
     history.push('/signup');
   }
 
-  const handleLogInBtn = (ev) => {
-    toggleMenu(ev);
+  let handleLogInBtn = function(
+    event: React.MouseEvent<HTMLDivElement>
+  ): void {    
+    toggleMenu(event);
     history.push('/');
   }
 
@@ -63,8 +79,10 @@ const AuthHeader = (props) => {
           </p>
         </div>
         <div className="menu-buttons">
-          <Button label="Sign Up" onClickHandler={handleSignUpBtn} size="extra-large" type="important"/>
-          <Button label="Log In" onClickHandler={handleLogInBtn} size="extra-large" type="neutral"/>
+          <Button label="Sign Up" onClickHandler={handleSignUpBtn} size="extra-large" type="important"
+            classVal="" idVal="" noMargin={false}/>
+          <Button label="Log In" onClickHandler={handleLogInBtn} size="extra-large" type="neutral"
+            classVal="" idVal="" noMargin={false}/>
         </div>
       </div>
     )
