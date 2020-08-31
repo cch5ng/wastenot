@@ -1,10 +1,3 @@
-//functionality
-//display food expiration alerts as list (recently passed, near upcoming) 
-//allow user actions
-    //postpone an alert (add one day onto the cur notification date)
-    //cancel an alert ()
-    //navigate to settings
-
 import React, { useState, useEffect } from 'react';
 import {connect} from 'react-redux';
 import http_requests from '../utils/http_requests';
