@@ -7,12 +7,11 @@ import Button from '../../App/Shared/Button/Button';
 
 const AuthHeader = (props) => {
   const [menuDisplayed, setMenuDisplayed] = useState(false);
+  let history = useHistory();
 
   const toggleMenu = (ev) => {
-    setMenuDisplayed(!menuDisplayed)
+    setMenuDisplayed(!menuDisplayed);
   }
-
-  let history = useHistory();
 
   const handleSignUpBtn = (ev) => {
     toggleMenu(ev);
