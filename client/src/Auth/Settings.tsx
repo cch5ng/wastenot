@@ -6,16 +6,28 @@ import InputText from '../App/Shared/InputText/InputText';
 import dbTimezoneAr from '../utils/db_timezone';
 import http_requests from '../utils/http_requests';
 
-const Settings = (props) => {
-
+type SettingsProps = {
+  authenticate: {
+    isLoggedIn: boolean,
+    hasButtonClicked: boolean,
+    status: string,
+    message: string,
+    authStr: string,
+  }
+}
+const Settings = (props: SettingsProps) => {
   const [timezone, setTimezone] = useState({value: 'none', label: 'Select a local timezone'});
 
-  function onChangeHandler(selectedOption) {
+  let onChangeHandler = function(
+    selectedOption: {value: string, label: string}
+  ): void {
     setTimezone(selectedOption);
   }
 
-  function formSubmitHandler(ev) {
-    ev.preventDefault();
+  let formSubmitHandler = function(
+    event: React.MouseEvent<HTMLDivElement>
+  ): void {
+    event.preventDefault();
     if (props.authenticate && props.authenticate.authStr) {
       http_requests.Auth.putTimezone({timezone, cookieStr: props.authenticate.authStr})
     }
@@ -44,7 +56,8 @@ const Settings = (props) => {
           options={dbTimezoneAr}
         />
 
-        <Button label="Save" onClickHandler={formSubmitHandler} />
+        <Button label="Save" onClickHandler={formSubmitHandler} 
+          classVal='' idVal='' size={null} type={null} noMargin={false} />
       </form>
     </div>
   )
