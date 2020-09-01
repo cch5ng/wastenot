@@ -6,9 +6,10 @@ import './style.css';
 import Checkbox from '../Shared/Checkbox/Checkbox';
 
 type InternalNotificationProps = {
-  clickCloseHandler: any
+  clickCloseHandler: any,
+  checkboxSelectHandler: any
 }
-const InternalNotification = (props) => {
+const InternalNotification = (props: InternalNotificationProps) => {
   return (
     <div className="internalNotification">
       <div className="controlClose" onClick={props.clickCloseHandler}>X</div>
