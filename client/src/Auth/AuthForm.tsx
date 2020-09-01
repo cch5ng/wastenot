@@ -6,26 +6,48 @@ import { getCookieStr } from '../utils/utils';
 import Button from '../App/Shared/Button/Button';
 import InputText from '../App/Shared/InputText/InputText';
 
-class AuthForm extends Component {
+type MyProps = {
+  login: any,
+  logout: any,
+  title: string,
+  authenticate: {
+    isLoggedIn: boolean,
+    hasButtonClicked: boolean,
+    status: string,
+    message: string,
+    authStr: string,
+  },
+  register: any,
+  isAuthenticated: any,
+};
+type MyState = {
+  email: string,
+  password: string,
+  passwordConfirm: string,
+  inputValidationErrors: string[]
+};
 
-  constructor(props) {
+class AuthForm extends React.Component<MyProps, MyState> {
+  constructor(props: MyProps) {
     super(props);
     this.state = {
       email: '',
       password: '',
       passwordConfirm: '',
-      inputValidationErrors: [],
+      inputValidationErrors: []
     }
   }
 
-  updateInput = ev => {
-    let name = ev.target.name;
-    let value = ev.target.value;
+  updateInput = (event: React.FormEvent<HTMLInputElement>): void => {
+    let name = event.target.name;
+    let value = event.target.value;
     this.setState({[name]: value})
-  }
+  };
 
-  logInBtnClick = (ev) => {
-    ev.preventDefault();
+  logInBtnClick = (
+    event: React.MouseEvent<HTMLDivElement>
+  ): void => {    
+    event.preventDefault();
     const { email, password } = this.state;
     const emailErrors = ['Email is required.', 'Email must be valid. Please check spelling and try again.'];
     this.setState({inputValidationErrors: []}); //clear old errors
@@ -34,19 +56,21 @@ class AuthForm extends Component {
       return;
     }
     this.props.login({ email, password });  
-  }
+  };
 
-  logOutBtnClick = (ev) => {
-    ev.preventDefault();
+  logOutBtnClick = (
+    event: React.MouseEvent<HTMLDivElement>
+  ): void => {  
+    event.preventDefault();
     this.props.logout();
-  }
+  };
 
-  signInBtnClick = (ev) => {
-    ev.preventDefault();
+  signInBtnClick = (
+    event: React.MouseEvent<HTMLDivElement>
+  ): void => {  
+    event.preventDefault();
     const { email, password, passwordConfirm } = this.state;
-    //email errors
     const emailErrors = ['Email is required.', 'Email must be valid. Please check spelling and try again.'];
-    //password errors
     const passwordErrors = ['Password and confirmation password values are required.', 
       'Password and confirmation password must be at least 8 characters long, contain one lower-case letter, contain one upper-case letter, contain one number, and container one special character (!, @, #, $, %, ^, &, *, or -).',
       'Password and confirmation password values must match.']
@@ -63,63 +87,53 @@ class AuthForm extends Component {
       return;
     }
     this.props.register({ email, password });
-  }
+  };
 
-  isEmailValid = () => {
+  isEmailValid = (): boolean => {    
     const {email} = this.state;
-    //valid email is not empty
     if (!email.length) {
       return false;
     }
-    //validate email valid
     const regex = /^(?=.*?[A-Za-z])(?=.*?[@])(?=.*?[\.]).{6,}$/gm
     return this.doesStrMatchPattern(email, regex);
-  }
+  };
 
-  isPasswordValid = () => {
+  isPasswordValid = (): boolean => {    
     const {password, passwordConfirm} = this.state;
-    //validate password is not empty
     if (!password.length || !passwordConfirm.length) {
       return false;
     }
-    //validate password and passwordConfirm match
     if (password !== passwordConfirm) {
       return false;
     }
-
-    //validate password and passwordConfirm valid
     const regex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/gm
     if (!this.doesStrMatchPattern(password, regex) || !this.doesStrMatchPattern(passwordConfirm, regex)) {
       return false;
     }
     return true;
-  }
+  };
 
-  doesStrMatchPattern(str, pattern) {
+  doesStrMatchPattern = (
+    str: string,
+    pattern: any
+  ): boolean => {  
     let matcher = str.match(pattern);
     if (matcher && matcher.length && matcher[0] === str) {
       return true;
     }
     return false;
-  }
-
-  get Error() {
-    if (this.props.authenticate.status === 'error' && this.props.authenticate.hasButtonClicked === true) {
-      return (
-        <div>
-          <p>{this.props.authenticate.message}</p>
-        </div>
-      )
-    }
-  }
+  };
 
   render() {
     return (
       <div className="main">
         <h1>{this.props.title}</h1>
         <form>
-          {this.Error}
-
+          {this.props.authenticate.status === 'error' && this.props.authenticate.hasButtonClicked === true && (
+            <div>
+              <p>{this.props.authenticate.message}</p>
+            </div>
+          )}
           {this.state.inputValidationErrors.length > 0 && (
             <ul>
               {this.state.inputValidationErrors.map(err => {
@@ -135,7 +149,9 @@ class AuthForm extends Component {
             value={this.state.email}
             type="text"
             placeholder="email"
-            onChangeHandler={this.updateInput} />
+            onChangeHandler={this.updateInput}
+            inputClassName=''
+            readOnly={false} />
           </div>
           <div className="formGroup">
             <label htmlFor="password">Password</label>
@@ -144,7 +160,9 @@ class AuthForm extends Component {
             id="password"
             value={this.state.password}
             placeholder="password"
-            onChangeHandler={this.updateInput} />
+            onChangeHandler={this.updateInput}
+            inputClassName=''
+            readOnly={false}/>
           </div>
           {this.props.title === 'Sign Up' && (
             <div  className="formGroup">
@@ -154,14 +172,18 @@ class AuthForm extends Component {
                 name="passwordConfirm"
                 value={this.state.passwordConfirm}
                 placeholder="confirm password"
-                onChangeHandler={this.updateInput} />
+                onChangeHandler={this.updateInput}
+                inputClassName=''
+                readOnly={false} />
             </div>
           )}
           {this.props.title === 'Login' && (
-            <Button label="Log In" onClickHandler={this.logInBtnClick} />
+            <Button label="Log In" onClickHandler={this.logInBtnClick} 
+              classVal='' idVal='' size={null} type={null} noMargin={false}/>
           )}
           {this.props.title === 'Sign Up' && (
-            <Button label="Sign Up" onClickHandler={this.signInBtnClick} />
+            <Button label="Sign Up" onClickHandler={this.signInBtnClick}
+              classVal='' idVal='' size={null} type={null} noMargin={false}/>
           )}
         </form>
       </div>
