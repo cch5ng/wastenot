@@ -157,7 +157,7 @@ const Alerts = (props: AlertsProps) => {
     )
 }
 
-let getAlertsArFromObj = function(alertsObj: {guid: string}): object[] {
+let getAlertsArFromObj = function(alertsObj: object): object[] {
     let alertsAr = [];
     for (let guid in alertsObj) {
         alertsAr.push(alertsObj[guid]);
