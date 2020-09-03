@@ -22,7 +22,8 @@ const Alerts = (props: AlertsProps) => {
         event: React.MouseEvent<HTMLDivElement>
         ): void {
         event.preventDefault();
-        const className = event.target.className;
+        const target = event.target as HTMLDivElement;
+        const {className} = target;
         const classAr = className.split(' ')
         const guid = classAr[classAr.length - 1];
         let notify_timestamp = alertsObj[guid].notify_timestamp;
@@ -32,7 +33,7 @@ const Alerts = (props: AlertsProps) => {
         if (props.authenticate && props.authenticate.authStr) {
             http_requests.Lists.putPostponeListItemNotification({
                 list_item_guid: guid,
-                timestamp: newNotifyTimestamp, //newNotifyTimestamp,
+                timestamp: newNotifyTimestamp,
                 cookieStr: props.authenticate.authStr
             })
                 .then(resp => {
@@ -49,10 +50,10 @@ const Alerts = (props: AlertsProps) => {
         event: React.MouseEvent<HTMLDivElement>
         ): void {
         event.preventDefault();
-        const className = event.target.className;
+        const target = event.target as HTMLDivElement;
+        const {className} = target;
         const classAr = className.split(' ')
         const guid = classAr[classAr.length - 1];
-
         if (props.authenticate && props.authenticate.authStr) {
             http_requests.Lists.putCancelListItemNotification({
                 list_item_guid: guid,
@@ -71,8 +72,9 @@ const Alerts = (props: AlertsProps) => {
     let handleRangeChange = function(
         event: React.FormEvent<HTMLInputElement>
         ): void {
-        let daysCount = event.target.value;
-        setDaysUntilExpiration(daysCount);
+            const target = event.target as HTMLInputElement;
+            let daysCount = target.value;
+        setDaysUntilExpiration(parseInt(daysCount, 10));
     }
 
     let getAlertsObj = function(ar: {guid: string}[]): object {
