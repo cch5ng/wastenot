@@ -44,10 +44,10 @@ const ExpirationMapTest = (props) => {
   let checkboxChangeHandler = function(
     event: React.FormEvent<HTMLInputElement>
   ): void {
-    let name = event.target.name;
-    let id = event.target.id;
+    const target = event.target as HTMLInputElement;
+    const {name, id} = target;
     let idx = getMappingsIdxFromId(id);
-    if (name = 'checkbox') {
+    if (name === 'checkbox') {
       let disabledNew = !mappings[idx].disabled;
       let newMappings = [].concat(mappings)
       newMappings[idx].disabled = disabledNew;
@@ -58,7 +58,8 @@ const ExpirationMapTest = (props) => {
   let inputChangeHandler = function(
     event: React.FormEvent<HTMLInputElement>
   ): void {
-    const {name, value, id} = event.target;
+    const target = event.target as HTMLInputElement;
+    const {name, id, value} = target;
     let idx = getMappingsIdxFromId(id);
     if (name === 'inputText') {
       let newMappings = [].concat(mappings)
@@ -70,7 +71,8 @@ const ExpirationMapTest = (props) => {
   let selectListChangeHandler = function(
     event: React.FormEvent<HTMLInputElement>
   ): void {
-    const {value, id} = event.target;
+    const target = event.target as HTMLInputElement;
+    const {value, id} = target;
     let idx = getMappingsIdxFromId(id);
     let newMappings = [].concat(mappings)
     newMappings[idx].expirationCategory = value;

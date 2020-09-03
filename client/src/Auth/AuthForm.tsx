@@ -39,8 +39,8 @@ class AuthForm extends React.Component<MyProps, MyState> {
   }
 
   updateInput = (event: React.FormEvent<HTMLInputElement>): void => {
-    let name = event.target.name;
-    let value = event.target.value;
+    let target = event.target as HTMLInputElement;
+    const {name, value}  = target;
     this.setState({[name]: value})
   };
 

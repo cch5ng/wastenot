@@ -86,8 +86,9 @@ const ShoppingListDetailForm = (props) => {
 
   let inputChangeHandler = function(
     event: React.FormEvent<HTMLInputElement>
-  ): void {  
-    const {name, value, type, id} = event.target;
+  ): void {
+    const target = event.target as HTMLInputElement;
+    const {name, value, type, id} = target;
     if (name === 'listNameInp') {
       setListName(value);
     } else if (type === 'text') {
@@ -116,8 +117,9 @@ const ShoppingListDetailForm = (props) => {
 
   let onChangeHandlerSelectSection = function(
     event: React.FormEvent<HTMLSelectElement>
-  ): void {  
-    const {id, value} = event.target;
+  ): void {
+    const target = event.target as HTMLSelectElement;
+    const {id, value} = target;
     let reformattedId = reformatSelectId(id);
     let newInput2: {section: string} = {section: value};
     let prevListItemInputs = listItemInputs;
@@ -133,7 +135,6 @@ const ShoppingListDetailForm = (props) => {
     event.preventDefault();  
     let requestBody;
     let listGuid;
-    let list = {};
     let cookieStr = (props.authenticate && props.authenticate.authStr) ? props.authenticate.authStr : null;
     let copyListItemInputs;
 
@@ -144,9 +145,11 @@ const ShoppingListDetailForm = (props) => {
         copyListItemInputs[tempId].parentId = listGuid;
       }
       setListItemInputs(copyListItemInputs);
-      list.name = listName;
-      list.type = listType;
-      list.listItems = objToArray(copyListItemInputs);
+      let list = {
+        name: listName,
+        type: listType,
+        listItems: objToArray(copyListItemInputs)
+      }
       let d = new Date();
       list.listItems.forEach(item => {
         item.timestamp = d.toISOString();
@@ -159,15 +162,17 @@ const ShoppingListDetailForm = (props) => {
         copyListItemInputs[tempId].parentId = listGuid;
       }
       setListItemInputs(copyListItemInputs);
-      list.name = listName;
-      list.type = listType;
-      list.listItems = objToArray(listItemInputs);
+      let list = {
+        name: listName,
+        type: listType,
+        listItems: objToArray(listItemInputs),
+        guid: listGuid
+      }
       let d = new Date();
       list.listItems.forEach(item => {
         item.timestamp = d.toISOString();
       })
-      list.guid = listGuid;
-      props.fetchShoppingListEdit({ list, cookieStr })
+      props.fetchShoppingListEdit({ list, cookieStr });
     }
     clearForm('empty');
     setFormSubmitted(true);
@@ -184,10 +189,11 @@ const ShoppingListDetailForm = (props) => {
 
         htmlResult.push(
           <li key={key} className="form-row-inline">
-            <Checkbox checkboxVal={curInput.checked} onChangeHandler={inputChangeHandler} id={key}/>
+            <Checkbox checkboxVal={curInput.checked} onChangeHandler={inputChangeHandler} id={key}
+              checkboxLabel='' name='' checkClassName='' />
             <InputText value={listItemInputs[key].name} placeholder="item name" 
               id={key} onChangeHandler={inputChangeHandler} name={key}
-            />
+              inputClassName='' readOnly={false} type={null} />
           </li>
         )
       }
@@ -199,7 +205,8 @@ const ShoppingListDetailForm = (props) => {
   let selectClickHandler = function(
     event: React.MouseEvent<HTMLDivElement>
   ): void {
-    let parent = event.target;
+    const target = event.target as HTMLDivElement;
+    let {parent} = target;
     let reactSelectInput;
     let idStr;
     //case click the select element
@@ -259,7 +266,6 @@ const ShoppingListDetailForm = (props) => {
       let expiration_ms = mappedListItem.expiration_ms;
       dictListItemMapGuidToExpirationMs[guid] = expiration_ms;
     }
-
     let copyListItemInputs = {...listItemInputs};
     for (const k in copyListItemInputs) {
       let item = copyListItemInputs[k];
@@ -300,7 +306,6 @@ const ShoppingListDetailForm = (props) => {
       };
       listItemOptions.push(inObj);
     })
-
     if (props.mode === 'edit') {
       dictListItemMapGuidToListItemMapName = mappedListItems.reduce((accum, cur) => {
         let guid = cur.guid;
@@ -308,7 +313,6 @@ const ShoppingListDetailForm = (props) => {
         return accum;
       }, {});
     }
-
     for (let i = 0; i < 50; i++) {
       key = props.mode === 'add' ? `${KEY_BASE}${i.toString()}` : Object.keys(listItemInputs)[i];
       let curInput =  listItemInputs[key];
@@ -329,7 +333,8 @@ const ShoppingListDetailForm = (props) => {
 
       htmlResult.push(
         <li key={key} id={key} className="" onClick={selectClickHandler}>
-          <Checkbox checkboxVal={curInput.checked} onChangeHandler={inputChangeHandler} id={key}/>
+          <Checkbox checkboxVal={curInput.checked} onChangeHandler={inputChangeHandler} id={key}
+            checkboxLabel='' name='' checkClassName='' />
           <CreatableSelect
             isClearable
             onChange={inputExpirationChangeHandler}
@@ -346,7 +351,6 @@ const ShoppingListDetailForm = (props) => {
     return htmlResult;
   }
 
-  //generic helper
   //TODO think clicking cancel btn on edit form mode maybe should not clear entire form
   let clearForm = function(
     clearMode: string = null

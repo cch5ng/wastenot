@@ -112,7 +112,8 @@ const Header = (props: HeaderProps) => {
     return (
       <div className="menu">
         {!globalHideInternalNotification && !sessionHideInternalNotification && (
-          <InternalNotification clickCloseHandler={notificationCloseHandler} />
+          <InternalNotification clickCloseHandler={notificationCloseHandler} 
+            checkboxSelectHandler={notificationCloseGlobalHandler} />
         )}
         <div className="icon" onClick={toggleMenu} >X</div>
         <div className="menu-links">
