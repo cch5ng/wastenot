@@ -202,25 +202,31 @@ const ShoppingListDetailForm = (props) => {
     return null;
   }
 
+  //purpose is to get which react select component is being changed bc react select seems to be constructed with
+  //the idea that each component should be added manually
+  //but in this case, the components are being constructed programmatically so it requires more effort to identify
+  //which component is being modified
   function selectClickHandler(event) {
-    console.log('event', event)
-    console.log('event.target', event.target)
-    console.log('event.target.parent', event.target.parent)
-    let parent = event.target.parent;
-    // const target = event.target;
-    // let {parent} = target;
+    const {target, currentTarget} = event;
+    let parent;
     let reactSelectInput;
     let idStr;
-    //case click the select element
-    reactSelectInput = parent.querySelector('input');
-    if (reactSelectInput && reactSelectInput.id) {
-      idStr = reactSelectInput.id;
-      setCreateableSelectKey(idStr);  
+
+    //handle clicking on icon within the react select comp
+    if (target.nodeName === 'svg') {
+      if (target.parentNode.parentNode.parentNode) {
+        parent = target.parentNode.parentNode.parentNode;
+        reactSelectInput = parent.querySelector('input');
+        if (reactSelectInput && reactSelectInput.id) {
+          idStr = reactSelectInput.id;
+          setCreateableSelectKey(idStr);  
+        }
+      }
     }
-    //2 cases; either click the svg
-    else if (parent.tagName === 'svg') {
-      if (parent.parentNode.parentNode.parentNode) {
-        parent = parent.parentNode.parentNode.parentNode;
+    else if (target.nodeName === 'path') {
+      //this could be child of svg for the down arrow icon or for the X icon
+      if (target.parentNode.parentNode.parentNode.parentNode) {
+        parent = target.parentNode.parentNode.parentNode.parentNode;
         reactSelectInput = parent.querySelector('input');
         if (reactSelectInput && reactSelectInput.id) {
           idStr = reactSelectInput.id;
@@ -229,9 +235,9 @@ const ShoppingListDetailForm = (props) => {
       }
     }
     //case clicked parent of svg
-    else if (parent.className && parent.className.indexOf('indicatorContainer') > -1) {
-      if (parent.parentNode.parentNode) {
-        parent = parent.parentNode.parentNode;
+    else if (target.parentNode.parentNode.className && target.parentNode.parentNode.className.indexOf('indicatorContainer') > -1) {
+      if (target.parentNode.parentNode) {
+        parent = target.parentNode.parentNode;
         reactSelectInput = parent.querySelector('input');
         if (reactSelectInput && reactSelectInput.id) {
           idStr = reactSelectInput.id;
@@ -239,46 +245,15 @@ const ShoppingListDetailForm = (props) => {
         }
       }
     }
+    //case click the select element
+    else {
+      reactSelectInput = target.parentNode.querySelector('input');
+      if (reactSelectInput && reactSelectInput.id) {
+        idStr = reactSelectInput.id;
+        setCreateableSelectKey(idStr);  
+      }  
+    }
   }
-
-  // let listClickHandler = function(
-  //   event: React.MouseEvent<HTMLLIElement>
-  // ): void {
-  //   console.log('event', event)
-  //   console.log('event.target', event.target)
-  //   const target = event.target as HTMLLIElement;
-  //   let {parent} = target;
-  //   let reactSelectInput;
-  //   let idStr;
-  //   //case click the select element
-  //   reactSelectInput = parent.querySelector('input');
-  //   if (reactSelectInput && reactSelectInput.id) {
-  //     idStr = reactSelectInput.id;
-  //     setCreateableSelectKey(idStr);  
-  //   }
-  //   //2 cases; either click the svg
-  //   else if (parent.tagName === 'svg') {
-  //     if (parent.parentNode.parentNode.parentNode) {
-  //       parent = parent.parentNode.parentNode.parentNode;
-  //       reactSelectInput = parent.querySelector('input');
-  //       if (reactSelectInput && reactSelectInput.id) {
-  //         idStr = reactSelectInput.id;
-  //         setCreateableSelectKey(idStr);  
-  //       }
-  //     }
-  //   }
-  //   //case clicked parent of svg
-  //   else if (parent.className && parent.className.indexOf('indicatorContainer') > -1) {
-  //     if (parent.parentNode.parentNode) {
-  //       parent = parent.parentNode.parentNode;
-  //       reactSelectInput = parent.querySelector('input');
-  //       if (reactSelectInput && reactSelectInput.id) {
-  //         idStr = reactSelectInput.id;
-  //         setCreateableSelectKey(idStr);  
-  //       }
-  //     }
-  //   }
-  // }
 
   //methods specific to form using expiration notifications
   //react select
