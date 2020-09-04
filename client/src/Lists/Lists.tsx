@@ -3,7 +3,13 @@ import { Link } from 'react-router-dom';
 import { IoIosRemoveCircleOutline, IoMdCreate } from "react-icons/io";
 import '../App.css';
 
-const Lists = ({ lists, type, clickHandlerDelete }) => {
+type ListsProps = {
+  lists: {guid: string, name: string}[],
+  type: string,
+  clickHandlerDelete: any
+}
+const Lists = (props: ListsProps) => {
+  const {lists, type, clickHandlerDelete} = props;
   return (
     <ul className="list-group list-no-style">
       {lists.map(list => {

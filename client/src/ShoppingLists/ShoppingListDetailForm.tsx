@@ -15,11 +15,11 @@ import { fetchShoppingListCreate, fetchShoppingListEdit } from '../actions/shopp
 import { isUsingExpiration } from '../actions/setting';
 import { objToArray, getCookieStr, arrayToObj, mappedListItemsArToObj, daysToMilliseconds } from '../utils/utils';
 
-const KEY_BASE = 'shoppingListItem';
-const listType = 'shopping';
+const KEY_BASE: string = 'shoppingListItem';
+const listType: string = 'shopping';
 const initListItemInputs = {};
 
-const sectionOptions = [
+const sectionOptions: {label: string, value: string}[] = [
       {label: 'Section', value: 'none'},
       {label: 'drinks', value: 'drinks'},
       {label: 'dairy', value: 'dairy'},
@@ -35,6 +35,32 @@ const listItemStyles = {
   control: styles => ({ ...styles, width: '80%' })
 }
 
+type ShoppingListDetailFormProps = {
+  mode: string,
+  authenticate: {
+    isLoggedIn: boolean,
+    hasButtonClicked: boolean,
+    status: string,
+    message: string,
+    authStr: string,
+  },
+  shoppingLists: {
+    status: string,
+    message: string,
+    shoppingLists: {
+      id: {
+        name: string,
+        guid: string
+      },
+    }
+  },
+  setting: {
+    hasButtonClicked: boolean
+  },
+  fetchShoppingListCreate: any,
+  fetchShoppingListEdit: any,
+  isUsingExpiration: any
+}
 const ShoppingListDetailForm = (props) => {
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [title, setTitle] = useState(props.mode === 'edit' ? 'Edit Shopping List' : 'Add Shopping List');
@@ -58,19 +84,17 @@ const ShoppingListDetailForm = (props) => {
 
   const [listItemInputs, setListItemInputs] = useState(initListItemInputs);
 
-  function inputChangeHandler(ev) {
-    let name = ev.target.name;
-    let value = ev.target.value;
-    let type = ev.target.type;
-    let id = ev.target.id;
-
+  let inputChangeHandler = function(
+    event: React.FormEvent<HTMLInputElement>
+  ): void {
+    const target = event.target as HTMLInputElement;
+    const {name, value, type, id} = target;
     if (name === 'listNameInp') {
       setListName(value);
     } else if (type === 'text') {
       // handle list item text inputs
       let prevListItemInputs = listItemInputs;
-      let newInput2 = {};
-      newInput2.name = value;
+      let newInput2: {name: string} = {name: value};
       let newInput = {}
       newInput[id] = {...prevListItemInputs[id], ...newInput2}
       let newListItemInputs = { ...prevListItemInputs, ...newInput};
@@ -78,8 +102,7 @@ const ShoppingListDetailForm = (props) => {
     } else {
       // handle click on checkbox label (custom input)
       let prevListItemInputs = listItemInputs;
-      let newInput2 = {};
-      newInput2.checked = !prevListItemInputs[id].checked;
+      let newInput2: {checked: boolean} = {checked: !prevListItemInputs[id].checked};
       let newInput = {}
       newInput[id] = {...prevListItemInputs[id], ...newInput2}
       let newListItemInputs = { ...prevListItemInputs, ...newInput};
@@ -87,17 +110,18 @@ const ShoppingListDetailForm = (props) => {
     }
   }
 
-  function reformatSelectId(id) {
-    let tempAr = id.split('Select')
-    return tempAr.join('')
+  let reformatSelectId = function(id: string): string {  
+    let tempAr = id.split('Select');
+    return tempAr.join('');
   }
 
-  function onChangeHandlerSelectSection(ev) {
-    let id = ev.target.id;
+  let onChangeHandlerSelectSection = function(
+    event: React.FormEvent<HTMLSelectElement>
+  ): void {
+    const target = event.target as HTMLSelectElement;
+    const {id, value} = target;
     let reformattedId = reformatSelectId(id);
-    let section = ev.target.value;
-    let newInput2 = {};
-    newInput2.section = section;
+    let newInput2: {section: string} = {section: value};
     let prevListItemInputs = listItemInputs;
     let newInput = {};
     newInput[reformattedId] = {...prevListItemInputs[reformattedId], ...newInput2};
@@ -105,10 +129,12 @@ const ShoppingListDetailForm = (props) => {
     setListItemInputs(newListItemInputs);
   }
 
-  function formSubmitHandler(ev) {
+  let formSubmitHandler = function(
+    event: React.MouseEvent<HTMLButtonElement>
+  ): void {
+    event.preventDefault();  
     let requestBody;
     let listGuid;
-    let list = {};
     let cookieStr = (props.authenticate && props.authenticate.authStr) ? props.authenticate.authStr : null;
     let copyListItemInputs;
 
@@ -119,9 +145,11 @@ const ShoppingListDetailForm = (props) => {
         copyListItemInputs[tempId].parentId = listGuid;
       }
       setListItemInputs(copyListItemInputs);
-      list.name = listName;
-      list.type = listType;
-      list.listItems = objToArray(copyListItemInputs);
+      let list = {
+        name: listName,
+        type: listType,
+        listItems: objToArray(copyListItemInputs)
+      }
       let d = new Date();
       list.listItems.forEach(item => {
         item.timestamp = d.toISOString();
@@ -134,25 +162,25 @@ const ShoppingListDetailForm = (props) => {
         copyListItemInputs[tempId].parentId = listGuid;
       }
       setListItemInputs(copyListItemInputs);
-      list.name = listName;
-      list.type = listType;
-      list.listItems = objToArray(listItemInputs);
+      let list = {
+        name: listName,
+        type: listType,
+        listItems: objToArray(listItemInputs),
+        guid: listGuid
+      }
       let d = new Date();
       list.listItems.forEach(item => {
         item.timestamp = d.toISOString();
       })
-      list.guid = listGuid;
-      props.fetchShoppingListEdit({ list, cookieStr })
+      props.fetchShoppingListEdit({ list, cookieStr });
     }
-
     clearForm('empty');
     setFormSubmitted(true);
   }
 
   //renders all list items (text inp and select list)
-  function renderForm() {
+  let renderForm = function(): string[] {
     let htmlResult = [];
-
     if (Object.keys(listItemInputs).length) {
       let key;
       for (let i = 0; i < 50; i++) {
@@ -161,10 +189,11 @@ const ShoppingListDetailForm = (props) => {
 
         htmlResult.push(
           <li key={key} className="form-row-inline">
-            <Checkbox checkboxVal={curInput.checked} onChangeHandler={inputChangeHandler} id={key}/>
+            <Checkbox checkboxVal={curInput.checked} onChangeHandler={inputChangeHandler} id={key}
+              checkboxLabel='' name='' checkClassName='' />
             <InputText value={listItemInputs[key].name} placeholder="item name" 
               id={key} onChangeHandler={inputChangeHandler} name={key}
-            />
+              inputClassName='' readOnly={false} type={null} />
           </li>
         )
       }
@@ -173,22 +202,20 @@ const ShoppingListDetailForm = (props) => {
     return null;
   }
 
-  function selectClickHandler(ev) {
-    let parent = ev.target;
+  //purpose is to get which react select component is being changed bc react select seems to be constructed with
+  //the idea that each component should be added manually
+  //but in this case, the components are being constructed programmatically so it requires more effort to identify
+  //which component is being modified
+  function selectClickHandler(event) {
+    const {target, currentTarget} = event;
+    let parent;
     let reactSelectInput;
     let idStr;
 
-    //case click the select element
-    reactSelectInput = parent.querySelector('input');
-    if (reactSelectInput && reactSelectInput.id) {
-      idStr = reactSelectInput.id;
-      setCreateableSelectKey(idStr);  
-    }
-
-    //2 cases; either click the svg
-    else if (parent.tagName === 'svg') {
-      if (parent.parentNode.parentNode.parentNode) {
-        parent = parent.parentNode.parentNode.parentNode;
+    //handle clicking on icon within the react select comp
+    if (target.nodeName === 'svg') {
+      if (target.parentNode.parentNode.parentNode) {
+        parent = target.parentNode.parentNode.parentNode;
         reactSelectInput = parent.querySelector('input');
         if (reactSelectInput && reactSelectInput.id) {
           idStr = reactSelectInput.id;
@@ -196,17 +223,35 @@ const ShoppingListDetailForm = (props) => {
         }
       }
     }
-
+    else if (target.nodeName === 'path') {
+      //this could be child of svg for the down arrow icon or for the X icon
+      if (target.parentNode.parentNode.parentNode.parentNode) {
+        parent = target.parentNode.parentNode.parentNode.parentNode;
+        reactSelectInput = parent.querySelector('input');
+        if (reactSelectInput && reactSelectInput.id) {
+          idStr = reactSelectInput.id;
+          setCreateableSelectKey(idStr);  
+        }
+      }
+    }
     //case clicked parent of svg
-    else if (parent.className && parent.className.indexOf('indicatorContainer') > -1) {
-      if (parent.parentNode.parentNode) {
-        parent = parent.parentNode.parentNode;
+    else if (target.parentNode.parentNode.className && target.parentNode.parentNode.className.indexOf('indicatorContainer') > -1) {
+      if (target.parentNode.parentNode) {
+        parent = target.parentNode.parentNode;
         reactSelectInput = parent.querySelector('input');
         if (reactSelectInput && reactSelectInput.id) {
           idStr = reactSelectInput.id;
           setCreateableSelectKey(idStr);  
         }
       }
+    }
+    //case click the select element
+    else {
+      reactSelectInput = target.parentNode.querySelector('input');
+      if (reactSelectInput && reactSelectInput.id) {
+        idStr = reactSelectInput.id;
+        setCreateableSelectKey(idStr);  
+      }  
     }
   }
 
@@ -224,24 +269,19 @@ const ShoppingListDetailForm = (props) => {
     setListItemInputs({...listItemInputs, 
       [createableSelectKey]: newListItemInput
     });
-    //this applies to changed values as well as new values
-    //__isNew__ === true
-  }
-  //react select new input
-  function handleCreatableInputChange(inputValue, actionMeta) {
   }
 
-  function setNotificationClickHandler(ev) {
-    ev.preventDefault();
+  let setNotificationClickHandler = function(
+    event: React.MouseEvent<HTMLButtonElement>
+  ): void {
+    event.preventDefault();
     let dictListItemMapGuidToExpirationMs = {};
-
     for (const ky in mappedListItemsObj) {
       let mappedListItem = mappedListItemsObj[ky];
       let guid = mappedListItem.guid;
       let expiration_ms = mappedListItem.expiration_ms;
       dictListItemMapGuidToExpirationMs[guid] = expiration_ms;
     }
-
     let copyListItemInputs = {...listItemInputs};
     for (const k in copyListItemInputs) {
       let item = copyListItemInputs[k];
@@ -262,22 +302,26 @@ const ShoppingListDetailForm = (props) => {
       }
     }
     setListItemInputs(copyListItemInputs);
-    formSubmitHandler(ev);
+    formSubmitHandler(event);
   }
 
-  function renderExpirationForm() {
+  //(required) used by react select 3rd party component new input
+  function handleCreatableInputChange(inputValue, actionMeta) {
+  }
+
+  let renderExpirationForm = function(): string[] {
     let htmlResult = [];
     let listItemOptions = [];
     let key;
     let dictListItemMapGuidToListItemMapName;
 
     mappedListItems.forEach(item => {
-      let inObj = {};
-      inObj.value = item.name;
-      inObj.label = item.name;
+      let inObj: {value: string, label: string} = {
+        value: item.name,
+        label: item.name
+      };
       listItemOptions.push(inObj);
     })
-
     if (props.mode === 'edit') {
       dictListItemMapGuidToListItemMapName = mappedListItems.reduce((accum, cur) => {
         let guid = cur.guid;
@@ -285,7 +329,6 @@ const ShoppingListDetailForm = (props) => {
         return accum;
       }, {});
     }
-
     for (let i = 0; i < 50; i++) {
       key = props.mode === 'add' ? `${KEY_BASE}${i.toString()}` : Object.keys(listItemInputs)[i];
       let curInput =  listItemInputs[key];
@@ -298,17 +341,16 @@ const ShoppingListDetailForm = (props) => {
         } else {
           label = curInput.name;
         }
-        
         value = {
           label,
           value: label
         };
       }
 
-      //TODO issue here with form-row-inline
       htmlResult.push(
         <li key={key} id={key} className="" onClick={selectClickHandler}>
-          <Checkbox checkboxVal={curInput.checked} onChangeHandler={inputChangeHandler} id={key}/>
+          <Checkbox checkboxVal={curInput.checked} onChangeHandler={inputChangeHandler} id={key}
+            checkboxLabel='' name='' checkClassName='' />
           <CreatableSelect
             isClearable
             onChange={inputExpirationChangeHandler}
@@ -325,11 +367,11 @@ const ShoppingListDetailForm = (props) => {
     return htmlResult;
   }
 
-  //generic helper
   //TODO think clicking cancel btn on edit form mode maybe should not clear entire form
-  function clearForm(clearMode = null) {
+  let clearForm = function(
+    clearMode: string = null
+  ): void {
     let formClearMode = clearMode === "empty" ? clearMode : props.mode;
-
     switch(formClearMode) {
       case "edit":
         setListItemInputs(props.editList.listItemInputs);

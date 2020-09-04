@@ -2,14 +2,20 @@ import React from 'react';
 import classNames from 'classnames';
 import './style.css';
 
-const Checkbox = (props) => {
+type CheckboxProps = { 
+  checkboxVal: boolean, 
+  onChangeHandler: any, 
+  checkboxLabel: string, 
+  id: string, 
+  name: string, 
+  checkClassName: string
+};
+const Checkbox = (props: CheckboxProps) => {
   let { checkboxVal, onChangeHandler, checkboxLabel, id, name, checkClassName } = props;
-  let checkClass;
-
+  let checkClass: string;
   if (checkClassName) {
     checkClass = `form ${checkClassName}`
   }
-
   if (checkboxLabel) {
     return (
       <div className={checkClass}>
@@ -17,7 +23,6 @@ const Checkbox = (props) => {
           checked={checkboxVal}
           onChange={ev => onChangeHandler(ev)}
           name={name} />
-
         {checkboxLabel && (
           <label className="checkbox-label" onClick={ev => onChangeHandler(ev)} id={id}>{checkboxLabel}</label>
         )}

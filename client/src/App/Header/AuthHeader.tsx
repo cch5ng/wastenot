@@ -3,24 +3,39 @@ import { Link, useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
 import './Header.css';
 import { logout } from '../../actions/authenticate';
-import Button from '../../App/Shared/Button/Button';
+import Button from '../Shared/Button/Button';
 
-const AuthHeader = (props) => {
-  const [menuDisplayed, setMenuDisplayed] = useState(false);
-
-  const toggleMenu = (ev) => {
-    setMenuDisplayed(!menuDisplayed)
+type AuthHeaderProps = {
+  logout: any,
+  authenticate: {
+    isLoggedIn: boolean,
+    hasButtonClicked: boolean,
+    status: string,
+    message: string,
+    authStr: string,
   }
-
+}
+const AuthHeader = (props: AuthHeaderProps) => {
+  const [menuDisplayed, setMenuDisplayed] = useState(false);
   let history = useHistory();
 
-  const handleSignUpBtn = (ev) => {
-    toggleMenu(ev);
+  let toggleMenu = function(
+    event: React.MouseEvent<HTMLDivElement>
+  ): void {  
+    setMenuDisplayed(!menuDisplayed);
+  }
+
+  let handleSignUpBtn = function(
+    event: React.MouseEvent<HTMLDivElement>
+  ): void {    
+    toggleMenu(event);
     history.push('/signup');
   }
 
-  const handleLogInBtn = (ev) => {
-    toggleMenu(ev);
+  let handleLogInBtn = function(
+    event: React.MouseEvent<HTMLDivElement>
+  ): void {    
+    toggleMenu(event);
     history.push('/');
   }
 
@@ -64,23 +79,15 @@ const AuthHeader = (props) => {
           </p>
         </div>
         <div className="menu-buttons">
-          <Button label="Sign Up" onClickHandler={handleSignUpBtn} size="extra-large" type="important"/>
-          <Button label="Log In" onClickHandler={handleLogInBtn} size="extra-large" type="neutral"/>
+          <Button label="Sign Up" onClickHandler={handleSignUpBtn} size="extra-large" type="important"
+            classVal="" idVal="" noMargin={false}/>
+          <Button label="Log In" onClickHandler={handleLogInBtn} size="extra-large" type="neutral"
+            classVal="" idVal="" noMargin={false}/>
         </div>
       </div>
     )
   }
 }
-
-/*
-          <Link to="/signup">
-            <div className="div-button sign-up-button">Sign Up</div>
-          </Link>
-          <Link to="/">
-            <div className="div-button log-in-button">Log In</div>
-          </Link>
-
-*/
 
 const mapStateToProps = state => ({
   authenticate: state.authenticate

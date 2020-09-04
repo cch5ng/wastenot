@@ -1,24 +1,29 @@
-//functionality
-//display food expiration alerts as list (recently passed, near upcoming) 
-//allow user actions
-    //postpone an alert (add one day onto the cur notification date)
-    //cancel an alert ()
-    //navigate to settings
-
 import React, { useState, useEffect } from 'react';
 import {connect} from 'react-redux';
 import http_requests from '../utils/http_requests';
 import Button from '../App/Shared/Button/Button';
 import './style.css';
 
-const Alerts = (props) => {
+type AlertsProps = {
+    authenticate: {
+        isLoggedIn: boolean,
+        hasButtonClicked: boolean,
+        status: string,
+        message: string,
+        authStr: string,
+    }    
+}
+const Alerts = (props: AlertsProps) => {
     const [alertsAr, setAlertsAr] = useState([]);
     const [alertsObj, setAlertsObj] = useState({});
     const [daysUntilExpiration, setDaysUntilExpiration] = useState(7);
 
-    function handlePostponeAlert(ev) {
-        ev.preventDefault();
-        const className = ev.target.className;
+    let handlePostponeAlert = function(
+        event: React.MouseEvent<HTMLDivElement>
+        ): void {
+        event.preventDefault();
+        const target = event.target as HTMLDivElement;
+        const {className} = target;
         const classAr = className.split(' ')
         const guid = classAr[classAr.length - 1];
         let notify_timestamp = alertsObj[guid].notify_timestamp;
@@ -28,7 +33,7 @@ const Alerts = (props) => {
         if (props.authenticate && props.authenticate.authStr) {
             http_requests.Lists.putPostponeListItemNotification({
                 list_item_guid: guid,
-                timestamp: newNotifyTimestamp, //newNotifyTimestamp,
+                timestamp: newNotifyTimestamp,
                 cookieStr: props.authenticate.authStr
             })
                 .then(resp => {
@@ -41,12 +46,14 @@ const Alerts = (props) => {
         }
     }
 
-    function handleCancelAlert(ev) {
-        ev.preventDefault();
-        const className = ev.target.className;
+    let handleCancelAlert = function(
+        event: React.MouseEvent<HTMLDivElement>
+        ): void {
+        event.preventDefault();
+        const target = event.target as HTMLDivElement;
+        const {className} = target;
         const classAr = className.split(' ')
         const guid = classAr[classAr.length - 1];
-
         if (props.authenticate && props.authenticate.authStr) {
             http_requests.Lists.putCancelListItemNotification({
                 list_item_guid: guid,
@@ -62,12 +69,15 @@ const Alerts = (props) => {
         }
     }
 
-    function handleRangeChange(ev) {
-        let daysCount = ev.target.value;
-        setDaysUntilExpiration(daysCount);
+    let handleRangeChange = function(
+        event: React.FormEvent<HTMLInputElement>
+        ): void {
+            const target = event.target as HTMLInputElement;
+            let daysCount = target.value;
+        setDaysUntilExpiration(parseInt(daysCount, 10));
     }
 
-    function getAlertsObj(ar) {
+    let getAlertsObj = function(ar: {guid: string}[]): object {
         let alertsObj = {};
         ar.forEach(alert => {
             const guid = alert.guid;
@@ -76,7 +86,7 @@ const Alerts = (props) => {
         return alertsObj;
     }
 
-    function getFilteredAlerts() {
+    let getFilteredAlerts = function(): object[] {
         let n = Date.now();
         let additionalMs = convertDayToMs(daysUntilExpiration);
         let thresholdMs = n + additionalMs;
@@ -86,15 +96,14 @@ const Alerts = (props) => {
             return expiryMs <= thresholdMs;
         })
         return filteredAlerts;
-
     }
 
-    function convertISOStrToMs(isoStr) {
+    let convertISOStrToMs = function(isoStr: string): number {
         let d = new Date(isoStr);
         return d.getTime();
     }
 
-    function convertDayToMs(dayCnt) {
+    let convertDayToMs = function(dayCnt: number): number {
         return dayCnt * 24 * 60 * 60 * 1000;
     }
 
@@ -118,7 +127,8 @@ const Alerts = (props) => {
         setAlertsAr(newAlertsAr);    
     }, [alertsObj])
 
-    let filteredAlerts = daysUntilExpiration === 7 ? alertsAr : getFilteredAlerts();
+    let filteredAlerts: {name: string, guid: string, notify_timestamp: string}[] 
+        = daysUntilExpiration === 7 ? alertsAr : getFilteredAlerts();
     return (
         <div className="main">
             <h1>Alerts</h1>
@@ -136,17 +146,18 @@ const Alerts = (props) => {
                 return (<div className="row row-left" key={alert.guid}>
                     <p>{alert.name} will expire on {newDate.toDateString()}</p>
                     <Button onClickHandler={handlePostponeAlert} label="+1 day" 
-                        classVal={alert.guid} size="extra-small" noMargin={true}/>
+                        classVal={alert.guid} size="extra-small" noMargin={true}
+                        idVal='' type={null}/>
                     <Button onClickHandler={handleCancelAlert} label="Cancel" 
-                        classVal={alert.guid} size="extra-small" noMargin={true}/>
-
+                        classVal={alert.guid} size="extra-small" noMargin={true}
+                        idVal='' type={null}/>
                 </div>)
             })}
         </div>
     )
 }
 
-function getAlertsArFromObj(alertsObj) {
+let getAlertsArFromObj = function(alertsObj: object): object[] {
     let alertsAr = [];
     for (let guid in alertsObj) {
         alertsAr.push(alertsObj[guid]);

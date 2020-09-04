@@ -5,13 +5,17 @@ import { Link } from 'react-router-dom';
 import './style.css';
 import Checkbox from '../Shared/Checkbox/Checkbox';
 
-const InternalNotification = (props) => {
+type InternalNotificationProps = {
+  clickCloseHandler: any,
+  checkboxSelectHandler: any
+}
+const InternalNotification = (props: InternalNotificationProps) => {
   return (
     <div className="internalNotification">
       <div className="controlClose" onClick={props.clickCloseHandler}>X</div>
       <p>This is a reminder to <Link to="/settings/expirationMapTest" onClick={props.clickCloseHandler}>set up mapping between your shopping list items and expiration dates.</Link></p>
       <form>
-        <Checkbox checkboxVal={false} checkboxLabel="Hide this message in the future" onChangeHandler={props.checkboxSelectHandler} />
+        <Checkbox checkboxVal={false} checkboxLabel="Hide this message in the future" onChangeHandler={props.checkboxSelectHandler} id='' name='' checkClassName={null} />
       </form>
     </div>
   )

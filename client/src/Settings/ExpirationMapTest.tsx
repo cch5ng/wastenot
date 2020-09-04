@@ -8,77 +8,80 @@ import { getExpirationCategory, getExpirationDate } from '../utils/map_expiratio
 import http_requests from '../utils/http_requests';
 import { getCookieStr } from '../utils/utils';
 
-const initMappings = () => {
+let initMappings = function(): {disabled: boolean, text: string, expirationCategory: string}[] {
   let initM = [];
   for (let i = 0; i < 30; i++) {
-    let obj = {};
-    obj.disabled = false; //disabled is same as checked
-    obj.text = '';
-    obj.expirationCategory = 'none';
+    let obj: {disabled: boolean, text: string, expirationCategory: string} = {
+      disabled: false,
+      text: '',
+      expirationCategory: 'none'
+    };
     initM.push(obj);
   }
   return initM;
 }
 
-let expirationCategoryOptions = [];
+let expirationCategoryOptions: {label: string, value: string}[] = [];
 Object.keys(EXPIRATION_DATES).forEach(category => {
-  let obj = {}
-  obj.label = category;
-  obj.value = category;
+  let obj = {
+    label: category,
+    value: category
+  }
   expirationCategoryOptions.push(obj);
 });
-//console.log('expirationCategoryOptions', expirationCategoryOptions)
 
 const ExpirationMapTest = (props) => {
   const [expirationMapPage, setExpirationMapPage] = useState(1);
   const [mappings, setMappings] = useState(initMappings());
 
-  const getMappingsIdxFromId = (id) => {
+  let getMappingsIdxFromId = function(
+    id: string
+  ): string {
     let idAr = id.split('-');
     return idAr[idAr.length - 1];
   }
 
-  //handles change to rows of checkbox and input text fields
-  const checkboxChangeHandler = (ev) => {
-    let name = ev.target.name;
-    let id = ev.target.id;
+  let checkboxChangeHandler = function(
+    event: React.FormEvent<HTMLInputElement>
+  ): void {
+    const target = event.target as HTMLInputElement;
+    const {name, id} = target;
     let idx = getMappingsIdxFromId(id);
-    //handle checkbox change
-    if (name = 'checkbox') {
+    if (name === 'checkbox') {
       let disabledNew = !mappings[idx].disabled;
       let newMappings = [].concat(mappings)
       newMappings[idx].disabled = disabledNew;
       setMappings(newMappings);
     }
-    //this should trigger expirationDateMapper1, only if the checkbox is not checked
-    //handle also the case if mapping was never done but then the checkbox gets de selected
   }
 
-  const inputChangeHandler = (ev) => {
-    let name = ev.target.name;
-    let value = ev.target.value;
-    let id = ev.target.id;
+  let inputChangeHandler = function(
+    event: React.FormEvent<HTMLInputElement>
+  ): void {
+    const target = event.target as HTMLInputElement;
+    const {name, id, value} = target;
     let idx = getMappingsIdxFromId(id);
-    if (name = 'inputText') {
+    if (name === 'inputText') {
       let newMappings = [].concat(mappings)
       newMappings[idx].text = value;
       setMappings(newMappings);
     }
   }
 
-  const selectListChangeHandler = (ev) => {
-    let value = ev.target.value;
-    let id = ev.target.id;
+  let selectListChangeHandler = function(
+    event: React.FormEvent<HTMLInputElement>
+  ): void {
+    const target = event.target as HTMLInputElement;
+    const {value, id} = target;
     let idx = getMappingsIdxFromId(id);
-
     let newMappings = [].concat(mappings)
     newMappings[idx].expirationCategory = value;
     setMappings(newMappings);
   }
 
   //determines how to map the input text content to the expiration_dates objects
-  const getMappedExpirationCategoriesAr = () => {
-    let mappedExpirationCategoriesAr = mappings.map(mapping => {
+  let getMappedExpirationCategoriesAr = function(): {disabled: boolean, text: string}[] {
+      let mappedExpirationCategoriesAr = mappings.map(mapping => {
       if (!mapping.disabled && mapping.text.length) {
         return getExpirationCategory(mapping.text, EXPIRATION_DATES)
       } else {
@@ -86,13 +89,13 @@ const ExpirationMapTest = (props) => {
         return 'none';
       }
     });
-
     return mappedExpirationCategoriesAr;
   }
 
-  const stepOneFormSubmitHandler = (ev) => {
-    ev.preventDefault();
-
+  let stepOneFormSubmitHandler = function(
+    event: React.MouseEvent<HTMLDivElement>
+  ): void {
+    event.preventDefault();
     let cookie = getCookieStr();
     let mappedExpirationCategoriesAr = getMappedExpirationCategoriesAr();
     let newMappings = [].concat(mappings);
@@ -106,17 +109,19 @@ const ExpirationMapTest = (props) => {
     setExpirationMapPage(2);
   }
 
-  const stepTwoFormSubmitHandler = (ev) => {
-    ev.preventDefault();
+  let stepTwoFormSubmitHandler = function(
+    event: React.MouseEvent<HTMLDivElement>
+  ): void {
+    event.preventDefault();
     let mappingsWithExpiration = [];
-
     let cookie = getCookieStr();
     mappings.forEach(item => {
       if (item.text.length && item.expirationCategory.length) {
-        let obj = {}
-        obj.name = item.text;
-        obj.expirationMs = getExpirationDate(item.expirationCategory, EXPIRATION_DATES);
-        obj.skipNotification = item.disabled;
+        let obj = {
+          name: item.text,
+          expirationMs: getExpirationDate(item.expirationCategory, EXPIRATION_DATES),
+          skipNotification: item.disabled
+        }
         mappingsWithExpiration.push(obj);
       }
     });
@@ -149,7 +154,15 @@ const ExpirationMapTest = (props) => {
 
 export default ExpirationMapTest;
 
-const MappingStep1 = (props) => {
+type MappingStep1Props = {
+  mappings: {text: string}[],
+  inputChangeHandler: any,
+  stepOneFormSubmitHandler: any,
+  checkboxChangeHandler: any,
+  expirationCategoryOptions: object,
+  selectListChangeHandler: any
+}
+const MappingStep1 = (props: MappingStep1Props) => {
   return (
     <div>
       <h1>Step 1: Enter a Sample Shopping List</h1>
@@ -166,16 +179,26 @@ const MappingStep1 = (props) => {
           return (
             <div key={outerKey} className="row">
               <InputText value={m.text} onChangeHandler={props.inputChangeHandler} 
-                name="inputText" id={inputTextIdx} inputClassName="oneCol"/>
+                name="inputText" id={inputTextIdx} inputClassName="oneCol"
+                placeholder='' readOnly={false} type={null} />
             </div>
           )
         })}
-        <Button label="Next" onClickHandler={props.stepOneFormSubmitHandler} size="medium" />
+        <Button label="Next" onClickHandler={props.stepOneFormSubmitHandler} size="medium" 
+          classVal='' idVal='' type={null} noMargin={false} />
       </form>
     </div>
   )
 }
 
+type ReviewStep2Props = {
+  mappings: {text: string, disabled: boolean, expirationCategory: string}[],
+  inputChangeHandler: any,
+  selectListChangeHandler: any,
+  checkboxChangeHandler: any,
+  expirationCategoryOptions: object,
+  stepTwoFormSubmitHandler: any
+}
 const ReviewStep2 = (props) => {
   return (
     <div>
@@ -198,15 +221,17 @@ const ReviewStep2 = (props) => {
           return (
             <div key={outerKey} className="row">
               <Checkbox checkboxVal={m.disabled} onChangeHandler={props.checkboxChangeHandler} 
-                name="checkbox" id={checkboxIdx} checkClassName="sixCol" />
+                name="checkbox" id={checkboxIdx} checkClassName="sixCol" checkboxLabel={null}/>
               <InputText value={m.text} onChangeHandler={props.inputChangeHandler} 
-                name="inputText" id={inputTextIdx} inputClassName="threeCol" readOnly={true} />
+                name="inputText" id={inputTextIdx} inputClassName="threeCol" readOnly={true} 
+                placeholder='' type={null} />
               <SelectList value={m.expirationCategory} options={props.expirationCategoryOptions} 
                 onChange={props.selectListChangeHandler} id={selectListIdx} selectClassName="threeCol"/>
             </div>
           )
         })}
-        <Button label="Save" onClickHandler={props.stepTwoFormSubmitHandler} size="medium" />
+        <Button label="Save" onClickHandler={props.stepTwoFormSubmitHandler} size="medium" 
+          classVal='' idVal='' type={null} noMargin={false} />
       </form>
     </div>
   )

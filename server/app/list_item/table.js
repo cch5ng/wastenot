@@ -169,6 +169,7 @@ class ListItemTable {
          WHERE u.id=lim.user_id AND u."emailHash"=$1 AND lim.guid=li.list_item_map_guid
          AND li.notification_sent=$2
          AND li.notify_timestamp > $3
+         AND li.notify_timestamp < $4
          ORDER BY li.notify_timestamp`,
         [emailHash, notification_sent, lastWeekTimestamp, nextWeekTimestamp],
         (error, response) => {
