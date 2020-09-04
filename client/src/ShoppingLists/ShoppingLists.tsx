@@ -8,8 +8,30 @@ import http_requests from '../utils/http_requests';
 import { fetchShoppingLists, fetchShoppingListDelete } from '../actions/shoppingLists';
 import '../App.css';
 
-class ShoppingLists extends Component {
+type MyProps = {
+  authenticate: {
+    isLoggedIn: boolean,
+    hasButtonClicked: boolean,
+    status: string,
+    message: string,
+    authStr: string,
+  },
+  shoppingLists: {
+    status: string,
+    message: string,
+    shoppingLists: {
+      id: {
+        name: string,
+        guid: string
+      },
+    }
+  },
+  fetchShoppingLists: any,
+  fetchShoppingListDelete: any,
+}
+type MyState = {}
 
+class ShoppingLists extends Component<MyProps, MyState> {
   constructor(props) {
     super(props);
   }
