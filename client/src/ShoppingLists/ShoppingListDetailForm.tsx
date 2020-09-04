@@ -202,11 +202,13 @@ const ShoppingListDetailForm = (props) => {
     return null;
   }
 
-  let selectClickHandler = function(
-    event: React.MouseEvent<HTMLDivElement>
-  ): void {
-    const target = event.target as HTMLDivElement;
-    let {parent} = target;
+  function selectClickHandler(event) {
+    console.log('event', event)
+    console.log('event.target', event.target)
+    console.log('event.target.parent', event.target.parent)
+    let parent = event.target.parent;
+    // const target = event.target;
+    // let {parent} = target;
     let reactSelectInput;
     let idStr;
     //case click the select element
@@ -238,6 +240,45 @@ const ShoppingListDetailForm = (props) => {
       }
     }
   }
+
+  // let listClickHandler = function(
+  //   event: React.MouseEvent<HTMLLIElement>
+  // ): void {
+  //   console.log('event', event)
+  //   console.log('event.target', event.target)
+  //   const target = event.target as HTMLLIElement;
+  //   let {parent} = target;
+  //   let reactSelectInput;
+  //   let idStr;
+  //   //case click the select element
+  //   reactSelectInput = parent.querySelector('input');
+  //   if (reactSelectInput && reactSelectInput.id) {
+  //     idStr = reactSelectInput.id;
+  //     setCreateableSelectKey(idStr);  
+  //   }
+  //   //2 cases; either click the svg
+  //   else if (parent.tagName === 'svg') {
+  //     if (parent.parentNode.parentNode.parentNode) {
+  //       parent = parent.parentNode.parentNode.parentNode;
+  //       reactSelectInput = parent.querySelector('input');
+  //       if (reactSelectInput && reactSelectInput.id) {
+  //         idStr = reactSelectInput.id;
+  //         setCreateableSelectKey(idStr);  
+  //       }
+  //     }
+  //   }
+  //   //case clicked parent of svg
+  //   else if (parent.className && parent.className.indexOf('indicatorContainer') > -1) {
+  //     if (parent.parentNode.parentNode) {
+  //       parent = parent.parentNode.parentNode;
+  //       reactSelectInput = parent.querySelector('input');
+  //       if (reactSelectInput && reactSelectInput.id) {
+  //         idStr = reactSelectInput.id;
+  //         setCreateableSelectKey(idStr);  
+  //       }
+  //     }
+  //   }
+  // }
 
   //methods specific to form using expiration notifications
   //react select
