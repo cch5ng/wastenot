@@ -74,6 +74,7 @@ const ShoppingListDetailForm = (props) => {
   const [mappedListItems, setMappedListItems] = useState([]);
   const [mappedListItemsObj, setMappedListItemsObj] = useState({});
   const [createableSelectKey, setCreateableSelectKey] = useState(null);
+  const [reactSelectError, setReactSelectError] = useState(null);
 
   for (let i = 0; i < 50; i++) {
     let key = `${KEY_BASE}${i}`;
@@ -154,6 +155,7 @@ const ShoppingListDetailForm = (props) => {
       list.listItems.forEach(item => {
         item.timestamp = d.toISOString();
       })
+      setReactSelectError('');
       props.fetchShoppingListCreate({ list, cookieStr});
     } else if (props.mode === 'edit') {
       listGuid = props.listGuid;
@@ -252,6 +254,10 @@ const ShoppingListDetailForm = (props) => {
         idStr = reactSelectInput.id;
         setCreateableSelectKey(idStr);  
       }  
+    }
+
+    if (!reactSelectInput || !reactSelectInput.id) {
+      setReactSelectError('One or more list selection did not work. Please try again.');
     }
   }
 
@@ -422,7 +428,8 @@ const ShoppingListDetailForm = (props) => {
         <ShoppingListFormExpiration title={title} listName={listName}
           onClickHandler={clearForm} formSubmitHandler={formSubmitHandler} 
           inputChangeHandler={inputChangeHandler} renderForm={renderExpirationForm} 
-          setNotificationClickHandler={setNotificationClickHandler} />
+          setNotificationClickHandler={setNotificationClickHandler} 
+          displayError={reactSelectError} />
       )}
       {(props.setting.isUsingExpiration === false || mappedListItems.length === 0) && (
         <ShoppingListFormNoExpiration title={title} formSubmitHandler={formSubmitHandler}
