@@ -155,6 +155,7 @@ const ShoppingListDetailForm = (props) => {
       list.listItems.forEach(item => {
         item.timestamp = d.toISOString();
       })
+      setReactSelectError('');
       props.fetchShoppingListCreate({ list, cookieStr});
     } else if (props.mode === 'edit') {
       listGuid = props.listGuid;
