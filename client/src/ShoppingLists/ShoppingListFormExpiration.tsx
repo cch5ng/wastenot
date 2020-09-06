@@ -20,10 +20,11 @@ type ShoppingListFormExpirationProps = {
     setNotificationClickHandler: any
 }
 const ShoppingListFormExpiration = (props) => {
-    const { title, formSubmitHandler, listName, inputChangeHandler, onClickHandler, renderForm, setNotificationClickHandler } = props;
+    const { title, formSubmitHandler, listName, inputChangeHandler, onClickHandler, 
+        renderForm, setNotificationClickHandler, displayError } = props;
     return (
         <div>
-            <h3>{title}</h3>
+            <h1>{title}</h1>
             <div>
                 <Button classVal="listDetailFormSaveBtn" onClickHandler={formSubmitHandler} label="Save" 
                     idVal='' size={null} type={null} noMargin={false} />
@@ -31,7 +32,13 @@ const ShoppingListFormExpiration = (props) => {
                     classVal='' idVal='' size={null} type={null} noMargin={false} />
                 <Button label="Set Notification" onClickHandler={setNotificationClickHandler} 
                     classVal='' idVal='' size={null} type={null} noMargin={false} />
-             </div>
+            </div>
+            {displayError !== null && (
+                <div>
+                    <h2>Errors</h2>
+                    <p>{displayError}</p>
+                </div>
+            )}
             <br />
             <InputText name="listNameInp" value={listName} placeholder="list name" onChangeHandler={inputChangeHandler} 
                 id='' inputClassName='' readOnly={false} type={null} />
