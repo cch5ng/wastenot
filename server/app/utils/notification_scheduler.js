@@ -12,16 +12,21 @@ if (process.env.NODE_ENV !== 'production') {
 	}
 }
 
+let max = process.env.NODE_ENV === 'development' ? process.env.PGMAXCONNECTIONS - 1: process.env.PGMAXCONNECTIONS;
+
 const pool = new Pool({
   user: process.env.PGUSER,
   host: process.env.PGHOST,
   database: process.env.PGDATABASE,
   password: process.env.PGPASSWORD,
   port: process.env.PGPORT,
+  max,
+  idleTimeoutMillis: 30000,
+  connectionTimeoutMillis: 20000,
 })
 
 console.log('Before job instantiation');
-const job = new CronJob('* * 12 * * *', function() {
+const job = new CronJob('*/30 * * * * *', function() {
     //prod
     //new CronJob('* * 12 * * *', function() {
     //dev
@@ -65,7 +70,7 @@ const job = new CronJob('* * 12 * * *', function() {
                                         respUserSubscription = resp3;
                                         dictByUid = getObjByUserId(resp3);
                                         mergedNotificationsSubscriptions = mergeNotificationsWithSubscriptions(mergedNotifications, dictByUid);
-                                        console.log('mergedNotificationsSubscriptions', mergedNotificationsSubscriptions)
+                                        //console.log('mergedNotificationsSubscriptions', mergedNotificationsSubscriptions)
                                         mergedNotificationsSubscriptions.forEach(sub => {
                                             let data = {
                                                 list_item_id: sub.list_item_id,
