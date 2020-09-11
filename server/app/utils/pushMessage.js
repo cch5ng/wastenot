@@ -14,7 +14,13 @@ const triggerPushMsg = function(subscription, dataToSend) {
         process.env.VAPID_PRIVATE_KEY
     );
 
-    return webpush.sendNotification(subscription, dataToSend)
+    const options = {
+        vapidDetails: {
+            subject: 'food expiration warning'
+        }
+    }
+
+    return webpush.sendNotification(subscription, dataToSend, options)
         .catch((err) => {
             if (err.statusCode === 404 || err.statusCode === 410) {
             console.log('Subscription has expired or is no longer valid: ', err);
