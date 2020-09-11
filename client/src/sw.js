@@ -64,7 +64,7 @@ export function subscribeUserToPush() {
           http_requests.Auth.postPushSubscription({email, pushSubscription: JSON.stringify(pushSubscription)})
 
       } else {
-          alert('user is not logged in so push subscription cannotbe saved')
+          alert('user is not logged in so push subscription cannot be saved')
       }
       return pushSubscription;
     });
@@ -103,7 +103,7 @@ export function sendNotification(data) {
 }
 
 self.addEventListener('push', function(event) {
-    //event.waitUntil(function() {
+    event.waitUntil(function() {
         let { message, list_item_id } = event.data.json();
         const options = {
             "body": `${message}`,
@@ -125,11 +125,11 @@ self.addEventListener('push', function(event) {
     
         self.registration.showNotification('Food Expiration Warning', options);
 
-    //})
-    // if (event.data) {
+    })
+    if (event.data) {
 
     //     //TEST need to uncomment
-    //     //sendNotification(message);
+        sendNotification(message);
 
     //     //TODO
     //     // event.waitUntil(
@@ -144,9 +144,9 @@ self.addEventListener('push', function(event) {
     //         //     }
     //         // })
     //     //)
-    // } else {
-    //  console.log('This push event has no data.');
-    // }
+    } else {
+     console.log('This push event has no data.');
+    }
 });
 
 // self.addEventListener('notificationclick', function(event) {
