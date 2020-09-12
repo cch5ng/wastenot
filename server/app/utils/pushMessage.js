@@ -1,22 +1,11 @@
-//pushMessage.js
-
 const webpush = require('web-push');
 
-const vapidKeys = {
-    publicKey: process.env.VAPID_PUBLIC_KEY,
-    privateKey: process.env.VAPID_PRIVATE_KEY
-};
-
 const triggerPushMsg = function(subscription, dataToSend) {
-    webpush.setVapidDetails(
-        process.env.VAPID_EMAIL,
-        process.env.VAPID_PUBLIC_KEY,
-        process.env.VAPID_PRIVATE_KEY
-    );
-
     const options = {
         vapidDetails: {
-            subject: 'food expiration warning'
+            subject: `mailto:${process.env.VAPID_EMAIL}`,
+            publicKey: process.env.VAPID_PUBLIC_KEY,
+            privateKey: process.env.VAPID_PRIVATE_KEY
         }
     }
 
