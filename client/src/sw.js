@@ -126,9 +126,8 @@ self.addEventListener('push', function(event) {
     })
     if (event.data) {
         let { message, list_item_id } = event.data.json();
-
         // MAIN, uncomment to enable push notification display in browser
-        //sendNotification(message);
+        sendNotification(message);
     } else {
         console.log('This push event has no data.');
     }
