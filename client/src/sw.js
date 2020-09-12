@@ -48,7 +48,7 @@ export function subscribeUserToPush() {
       const subscribeOptions = {
         userVisibleOnly: true,
         applicationServerKey: urlBase64ToUint8Array(
-          'BFKDFhisj0ZdbdXBL3FvqPULSNZL0dVAh4ryEbQ_eFlyDkwmsoB6k7NZnlkqoBZFDjblfUAKoOb6oBuZz08qyPI'
+          process.env.VAPID_PUBLIC_KEY
         )
       };
   
@@ -104,7 +104,6 @@ export function sendNotification(data) {
 
 self.addEventListener('push', function(event) {
     event.waitUntil(function() {
-        let { message, list_item_id } = event.data.json();
         const options = {
             "body": `${message}`,
             "data": event.data.text(),
@@ -124,28 +123,13 @@ self.addEventListener('push', function(event) {
         }
     
         self.registration.showNotification('Food Expiration Warning', options);
-
     })
     if (event.data) {
-
+        let { message, list_item_id } = event.data.json();
     //     //TEST need to uncomment
         sendNotification(message);
-
-    //     //TODO
-    //     // event.waitUntil(
-    //     //     sendNotification(event.data)
-
-    //         // self.registration.showNotification("test notification", {
-    //         //     body: "New push notification",
-    //         //     //icon: "/images/logo@2x.png",
-    //         //     tag:  "push-notification-tag",
-    //         //     data: {
-    //         //     list_item_id: JSON.parse(event.data).list_item_id
-    //         //     }
-    //         // })
-    //     //)
     } else {
-     console.log('This push event has no data.');
+        console.log('This push event has no data.');
     }
 });
 
