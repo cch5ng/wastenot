@@ -1,7 +1,7 @@
 const { Pool } = require('pg');
 require('dotenv').config()
 
-let max = process.env.NODE_ENV === 'development' ? process.env.PGMAXCONNECTIONS - 1: process.env.PGMAXCONNECTIONS;
+let max = process.env.NODE_ENV === 'development' ? process.env.PGMAXCONNECTIONS - 2: process.env.PGMAXCONNECTIONS;
 
 const pool = new Pool({
 	user: process.env.PGUSER,
