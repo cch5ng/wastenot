@@ -12,7 +12,7 @@ if (process.env.NODE_ENV !== 'production') {
 	}
 }
 
-let max = process.env.NODE_ENV === 'development' ? process.env.PGMAXCONNECTIONS - 1: process.env.PGMAXCONNECTIONS;
+let max = process.env.NODE_ENV === 'development' ? 1: process.env.PGMAXCONNECTIONS;
 
 const pool = new Pool({
   user: process.env.PGUSER,
