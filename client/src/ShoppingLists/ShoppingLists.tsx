@@ -43,7 +43,8 @@ class ShoppingLists extends Component<MyProps, MyState> {
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.authenticate.authStr !== this.props.authenticate.authStr) {
+    if (prevProps.authenticate.authStr !== this.props.authenticate.authStr
+        && this.props.shoppingLists.message === 'no shopping lists have been retrieved') {
       this.props.fetchShoppingLists({cookieStr: this.props.authenticate.authStr});
     }
   }
