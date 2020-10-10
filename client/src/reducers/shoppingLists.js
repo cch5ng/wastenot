@@ -2,7 +2,7 @@ import { SHOPPING_LISTS_FETCH, SHOPPING_LISTS_ERR,
   SHOPPING_LISTS_FETCH_SUCCESS, SHOPPING_LISTS_EDIT_FETCH_SUCCESS,
   SHOPPING_LISTS_ADD_FETCH_SUCCESS, SHOPPING_LISTS_DELETE_FETCH_SUCCESS } from '../actions/shoppingLists';
 
-const shoppingLists = (state = {}, action) => {
+const shoppingLists = (state = {message: 'no shopping lists have been retrieved'}, action) => {
   let listObj = {};
   let id;
   switch(action.type) {
