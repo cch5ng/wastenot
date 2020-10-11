@@ -25,12 +25,11 @@ const shoppingLists = (state = {message: 'no shopping lists have been retrieved'
         shoppingLists: action.shoppingLists
       }
     case SHOPPING_LISTS_ADD_FETCH_SUCCESS:
-      id = Object.keys(action.shoppingList)[0];
       return {
         ...state,
         status: 'success',
         message: action.message,
-        shoppingLists: {...state.shoppingLists, [id]: action.shoppingList}
+        shoppingLists: {...state.shoppingLists, ...action.shoppingList}
       }
     case SHOPPING_LISTS_EDIT_FETCH_SUCCESS:
       id = action.shoppingList.guid;
