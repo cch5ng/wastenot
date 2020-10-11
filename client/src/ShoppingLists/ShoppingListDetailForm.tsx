@@ -75,6 +75,7 @@ const ShoppingListDetailForm = (props) => {
   const [mappedListItemsObj, setMappedListItemsObj] = useState({});
   const [createableSelectKey, setCreateableSelectKey] = useState(null);
   const [reactSelectError, setReactSelectError] = useState(null);
+  const [clickedCancelBtnCount, setClickedCancelBtnCount] = useState(0);
 
   for (let i = 0; i < 50; i++) {
     let key = `${KEY_BASE}${i}`;
@@ -192,7 +193,7 @@ const ShoppingListDetailForm = (props) => {
         htmlResult.push(
           <li key={key} className="form-row-inline">
             <Checkbox checkboxVal={curInput.checked} onChangeHandler={inputChangeHandler} id={key}
-              checkboxLabel='' name='' checkClassName='' />
+              checkboxLabel='' name='' checkClassName=''/>
             <InputText value={listItemInputs[key].name} placeholder="item name" 
               id={key} onChangeHandler={inputChangeHandler} name={key}
               inputClassName='' readOnly={false} type={null} />
@@ -374,11 +375,10 @@ const ShoppingListDetailForm = (props) => {
   }
 
   //TODO think clicking cancel btn on edit form mode maybe should not clear entire form
-  let clearForm = function(
+  const clearForm = function(
     clearMode: string = null
   ): void {
-    let formClearMode = clearMode === "empty" ? clearMode : props.mode;
-    switch(formClearMode) {
+    switch(clearMode) {
       case "edit":
         setListItemInputs(props.editList.listItemInputs);
         setListName(props.editList.listName);
@@ -386,13 +386,28 @@ const ShoppingListDetailForm = (props) => {
       case "add":
       case "empty":
       default:
-        setListItemInputs(initListItemInputs);
+        let clearedListItemInputs = getInitListItemInputs();
+        setListItemInputs(clearedListItemInputs);
         setListName('');
         break;
     }
   }
 
+  //get empty list item Inputs
+  const getInitListItemInputs = () => {
+    const emptyListItemInputs = {};
+    for (let i = 0; i < 50; i++) {
+      let key = `${KEY_BASE}${i}`;
+      let inputObj = {name: '', section: 'none', checked: false, list_item_map_guid: null, notify_timestamp: null};
+      emptyListItemInputs[key] = inputObj;
+      emptyListItemInputs[key].sortOrder = i;
+    }
+    console.log('emptyListItemInputs', emptyListItemInputs)
+    return emptyListItemInputs;
+  }
+
   useEffect(() => {
+    console.log('useEffect triggered')
     if (props.authenticate.authStr) {
       let cookieStr = props.authenticate.authStr;
       props.isUsingExpiration({cookieStr})
@@ -417,7 +432,7 @@ const ShoppingListDetailForm = (props) => {
           })
       }  
     }
-  }, [props.authenticate.authStr]);
+  }, [props.authenticate.authStr, clickedCancelBtnCount]);
 
   return (
     <div className="main">
@@ -429,12 +444,12 @@ const ShoppingListDetailForm = (props) => {
           onClickHandler={clearForm} formSubmitHandler={formSubmitHandler} 
           inputChangeHandler={inputChangeHandler} renderForm={renderExpirationForm} 
           setNotificationClickHandler={setNotificationClickHandler} 
-          displayError={reactSelectError} />
+          displayError={reactSelectError} mode={props.mode} />
       )}
       {(props.setting.isUsingExpiration === false || mappedListItems.length === 0) && (
         <ShoppingListFormNoExpiration title={title} formSubmitHandler={formSubmitHandler}
           onClickHandler={clearForm} listName={listName} inputChangeHandler={inputChangeHandler}
-          renderForm={renderForm} />
+          renderForm={renderForm} mode={props.mode} />
       )}
     </div>
   )
