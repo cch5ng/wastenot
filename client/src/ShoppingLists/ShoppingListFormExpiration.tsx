@@ -21,14 +21,14 @@ type ShoppingListFormExpirationProps = {
 }
 const ShoppingListFormExpiration = (props) => {
     const { title, formSubmitHandler, listName, inputChangeHandler, onClickHandler, 
-        renderForm, setNotificationClickHandler, displayError } = props;
+        renderForm, setNotificationClickHandler, displayError, mode } = props;
     return (
         <div>
             <h1>{title}</h1>
             <div>
                 <Button classVal="listDetailFormSaveBtn" onClickHandler={formSubmitHandler} label="Save" 
                     idVal='' size={null} type={null} noMargin={false} />
-                <Button label="Cancel" onClickHandler={onClickHandler} 
+                <Button label="Cancel" onClickHandler={ev => onClickHandler(mode)} 
                     classVal='' idVal='' size={null} type={null} noMargin={false} />
                 <Button label="Set Notification" onClickHandler={setNotificationClickHandler} 
                     classVal='' idVal='' size={null} type={null} noMargin={false} />
