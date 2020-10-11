@@ -37,14 +37,15 @@ class ShoppingLists extends Component<MyProps, MyState> {
   }
 
   componentDidMount() {
-    if (this.props.authenticate && this.props.authenticate.authStr) {
+    if (this.props.authenticate && this.props.authenticate.authStr
+      && this.props.shoppingLists.message === 'no shopping lists have been retrieved') {
       this.props.fetchShoppingLists({cookieStr: this.props.authenticate.authStr});
     }
   }
 
   componentDidUpdate(prevProps) {
     if (prevProps.authenticate.authStr !== this.props.authenticate.authStr
-        && this.props.shoppingLists.message === 'no shopping lists have been retrieved') {
+      && this.props.shoppingLists.message === 'no shopping lists have been retrieved') {
       this.props.fetchShoppingLists({cookieStr: this.props.authenticate.authStr});
     }
   }
