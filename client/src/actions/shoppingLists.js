@@ -37,11 +37,17 @@ export const fetchShoppingListCreate = ({ list, cookieStr }) => dispatch => {
   if (cookieStr) {
     http_requests.Lists.postShoppingList({ list, cookieStr })
       .then(response => {
+        let guid = Object.keys(response.shoppingList)[0];
+        let shortShoppingList = {};
+        shortShoppingList[guid] = {
+          name: response.shoppingList[guid].name,
+          guid
+        }
         if (response.type === 'success') {
           dispatch({
             type: SHOPPING_LISTS_ADD_FETCH_SUCCESS,
             message: response.message,
-            shoppingList: response.shoppingList
+            shoppingList: shortShoppingList
           })
         }
       })
