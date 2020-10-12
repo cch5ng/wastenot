@@ -47,9 +47,6 @@ const AuthHeader = (props: AuthHeaderProps) => {
         </div>
         <div className="menu-links-medium">
           <p className="menu-link-item">
-            <Link to="/about">About</Link>
-          </p>
-          <p className="menu-link-item">
             <Link to="/support">Support</Link>
           </p>
         </div>
@@ -71,9 +68,6 @@ const AuthHeader = (props: AuthHeaderProps) => {
       <div className="menu">
         <div className="icon" onClick={toggleMenu} >X</div>
         <div className="menu-links">
-          <p className="menu-link-item">
-            <Link to="/about">About</Link>
-          </p>
           <p className="menu-link-item">
             <Link to="/support">Support</Link>
           </p>

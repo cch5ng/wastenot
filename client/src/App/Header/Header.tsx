@@ -76,25 +76,13 @@ const Header = (props: HeaderProps) => {
             <Link to="/shoppingLists">Shopping Lists</Link>
           </p>
           <p className="menu-link-item">
-            <Link to="/shoppingLists/new">New Shopping List</Link>
-          </p>
-          <p className="menu-link-item">
             <Link to="/alerts">Alerts</Link>
-          </p>
-          <p className="menu-link-item">
-            <Link to="/settings/listTemplatesNew">New Template</Link>
-          </p>
-          <p className="menu-link-item">
-            <Link to="/settings/listTemplates">Templates</Link>
           </p>
           <p className="menu-link-item">
             <Link to="/settings">Settings</Link>
           </p>
           <p className="menu-link-item">
-            <Link to="/settings/expirationMapTest">Expiration Map Test</Link>
-          </p>
-          <p className="menu-link-item">
-            <Link to="/about">About</Link>
+            <Link to="/settings/expirationMapTest">Alert Setup</Link>
           </p>
           <p className="menu-link-item">
             <Link to="/support">Support</Link>
@@ -121,25 +109,13 @@ const Header = (props: HeaderProps) => {
             <Link to="/shoppingLists">Shopping Lists</Link>
           </p>
           <p className="menu-link-item">
-            <Link to="/shoppingLists/new">New Shopping List</Link>
-          </p>
-          <p className="menu-link-item">
             <Link to="/alerts">Alerts</Link>
-          </p>
-          <p className="menu-link-item">
-            <Link to="/settings/listTemplatesNew">New Template</Link>
-          </p>
-          <p className="menu-link-item">
-            <Link to="/settings/listTemplates">Templates</Link>
           </p>
           <p className="menu-link-item">
             <Link to="/settings">Settings</Link>
           </p>
           <p className="menu-link-item">
-            <Link to="/settings/expirationMapTest">Expiration Map Test</Link>
-          </p>
-          <p className="menu-link-item">
-            <Link to="/about">About</Link>
+            <Link to="/settings/expirationMapTest">Alert Setup</Link>
           </p>
           <p className="menu-link-item">
             <Link to="/support">Support</Link>
