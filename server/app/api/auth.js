@@ -1,4 +1,5 @@
 const { Router } = require('express');
+const passport = require('passport');
 const AuthTable = require('../auth/table');
 const SettingTable = require('../setting/table');
 const Session = require('../auth/Session');
@@ -97,6 +98,17 @@ router.post('/authenticated', (req, res, next) => {
     return next(error);
   }
 })
+
+//github auth
+router.get('/github',
+  passport.authenticate('github', { scope: [ 'user:email' ] }));
+
+router.get('/github/callback', 
+  passport.authenticate('github', { failureRedirect: '/login' }),
+  function(req, res) {
+    // Successful authentication, redirect home.
+    res.redirect('/');
+  });
 
 router.put('/settings/timezone', (req, res, next) => {
   let { cookieStr, timezone } = req.body;
