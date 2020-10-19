@@ -256,10 +256,6 @@ const ShoppingListDetailForm = (props) => {
         setCreateableSelectKey(idStr);  
       }  
     }
-
-    if (!reactSelectInput || !reactSelectInput.id) {
-      setReactSelectError('One or more list selection did not work. Please try again.');
-    }
   }
 
   //methods specific to form using expiration notifications
@@ -276,6 +272,10 @@ const ShoppingListDetailForm = (props) => {
     setListItemInputs({...listItemInputs, 
       [createableSelectKey]: newListItemInput
     });
+    //place react-select error here so it doesn't render excessivly
+    if (!createableSelectKey) {
+      setReactSelectError('One or more list selection did not work. Please try again.');
+    }  
   }
 
   let setNotificationClickHandler = function(
@@ -354,8 +354,10 @@ const ShoppingListDetailForm = (props) => {
         };
       }
 
+//onClick={selectClickHandler}
+
       htmlResult.push(
-        <li key={key} id={key} className="" onClick={selectClickHandler}>
+        <li key={key} id={key} className="" onMouseUp={selectClickHandler}>
           <Checkbox checkboxVal={curInput.checked} onChangeHandler={inputChangeHandler} id={key}
             checkboxLabel='' name='' checkClassName='' />
           <CreatableSelect
@@ -407,7 +409,6 @@ const ShoppingListDetailForm = (props) => {
   }
 
   useEffect(() => {
-    console.log('useEffect triggered')
     if (props.authenticate.authStr) {
       let cookieStr = props.authenticate.authStr;
       props.isUsingExpiration({cookieStr})
