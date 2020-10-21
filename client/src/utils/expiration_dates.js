@@ -6,27 +6,31 @@ const EXPIRATION_DATES = {
     refrigerator: '21 - 35 days',
     refrigeratorInt: 1814400000,
     freezer: null,
-    keyWords: [ 'eggs' ]
+    keyWords: [ 'eggs' ],
+    category: 'protein'
   },
-  'raw egg yolks, whites': {
+  'eggs (cracked yolks, whites)': {
     refrigerator: '2 - 4 days',
     refrigeratorInt: 172800000,
     freezer: '1 year',
-    keyWords: [ 'egg whites', 'egg yolks' ]
+    keyWords: [ 'egg whites', 'egg yolks' ],
+    category: 'protein'
   },
-  'Hard cooked eggs': {
+  'eggs (hard-boiled)': {
     refrigerator: '1 week',
     refrigeratorInt: 604800000,
     freezer: null,
-    keyWords: [ 'hard-boiled eggs', 'hard-cooked eggs' ]
+    keyWords: [ 'hard-boiled eggs', 'hard-cooked eggs', 'hard boiled eggs' ],
+    category: 'protein'
   },
-  'Liquid pasteurized eggs or egg substitutes': {
+  'egg substitutes (liquid)': {
     refrigerator: '10 days',
     refrigeratorInt: 864000000,
     freezer: '1 year',
-    keyWords: [ 'liquid eggs', 'egg substitutes' ]
+    keyWords: [ 'liquid eggs', 'egg substitutes' ],
+    category: 'protein'
   },
-  'Lunch meats, opened package': {
+  'lunch meats, opened package': {
     refrigerator: '3 - 5 days',
     refrigeratorInt: 259200000,
     freezer: '1 - 2 months',
@@ -38,9 +42,10 @@ const EXPIRATION_DATES = {
       'sliced pastrami, opened',
       'sliced pepperoni, opened',
       'sliced salami, opened'
-    ]
+    ],
+    category: 'protein'
   },
-  'Lunch meats unopened package': {
+  'lunch meats, unopened package': {
     refrigerator: '2 weeks',
     refrigeratorInt: 1209600000,
     freezer: '1 - 2 months',
@@ -53,15 +58,17 @@ const EXPIRATION_DATES = {
       'sliced pepperoni, unopened',
       'sliced salami, unopened',
       'roast beef'
-    ]
+    ],
+    category: 'protein'
   },
-  'Raw Hamburger, Ground & Stew Meat, Hamburger & stew meats': {
+  'raw hamburger, ground beef, stew meat': {
     refrigerator: '1 - 2 days',
     refrigeratorInt: 86400000,
     freezer: '3 - 4 months',
-    keyWords: [ 'raw hamburger', 'raw ground beef', 'raw meat', 'raw stew meat' ]
+    keyWords: [ 'hamburger', 'raw hamburger', 'raw ground beef', 'raw meat', 'raw stew meat' ],
+    category: 'protein'
   },
-  'Ground turkey, chicken, pork, veal, lamb': {
+  'ground turkey, chicken, pork, veal, lamb': {
     refrigerator: '1 - 2 days',
     refrigeratorInt: 86400000,
     freezer: '3 - 4 months',
@@ -71,19 +78,22 @@ const EXPIRATION_DATES = {
       'raw ground pork',
       'raw ground veal',
       'raw ground lamb'
-    ]
+    ],
+    category: 'protein'
   },
   'hamburger, meat, beef, steak (cooked)': {
     refrigerator: '3 - 4 days',
     refrigeratorInt: 259200000,
     freezer: '2 weeks',
-    keyWords: [ 'cooked hamburger', 'cooked beef', 'cooked steak', 'cooked roast', 'cooked meat', 'steak' ]
+    keyWords: [ 'cooked hamburger', 'cooked beef', 'cooked steak', 'cooked roast', 'cooked meat', 'steak' ],
+    category: 'protein'
   },
   'turkey, chicken, pork, veal, lamb, chops (cooked)': {
     refrigerator: '3 - 4 days',
     refrigeratorInt: 259200000,
     freezer: '2 weeks',
-    keyWords: [ 'cooked turkey', 'cooked chicken', 'cooked pork', 'cooked veal', 'cooked lamb' ]
+    keyWords: [ 'cooked turkey', 'cooked chicken', 'cooked pork', 'cooked veal', 'cooked lamb' ],
+    category: 'protein'
   },
   'TV Dinners, Frozen Casseroles': {
     refrigerator: null,
@@ -104,7 +114,8 @@ const EXPIRATION_DATES = {
       'macaroni salad',
       'deli',
       'prepared'
-    ]
+    ],
+    category: 'deli'
   },
   'deli pre-stuffed pork & lamb chops, chicken breasts stuffed w/ dressing': {
     refrigerator: '1 day',
@@ -114,192 +125,220 @@ const EXPIRATION_DATES = {
       'stuffed pork chops',
       'stuffed lamb chops',
       'stuffed chicken breasts'
-    ]
+    ],
+    category: 'deli'
   },
   'Store-cooked convenience meals': {
     refrigerator: '3 - 4 days',
     refrigeratorInt: 259200000,
     freezer: null,
-    keyWords: []
+    keyWords: [],
+    category: 'deli'
   },
-  'Commercial brand vacuum-packed dinners with USDA seal, unopened': {
+  'refrigerated meals, unopened (sealed)': {
     refrigerator: '2 weeks',
     refrigeratorInt: 1209600000,
     freezer: null,
-    keyWords: []
+    keyWords: [],
+    category: 'deli'
   },
-  'Ham, Corned Beef, Corned beef in pouch, with pickling juices Drained': {
+  'ham, corned Beef (bagged and sealed)': {
     refrigerator: '5 - 7 days',
     refrigeratorInt: 432000000,
     freezer: '1 month',
-    keyWords: [ 'ham', 'corned beef in pouch, drained', 'corned beef' ]
+    keyWords: [ 'ham', 'corned beef in pouch, drained', 'corned beef' ],
+    category: 'deli'
   },
-  'Ham, canned, labeled unopened': {
+  'ham, canned (unopened)': {
     refrigerator: '6 - 9 months',
     refrigeratorInt: 15552000000,
     freezer: null,
-    keyWords: [ 'canned ham' ]
+    keyWords: [ 'canned ham' ],
+    category: 'canned'
   },
-  'Ham, canned, labeled opened': {
+  'ham, canned (opened)': {
     refrigerator: '3 - 5 days',
     refrigeratorInt: 259200000,
     freezer: '1 - 2 months',
-    keyWords: [ 'canned ham, opened' ]
+    keyWords: [ 'canned ham, opened' ],
+    category: 'canned'
   },
-  'Ham, fully cooked, whole': {
+  'ham, cooked (whole)': {
     refrigerator: '7 days',
     refrigeratorInt: 604800000,
     freezer: '1 - 2 months',
-    keyWords: [ 'cooked ham, whole' ]
+    keyWords: [ 'cooked ham, whole' ],
+    category: 'protein'
   },
-  'Ham, fully cooked, half': {
+  'ham, cooked (half)': {
     refrigerator: '3 - 5 days',
     refrigeratorInt: 259200000,
     freezer: '1 - 2 months',
-    keyWords: [ 'cooked ham, half' ]
+    keyWords: [ 'cooked ham, half' ],
+    category: 'protein'
   },
-  'Ham, fully cooked, slices': {
+  'ham, sliced': {
     refrigerator: '3 - 4 days',
     refrigeratorInt: 259200000,
     freezer: '1 - 2 months',
-    keyWords: [ 'sliced ham, cooked' ]
+    keyWords: [ 'sliced ham, cooked' ],
+    category: 'protein'
   },
-  'Hot dogs, opened package': {
+  'hot dogs (opened)': {
     refrigerator: '1 week',
     refrigeratorInt: 604800000,
     freezer: '1 - 2 months',
-    keyWords: [ 'hot dogs, opened' ]
+    keyWords: [ 'hot dogs, opened' ],
+    category: 'protein'
   },
-  'hot dogs unopened package': {
+  'hot dogs (unopened)': {
     refrigerator: '2 weeks',
     refrigeratorInt: 1209600000,
     freezer: '1 - 2 months',
-    keyWords: [ 'hot dogs' ]
+    keyWords: [ 'hot dogs' ],
+    category: 'protein'
   },
-  'Soups & Stews, Vegetable or meat-added & mixtures of them': {
+  'soups, stews': {
     refrigerator: '3 - 4 days',
     refrigeratorInt: 259200000,
     freezer: '2 - 3 months'
   },
-  'Bacon': {
+  'bacon': {
     refrigerator: '7 days',
     refrigeratorInt: 604800000,
-    freezer: '1 month'
+    freezer: '1 month',
+    category: 'deli'
   },
-  'Sausage, raw from pork, beef, chicken or turkey': {
+  'sausage, raw (pork, beef, chicken or turkey)': {
     refrigerator: '1 - 2 days',
     refrigeratorInt: 86400000,
-    freezer: '1 - 2 months'
+    freezer: '1 - 2 months',
+    category: 'protein'
   },
-  'Smoked breakfast links, patties': {
+  'breakfast links, patties (smoked)': {
     refrigerator: '7 days',
     refrigeratorInt: 604800000,
-    freezer: '1 - 2 months'
+    freezer: '1 - 2 months',
+    category: 'protein'
   },
-  'Beef, Veal, Lamb, & Pork Steaks': {
+  'beef, veal, lamb, pork steaks': {
     refrigerator: '3 - 5 days',
     refrigeratorInt: 259200000,
-    freezer: '6 - 12 months'
+    freezer: '6 - 12 months',
+    category: 'protein'
   },
-  'Beef, Veal, Lamb, & Pork Roasts': {
+  'beef, veal, lamb, pork roasts': {
     refrigerator: '3 - 5 days',
     refrigeratorInt: 259200000,
-    freezer: '4 - 12 months'
+    freezer: '4 - 12 months',
+    category: 'protein'
   },
-  'Beef, Veal, Lamb, & Pork Chops': {
+  'beef, veal, lamb, pork chops': {
     refrigerator: '3 - 5 days',
     refrigeratorInt: 259200000,
-    freezer: '4 - 6 months'
+    freezer: '4 - 6 months',
+    category: 'protein'
   },
-  'Variety meats (tongue, kidneys, liver, heart, chitterlings)': {
+  'variety meats (tongue, kidneys, liver, heart, chitterlings)': {
     refrigerator: '1 - 2 days',
     refrigeratorInt: 86400000,
-    freezer: '3 - 4 months'
+    freezer: '3 - 4 months',
+    category: 'protein'
   },
-  'leftover Cooked meat & meat dishes': {
+  'meat, cooked': {
     refrigerator: '3 - 4 days',
     refrigeratorInt: 259200000,
-    freezer: '2 - 3 months'
+    freezer: '2 - 3 months',
+    category: 'protein'
   },
-  'leftover Gravy & meat broth': {
-    refrigerator: '1 - 2 days',
-    refrigeratorInt: 86400000,
-    freezer: '2 - 3 months'
-  },
-  'fresh Chicken or turkey, whole': {
-    refrigerator: '1 - 2 days',
-    refrigeratorInt: 86400000,
-    freezer: '1 year'
-  },
-  'fresh Chicken or turkey, parts': {
-    refrigerator: '1 - 2 days',
-    refrigeratorInt: 86400000,
-    freezer: '9 months'
-  },
-  'fresh Giblets': {
-    refrigerator: '1 - 2 days',
-    refrigeratorInt: 86400000,
-    freezer: '3 - 4 months'
-  },
-  'leftover Fried chicken': {
-    refrigerator: '3 - 4 days',
-    refrigeratorInt: 259200000,
-    freezer: '4 months'
-  },
-  'leftover Cooked poultry dishes': {
-    refrigerator: '3 - 4 days',
-    refrigeratorInt: 259200000,
-    freezer: '4 - 6 months'
-  },
-  'leftover cooked poultry Pieces, plain': {
-    refrigerator: '3 - 4 days',
-    refrigeratorInt: 259200000,
-    freezer: '4 months'
-  },
-  'leftover cooked poultry Pieces covered with broth, gravy': {
-    refrigerator: '3 - 4 days',
-    refrigeratorInt: 259200000,
-    freezer: '6 months'
-  },
-  'leftover cooked Chicken nuggets, patties': {
-    refrigerator: '3 - 4 days',
-    refrigeratorInt: 259200000,
-    freezer: '1 - 3 months'
-  },
-  'Lean fish  ': {
-    refrigerator: '1 - 2 days',
-    refrigeratorInt: 86400000,
-    freezer: '6 - 8 months'
-  },
-  'Fatty fish': {
+  'gravy, meat broth': {
     refrigerator: '1 - 2 days',
     refrigeratorInt: 86400000,
     freezer: '2 - 3 months'
   },
-  'Cooked fish': {
+  'chicken, turkey (whole and fresh)': {
+    refrigerator: '1 - 2 days',
+    refrigeratorInt: 86400000,
+    freezer: '1 year',
+    category: 'protein'
+  },
+  'chicken, turkey': {
+    refrigerator: '1 - 2 days',
+    refrigeratorInt: 86400000,
+    freezer: '9 months',
+    category: 'protein'
+  },
+  'giblets, fresh': {
+    refrigerator: '1 - 2 days',
+    refrigeratorInt: 86400000,
+    freezer: '3 - 4 months',
+    category: 'protein'
+  },
+  'fried chicken': {
     refrigerator: '3 - 4 days',
     refrigeratorInt: 259200000,
-    freezer: '4 - 6 months'
+    freezer: '4 months',
+    category: 'deli'
   },
-  'Smoked fish': {
+  'chicken, turkey (cooked)': {
+    refrigerator: '3 - 4 days',
+    refrigeratorInt: 259200000,
+    freezer: '4 months',
+    category: 'protein'
+  },
+  'chicken, turkey (cooked with broth, gravy)': {
+    refrigerator: '3 - 4 days',
+    refrigeratorInt: 259200000,
+    freezer: '6 months',
+    category: 'protein'
+  },
+  'chicken nuggets, patties (cooked)': {
+    refrigerator: '3 - 4 days',
+    refrigeratorInt: 259200000,
+    freezer: '1 - 3 months',
+    category: 'protein'
+  },
+  'fish, lean': {
+    refrigerator: '1 - 2 days',
+    refrigeratorInt: 86400000,
+    freezer: '6 - 8 months',
+    category: 'protein'
+  },
+  'fish (fatty)': {
+    refrigerator: '1 - 2 days',
+    refrigeratorInt: 86400000,
+    freezer: '2 - 3 months',
+    category: 'protein'
+  },
+  'fish, cooked': {
+    refrigerator: '3 - 4 days',
+    refrigeratorInt: 259200000,
+    freezer: '4 - 6 months',
+    category: 'protein'
+  },
+  'fish, smoked': {
     refrigerator: '14 days',
     refrigeratorInt: 1209600000,
-    freezer: '2 months'
+    freezer: '2 months',
+    category: 'protein'
   },
-  'Fresh shrimp, scallops, crawfish, squid': {
+  'shrimp, scallops, crawfish, squid': {
     refrigerator: '1 - 2 days',
     refrigeratorInt: 86400000,
-    freezer: '3 - 6 months'
+    freezer: '3 - 6 months',
+    category: 'protein'
   },
-  'Canned seafood after opening out of can': {
+  'seafood, canned (opened)': {
     refrigerator: '3 - 4 days',
     refrigeratorInt: 259200000,
-    freezer: '2 months'
+    freezer: '2 months',
+    category: 'protein'
   },
   'milk': {
     refrigerator: '7 days',
     refrigeratorInt: 604800000,
-    freezer: null
+    freezer: null,
+    category: 'dairy'
   },
   'rice (cooked)': {
     refrigerator: '3-4 days',
@@ -307,7 +346,8 @@ const EXPIRATION_DATES = {
     freezer: null,
     keyWords: [
       'cooked rice (refrigerated)'
-    ]
+    ],
+    category: 'grains and pasta'
   },
   'pasta (cooked)': {
     refrigerator: '3-4 days',
@@ -315,32 +355,38 @@ const EXPIRATION_DATES = {
     freezer: null,
     keyWords: [
       'cooked pasta (refrigerated)'
-    ]
+    ],
+    category: 'grains and pasta'
   },
   'apples': {
     refrigerator: '4-8 weeks',
     refrigeratorInt: 2592000000,
     freezer: null,
+    category: 'produce'
   },
   'blueberries': {
     refrigerator: '1-2 weeks',
     refrigeratorInt: 604800000,
     freezer: null,
+    category: 'produce'
   },
   'broccoli': {
     refrigerator: '1-2 weeks',
     refrigeratorInt: 604800000,
     freezer: null,
+    category: 'produce'
   },
   'carrots': {
     refrigerator: '3-4 weeks',
     refrigeratorInt: 1814400000,
     freezer: null,
+    category: 'produce'
   },
   'cucumbers': {
     refrigerator: '7 days',
     refrigeratorInt: 604800000,
     freezer: null,
+    category: 'produce'
   },
   'lettuce (iceberg, romaine)': {
     refrigerator: '7-10 days',
@@ -349,27 +395,32 @@ const EXPIRATION_DATES = {
     keyWords: [
       'iceberg lettuce', 
       'romaine lettuce'
-    ]
+    ],
+    category: 'produce'
   },
   'lemons': {
     refrigerator: '3-4 weeks',
     refrigeratorInt: 1814400000,
     freezer: null,
+    category: 'produce'
   },
   'oranges': {
     refrigerator: '3-4 weeks',
     refrigeratorInt: 1814400000,
     freezer: null,
+    category: 'produce'
   },
   'strawberries': {
     refrigerator: '3-7 days',
     refrigeratorInt: 259200000,
-    freezer: null
+    freezer: null,
+    category: 'produce'
   },
   'string beans': {
     refrigerator: '3-5 days',
     refrigeratorInt: 259200000,
-    freezer: null
+    freezer: null,
+    category: 'produce'
   },
   'peas (snow, sugar)': {
     refrigerator: '3-5 days',
@@ -379,24 +430,24 @@ const EXPIRATION_DATES = {
       'snow peas',
       'sugar peas',
       'sugar snap peas'
-    ]
+    ],
+    category: 'produce'
   },
   'mushrooms (whole)': {
     refrigerator: '7-10 days',
     refrigeratorInt: 604800000,
-    freezer: null
+    freezer: null,
+    category: 'produce'
   },
   'zucchini': {
     refrigerator: '4-5 days',
     refrigeratorInt: 345600000,
-    freezer: null
+    freezer: null,
+    category: 'produce'
   },
-  test_1: { refrigerator: '1 min', refrigeratorInt: 60000, freezer: null },
-  test_2: { refrigerator: '2 min', refrigeratorInt: 120000, freezer: null },
-  test_4: { refrigerator: '4 min', refrigeratorInt: 240000, freezer: null }
+  test_1: { refrigerator: '1 min', refrigeratorInt: 60000, freezer: null, category: 'test'},
+  test_2: { refrigerator: '2 min', refrigeratorInt: 120000, freezer: null, category: 'test'},
+  test_4: { refrigerator: '4 min', refrigeratorInt: 240000, freezer: null, category: 'test'}
 }
 
 export { EXPIRATION_DATES };
-
-//missing dairy
-//missing produce
