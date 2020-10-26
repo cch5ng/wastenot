@@ -86,7 +86,7 @@ a.title:active {
 
 .action-link a:link,
 .action-link a:visited {
-  color: #F1665D;
+  color: #d85b53; /*#F1665D;*/
   text-decoration: none;
 }
 
