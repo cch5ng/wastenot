@@ -5,6 +5,7 @@ import { register, logout, login, isAuthenticated } from '../actions/authenticat
 import { getCookieStr } from '../utils/utils';
 import Button from '../App/Shared/Button/Button';
 import InputText from '../App/Shared/InputText/InputText';
+import styles from './AuthForm.module.css';
 
 type MyProps = {
   login: any,
@@ -128,7 +129,7 @@ class AuthForm extends React.Component<MyProps, MyState> {
     return (
       <div className="main">
         <h1>{this.props.title}</h1>
-        <form>
+        <form className="authFormContainer">
           {this.props.authenticate.status === 'error' && this.props.authenticate.hasButtonClicked === true && (
             <div>
               <p>{this.props.authenticate.message}</p>

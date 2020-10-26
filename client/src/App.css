@@ -70,6 +70,16 @@ h1 {
   align-self: center;
 }
 
+.authFormContainer {
+  background-color: #fff0e7;
+}
+
+@media (min-width: 500px) {
+  .authFormContainer {
+    border: 1px dashed #87cfff;
+  }
+}
+
 @media (min-width: 768px) {
   .main {
     margin: 15px 35px;
