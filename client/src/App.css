@@ -27,13 +27,14 @@
 }
 
 h1 {
+  font-size: 1.3rem;
+  color: #304a5b;
   /* margin-left: 2.5%; */
 }
 
 /* form */
 
 .authFormContainer {
-  background-color: #fff0e7;
   width: 95%;
   margin: 20px auto;
   /* padding: 20px; */
@@ -87,6 +88,7 @@ h1 {
 
 @media (min-width: 500px) {
   .authFormContainer {
+    background-color: #fff0e7;
     border: 2px dashed #87cfff;
     width: 90%;
     padding: 20px;

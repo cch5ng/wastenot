@@ -1,16 +1,20 @@
 .button {
   height: 25px;
   font-size: 14px;
-  margin: 30px 0 12px 0;
+  margin: 30px 10px 12px 0;
   padding: 0 5px;
   border-radius: 5px;
   border-style: none;
-  background-color: #6e614f;
+  background-color: #6ca7ce; /*#79bae5; #6e614f;*/
   color: #fff;
 }
 
 .button:hover {
-  background-color: #9e968a;
+  background-color: #93c7ea; /*#9e968a*/;
+}
+
+button:focus {
+  outline-color:#486f89; /*#bcdcf2;*/
 }
 
 .extra-small {
