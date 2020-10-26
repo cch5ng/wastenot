@@ -3,20 +3,20 @@
   height: 70px;
   display: flex;
   flex-flow: row no-wrap;
-  background-color: #3bd6c6;/*00868b; #006400;*/
+  background-color: #ffb787; /*#3bd6c6;*/
   box-sizing: border-box;
 }
 
 .header-main,
 .header-nav {
-  color: #4c4c4c; /*#fff;*/
+  color: #283e4c; /*#4c4c4c; #fff;*/
   width: 50%;
   display: flex;
   text-decoration: none;
 }
 
 .header-main {
-  font-family: 'Righteous', cursive;
+  font-family: 'Satisfy', sans-serif;
   margin: 14px 0 0 14px;
 }
 

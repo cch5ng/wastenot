@@ -1,11 +1,13 @@
 .App {
   /* text-align: center; */
+  background-color: #fff0e7;
 }
 
 .main {
   clear: both;
   text-align: left;
   padding: 15px;
+  height: calc(100vw - 70px);
   /* margin: 15px 15px; */
 }
 
