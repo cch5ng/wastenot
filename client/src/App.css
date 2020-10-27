@@ -34,7 +34,8 @@ h1 {
 
 /* form */
 
-.authFormContainer {
+.authFormContainer,
+.formShoppingListContainer {
   width: 95%;
   margin: 20px auto;
   /* padding: 20px; */
@@ -63,8 +64,21 @@ h1 {
 .row,
 .form-row-inline {
   display: flex;
-  flex-flow: row no-wrap;
-  align-items: center;
+  flex-flow: row nowrap;
+  align-items: flex-start;
+  margin-top: 15px;
+}
+
+.formRowInlineLeft {
+  margin-top: 15px;
+}
+
+.formRowInlineLeft::after {
+  clear: both;
+  /* display: flex;
+  flex-flow: row nowrap;
+  justify-content: flex-start;
+  align-items: center; */
 }
 
 .row-left {
@@ -87,7 +101,8 @@ h1 {
 }
 
 @media (min-width: 500px) {
-  .authFormContainer {
+  .authFormContainer,
+  .formShoppingListContainer {
     background-color: #fff0e7;
     border: 2px dashed #87cfff;
     width: 90%;
@@ -125,7 +140,8 @@ h1 {
     width: 15%;
   }
 
-  .authFormContainer {
+  .authFormContainer,
+  .formShoppingListContainer {
     width: 60%;
   }
 

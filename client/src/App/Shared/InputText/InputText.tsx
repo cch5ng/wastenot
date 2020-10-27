@@ -21,13 +21,14 @@ const InputText = (props: InputTextProps) => {
     inputClass = `formGroup ${inputClassName}`;
   }
 
+  // <div className={inputClass}>
+  // </div>
+
   return (
-    <div className={inputClass}>
-      <input type={type} className={inputClass} id={id} value={value} 
-        onChange={ev => onChangeHandler(ev)}
-        placeholder={placeholder} name={name}
-        readOnly={readOnly ? readOnly : false} />
-    </div>
+    <input type={type} className={inputClass} id={id} value={value} 
+      onChange={ev => onChangeHandler(ev)}
+      placeholder={placeholder} name={name}
+      readOnly={readOnly ? readOnly : false} />
   )
 }
 

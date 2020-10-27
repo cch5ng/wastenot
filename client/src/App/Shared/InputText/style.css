@@ -1,7 +1,7 @@
 input {
-  min-width: 100%;
-  /* calc(100% - 34px); */
-  height: 25px;
+  /* min-width: 100%; */
+  min-width: calc(100% - 35px);
+  height: 38px;
   padding-left: 8px;
   font-size: 14px;
   border-radius: 5px;
