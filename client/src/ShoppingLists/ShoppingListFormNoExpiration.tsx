@@ -22,28 +22,31 @@ type ShoppingListFormNoExpirationProps = {
 const ShoppingListFormNoExpiration = (props) => {
     const { title, formSubmitHandler, listName, inputChangeHandler, onClickHandler, renderForm, mode } = props;
     return (
-        <div>
+        <form className='formShoppingListContainer'>
             <h3>{title}</h3>
             <div>
-            <Button classVal="listDetailFormSaveBtn" onClickHandler={formSubmitHandler} label="Save" 
-                idVal='' size={null} type={null} noMargin={false} />
-            <Button label="Cancel" onClickHandler={ev => onClickHandler(mode)} 
-                classVal='' idVal='' size={null} type={null} noMargin={false} />
+                <Button classVal="listDetailFormSaveBtn" onClickHandler={formSubmitHandler} label="Save" 
+                    idVal='' size={null} type={null} noMargin={false} />
+                <Button label="Cancel" onClickHandler={ev => onClickHandler(mode)} 
+                    classVal='' idVal='' size={null} type={null} noMargin={false} />
             </div>
             <br />
-            <InputText name="listNameInp" value={listName} placeholder="list name" 
-                onChangeHandler={inputChangeHandler} id='' inputClassName='' 
+            <div className="formGroup">
+                <label htmlFor="listNameInp">List Name</label>
+                <InputText name="listNameInp" value={listName} placeholder="list name" 
+                onChangeHandler={inputChangeHandler} id='listNameInp' inputClassName='' 
                 readOnly={false} type={null} />
+            </div>
             <ul className="list-no-style">
             {renderForm()}
             </ul>
             <div>
-            <Button classVal="listDetailFormSaveBtn" onClickHandler={formSubmitHandler} label="Save"
-                idVal='' size={null} type={null} noMargin={false} />
-            <Button label="Cancel" onClickHandler={onClickHandler}
-                classVal='' idVal='' size={null} type={null} noMargin={false} />
+                <Button classVal="listDetailFormSaveBtn" onClickHandler={formSubmitHandler} label="Save"
+                    idVal='' size={null} type={null} noMargin={false} />
+                <Button label="Cancel" onClickHandler={onClickHandler}
+                    classVal='' idVal='' size={null} type={null} noMargin={false} />
             </div>    
-        </div>
+        </form>
     )
 }
 

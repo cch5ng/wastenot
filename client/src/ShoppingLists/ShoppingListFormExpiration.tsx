@@ -23,14 +23,14 @@ const ShoppingListFormExpiration = (props) => {
     const { title, formSubmitHandler, listName, inputChangeHandler, onClickHandler, 
         renderForm, setNotificationClickHandler, displayError, mode } = props;
     return (
-        <div>
+        <form className='formShoppingListContainer'>
             <h1>{title}</h1>
             <div>
                 <Button classVal="listDetailFormSaveBtn" onClickHandler={formSubmitHandler} label="Save" 
                     idVal='' size={null} type={null} noMargin={false} />
                 <Button label="Cancel" onClickHandler={ev => onClickHandler(mode)} 
                     classVal='' idVal='' size={null} type={null} noMargin={false} />
-                <Button label="Set Notification" onClickHandler={setNotificationClickHandler} 
+                <Button label="Set Alerts" onClickHandler={setNotificationClickHandler} 
                     classVal='' idVal='' size={null} type={null} noMargin={false} />
             </div>
             {displayError !== null && (
@@ -40,20 +40,23 @@ const ShoppingListFormExpiration = (props) => {
                 </div>
             )}
             <br />
-            <InputText name="listNameInp" value={listName} placeholder="list name" onChangeHandler={inputChangeHandler} 
+            <div className="formGroup">
+                <label htmlFor="listNameInp">List Name</label>
+                <InputText name="listNameInp" value={listName} placeholder="list name" onChangeHandler={inputChangeHandler} 
                 id='' inputClassName='' readOnly={false} type={null} />
+            </div>
             <ul className="list-no-style">
-            {renderForm()}
+                {renderForm()}
             </ul>
             <div>
                 <Button classVal="listDetailFormSaveBtn" onClickHandler={formSubmitHandler} label="Save" 
                     idVal='' size={null} type={null} noMargin={false} />
                 <Button label="Cancel" onClickHandler={onClickHandler}
                     classVal='' idVal='' size={null} type={null} noMargin={false} />
-                <Button label="Set Notification" onClickHandler={setNotificationClickHandler}
+                <Button label="Set Alerts" onClickHandler={setNotificationClickHandler}
                     classVal='' idVal='' size={null} type={null} noMargin={false} />
             </div>
-        </div>
+        </form>
     )
 }
 
