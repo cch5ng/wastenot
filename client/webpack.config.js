@@ -30,6 +30,19 @@ module.exports = () => {
           use: ['babel-loader']
         },
         { test: /\.tsx?$/, loader: 'ts-loader' },
+        // {
+        //   test: /\.css$/i,
+        //   exclude: /node_modules/,
+        //   use: [
+        //     'style-loader',
+        //     {
+        //       loader: 'css-loader',
+        //       options: {
+        //         modules: true,
+        //       },
+        //     },
+        //   ],
+        // },
         {
           test: /\.(sa|sc|c)ss$/,
           use: [
@@ -42,7 +55,7 @@ module.exports = () => {
       ],
     },
     resolve: {
-      extensions: ['*', '.ts', '.tsx', '.js', '.jsx']
+      extensions: ['*', '.ts', '.tsx', '.js', '.jsx', '.css', '.scss']
     },
     plugins: [
       new webpack.HotModuleReplacementPlugin(),
