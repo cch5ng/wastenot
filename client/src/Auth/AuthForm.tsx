@@ -5,7 +5,6 @@ import { register, logout, login, isAuthenticated } from '../actions/authenticat
 import { getCookieStr } from '../utils/utils';
 import Button from '../App/Shared/Button/Button';
 import InputText from '../App/Shared/InputText/InputText';
-import styles from './AuthForm.module.css';
 
 type MyProps = {
   login: any,
