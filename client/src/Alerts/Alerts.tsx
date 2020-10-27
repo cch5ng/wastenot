@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import {connect} from 'react-redux';
 import http_requests from '../utils/http_requests';
 import Button from '../App/Shared/Button/Button';
-import styles from './Alerts.module.css';
+import styles from './Alerts.css';
 
 type AlertsProps = {
     authenticate: {
