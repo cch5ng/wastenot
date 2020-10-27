@@ -8,13 +8,22 @@ type CheckboxProps = {
   checkboxLabel: string, 
   id: string, 
   name: string, 
-  checkClassName: string
+  checkClassName: string,
+  size: string
 };
 const Checkbox = (props: CheckboxProps) => {
-  let { checkboxVal, onChangeHandler, checkboxLabel, id, name, checkClassName } = props;
+  let { checkboxVal, onChangeHandler, checkboxLabel, id, name, checkClassName, size } = props;
   let checkClass: string;
-  if (checkClassName) {
-    checkClass = `form ${checkClassName}`
+  if (checkClassName && size && size === 'largeCheckbox') {
+    checkClass = `form-group-large ${checkClassName}`
+  } else if (checkClassName) {
+    checkClass = `form-group ${checkClassName}`
+  }
+
+  let labelClassName: string;
+  labelClassName = 'checkbox-label';
+  if (size && size === 'largeCheckbox') {
+    labelClassName = `checkbox-label ${size}`
   }
   if (checkboxLabel) {
     return (
@@ -24,7 +33,7 @@ const Checkbox = (props: CheckboxProps) => {
           onChange={ev => onChangeHandler(ev)}
           name={name} />
         {checkboxLabel && (
-          <label className="checkbox-label" onClick={ev => onChangeHandler(ev)} id={id}>{checkboxLabel}</label>
+          <label className={labelClassName} onClick={ev => onChangeHandler(ev)} id={id}>{checkboxLabel}</label>
         )}
       </div>
     )
@@ -35,7 +44,7 @@ const Checkbox = (props: CheckboxProps) => {
       <input checked={checkboxVal} type="checkbox" className="list-item-input"
         onChange={ev => onChangeHandler(ev)} name={name}
         />
-      <label onClick={ev => onChangeHandler(ev)} id={id} />
+      <label className={labelClassName} onClick={ev => onChangeHandler(ev)} id={id} />
     </div>
   )
 }

@@ -3,28 +3,29 @@
   height: 70px;
   display: flex;
   flex-flow: row no-wrap;
-  background-color: #3bd6c6;/*00868b; #006400;*/
+  background-color: #ffb787; /*#3bd6c6;*/
+  align-items: center;
   box-sizing: border-box;
 }
 
 .header-main,
 .header-nav {
-  color: #4c4c4c; /*#fff;*/
+  color: #283e4c; /*#4c4c4c; #fff;*/
   width: 50%;
   display: flex;
   text-decoration: none;
 }
 
 .header-main {
-  font-family: 'Righteous', cursive;
-  margin: 14px 0 0 14px;
+  font-family: 'Satisfy', sans-serif;
+  margin: 0 0 0 14px;
 }
 
 .header-nav {
   font-size: 1.1em;
   justify-content: flex-end;
   align-items: normal;
-  margin: 18px 14px 0 0;
+  margin: 0 14px 0 0;
 }
 
 /*a.title {
@@ -35,7 +36,7 @@ a.title:link,
 a.title:visited,
 a.title:hover,
 a.title:active {
-  color: #4c4c4c;
+  color: #6094b7; /*#79bae5; #4c4c4c;*/
   text-decoration: none;
 }
 
@@ -86,7 +87,7 @@ a.title:active {
 
 .action-link a:link,
 .action-link a:visited {
-  color: #F1665D;
+  color: #d85b53; /*#F1665D;*/
   text-decoration: none;
 }
 
@@ -113,6 +114,10 @@ a.title:active {
   padding: 16px 0;
 }
 
+.menu-links {
+  text-align: center;
+}
+
 .div-button {
   height: 22px;
   border: 1px solid #ccc;
@@ -137,6 +142,10 @@ a.title:active {
 .menu-buttons a {
   text-decoration: none;
   color: #000;
+}
+
+.menu-buttons {
+  text-align: center;
 }
 
 .menu-link-item {
@@ -176,9 +185,9 @@ a.title:active {
 
   .menu-links-medium {
     display: flex;
-    flex-flow: row no-wrap;
+    flex-flow: row nowrap;
     width: 50%;
-    margin: 20px auto 0;
+    margin: 0 auto;
     justify-content: center;
   }
 

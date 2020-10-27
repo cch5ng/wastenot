@@ -357,9 +357,9 @@ const ShoppingListDetailForm = (props) => {
 //onClick={selectClickHandler}
 
       htmlResult.push(
-        <li key={key} id={key} className="" onMouseUp={selectClickHandler}>
+        <li key={key} id={key} className="formRowInlineLeft" onMouseUp={selectClickHandler}>
           <Checkbox checkboxVal={curInput.checked} onChangeHandler={inputChangeHandler} id={key}
-            checkboxLabel='' name='' checkClassName='' />
+            checkboxLabel='' name='' checkClassName='left' size='largeCheckbox' />
           <CreatableSelect
             isClearable
             onChange={inputExpirationChangeHandler}

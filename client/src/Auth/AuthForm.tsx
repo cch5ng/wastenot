@@ -127,15 +127,16 @@ class AuthForm extends React.Component<MyProps, MyState> {
   render() {
     return (
       <div className="main">
-        <h1>{this.props.title}</h1>
-        <form>
+        <form className="authFormContainer">
+          <h1>{this.props.title}</h1>
+
           {this.props.authenticate.status === 'error' && this.props.authenticate.hasButtonClicked === true && (
             <div>
               <p>{this.props.authenticate.message}</p>
             </div>
           )}
           {this.state.inputValidationErrors.length > 0 && (
-            <ul>
+            <ul className="listErrorMessages">
               {this.state.inputValidationErrors.map(err => {
                 return (<li>{err}</li>)
               })}
