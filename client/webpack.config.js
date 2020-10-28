@@ -3,6 +3,7 @@ const dotenv = require('dotenv');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const {InjectManifest} = require('workbox-webpack-plugin');
+//const Autoprefixer = require('autoprefixer');
 
 const devMode = process.env.NODE_ENV !== 'production'
 
@@ -45,11 +46,12 @@ module.exports = () => {
         // },
         {
           test: /\.(sa|sc|c)ss$/,
-          use: [
-            devMode ? 'style-loader' : MiniCssExtractPlugin.loader,
+          use: ['style-loader', 
+            'css-modules-typescript-loader',
+          //MiniCssExtractPlugin.loader,
             'css-loader',
             //'postcss-loader',
-            //'sass-loader',
+            'sass-loader',
           ]
         }
       ],
@@ -67,12 +69,14 @@ module.exports = () => {
       new MiniCssExtractPlugin({
         // Options similar to the same options in webpackOptions.output
         // both options are optional
-        filename: "[name].css",
-        chunkFilename: "[id].css"
+        filename: 'style.[contenthash].css'
+        //filename: "[name].css",
+        //chunkFilename: "[id].css"
       }),
       new InjectManifest({
         swSrc: './src/sw.js',
-      })
+      }),
+      //require('autoprefixer'),
     ], 
     devServer: {
       contentBase: './dist',
