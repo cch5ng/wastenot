@@ -47,9 +47,10 @@ const Settings = (props: SettingsProps) => {
 
   //reformat the data source for consumption by react select
   return (
-    <div>
-      <h1>Application Settings</h1>
-      <form>
+    <div className="main">
+      <form className='formShoppingListContainer'>
+        <h1>Application Settings</h1>
+
         <Select
           value={timezone}
           onChange={onChangeHandler}

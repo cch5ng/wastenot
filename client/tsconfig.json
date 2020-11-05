@@ -7,8 +7,5 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
   },
-  "include": [
-    "src"
-  ],
   "compileOnSave": false
 }

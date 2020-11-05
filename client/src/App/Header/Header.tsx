@@ -68,7 +68,7 @@ const Header = (props: HeaderProps) => {
         {!globalHideInternalNotification && !sessionHideInternalNotification && (
           <InternalNotification clickCloseHandler={notificationCloseHandler} checkboxSelectHandler={notificationCloseGlobalHandler} />
         )}
-        <div className="header-main">
+        <div className="headerMain">
           <h2><Link to="/" className="title">Waste Not</Link></h2>
         </div>
         <div className="menu-links-medium">
@@ -88,7 +88,7 @@ const Header = (props: HeaderProps) => {
             <Link to="/support">Support</Link>
           </p>
         </div>
-        <div className="header-nav">
+        <div className="headerNav">
           <p className="nav-link" onClick={logOutHandler} >Log Out</p>
           <p className="nav-link menu-text" onClick={toggleMenu} >Menu</p>
         </div>

@@ -42,7 +42,7 @@ const AuthHeader = (props: AuthHeaderProps) => {
   if (!menuDisplayed) {
     return (
       <div className="header title">
-        <div className="header-main">
+        <div className="headerMain">
           <h2><Link to="/" className="title">Waste Not</Link></h2>
         </div>
         <div className="menu-links-medium">
@@ -50,7 +50,7 @@ const AuthHeader = (props: AuthHeaderProps) => {
             <Link to="/support">Support</Link>
           </p>
         </div>
-        <div className="header-nav">
+        <div className="headerNav">
           <p className="action-link">
             <Link to="/signup">Sign Up</Link>
           </p>
