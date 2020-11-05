@@ -199,16 +199,17 @@ type ReviewStep2Props = {
 const ReviewStep2 = (props) => {
   return (
     <div className="main">
-      <h1>Step 2: Review Mappings</h1>
-      <p>
-        The system has automatically found food categories that match with the shopping list items. You can choose to skip getting notifications for an item by clicking its checkbox. If the food category does not look right, you can select a different category from the drop-down list or select "no match" if there is no corresponding category.
-      </p>
-      <div className="row">
-        <div className="sixCol">Disable</div>
-        <div className="threeCol">List Item</div>
-        <div className="threeCol">Expiration Category</div>
-      </div>
-      <form>
+      <form className='formShoppingListContainer'>
+        <h1>Step 2: Review Mappings</h1>
+        <p>
+          The system has automatically found food categories that match with the shopping list items. You can choose to skip getting notifications for an item by clicking its checkbox. If the food category does not look right, you can select a different category from the drop-down list or select "no match" if there is no corresponding category.
+        </p>
+        <div className="row">
+          <div className="sixCol">Disable</div>
+          <div className="threeCol">List Item</div>
+          <div className="threeCol">Expiration Category</div>
+        </div>
+
         {props.mappings.map((m, idx) => {
           let keyBase = `expirationMapRow-`;
           let outerKey = `${keyBase}${idx}`;
