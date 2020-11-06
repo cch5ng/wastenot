@@ -1,9 +1,11 @@
 select,
 option {
-  height: 25px;
-  width: 50%;
+  height: 38px;
+  padding-left: 8px;
   font-size: 14px;
-  box-sizing: border-box;
+  border-radius: 5px;
+  border: 1px solid #999;
+  width: 50%;
 }
 
 select:focus,
