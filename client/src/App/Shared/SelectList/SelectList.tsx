@@ -10,10 +10,13 @@ type SelectListProps = {
   selectClassName: string
 };
 const SelectList = (props) => {
-  let {value, options, onChange, id, selectClassName } = props;
+  let {value, options, onChange, id, selectClassName, inline } = props;
   let selectClass: string;
   if (selectClassName) {
     selectClass = `formGroup ${selectClassName}`
+  }
+  if (inline) {
+    selectClass = `${selectClassName}`
   }
   return (
     <select  id={id} value={value} onChange={(ev) => onChange(ev)} className={selectClass}>
