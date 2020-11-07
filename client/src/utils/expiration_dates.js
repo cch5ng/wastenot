@@ -52,6 +52,13 @@ const EXPIRATION_DATES = {
     freezer: null,
     category: 'produce'
   },
+  'cauliflower': {
+    refrigerator: '1-2 weeks',
+    refrigeratorInt: 604800000,
+    freezer: null,
+    category: 'produce'
+  },
+
   'carrots': {
     refrigerator: '3-4 weeks',
     refrigeratorInt: 1814400000,
@@ -194,24 +201,23 @@ const EXPIRATION_DATES = {
     ],
     category: 'protein'
   },
-  'half and half': {
+  'creamer (coconut, almond milk)': {
     refrigerator: '7 days',
     refrigeratorInt: 604800000,
     freezer: null,
     category: 'dairy'
   },
-  'hamburger (raw), ground beef, stew meat': {
-    refrigerator: '1 - 2 days',
-    refrigeratorInt: 86400000,
-    freezer: '3 - 4 months',
-    keyWords: [ 'hamburger', 'raw hamburger', 'raw ground beef', 'raw meat', 'raw stew meat' ],
-    category: 'protein'
+  'half and half': {
+    refrigerator: '5 days',
+    refrigeratorInt: 432000000,
+    freezer: null,
+    category: 'dairy'
   },
-  'hamburger, meat, beef, steak (cooked)': {
+  'ham, sliced': {
     refrigerator: '3 - 4 days',
     refrigeratorInt: 259200000,
-    freezer: '2 weeks',
-    keyWords: [ 'cooked hamburger', 'cooked beef', 'cooked steak', 'cooked roast', 'cooked meat', 'steak' ],
+    freezer: '1 - 2 months',
+    keyWords: [ 'sliced ham, cooked' ],
     category: 'protein'
   },
 
@@ -250,11 +256,26 @@ const EXPIRATION_DATES = {
     keyWords: [ 'cooked ham, half' ],
     category: 'protein'
   },
-  'ham, sliced': {
+  'hamburger (raw), ground beef, stew meat': {
+    refrigerator: '1 - 2 days',
+    refrigeratorInt: 86400000,
+    freezer: '3 - 4 months',
+    keyWords: [ 'hamburger', 'raw hamburger', 'raw ground beef', 'raw meat', 'raw stew meat' ],
+    category: 'protein'
+  },
+  'hamburger, meat, beef, steak (cooked)': {
     refrigerator: '3 - 4 days',
     refrigeratorInt: 259200000,
+    freezer: '2 weeks',
+    keyWords: [ 'cooked hamburger', 'cooked beef', 'cooked steak', 'cooked roast', 'cooked meat', 'steak' ],
+    category: 'protein'
+  },
+
+  'hot dogs (unopened)': {
+    refrigerator: '2 weeks',
+    refrigeratorInt: 1209600000,
     freezer: '1 - 2 months',
-    keyWords: [ 'sliced ham, cooked' ],
+    keyWords: [ 'hot dogs' ],
     category: 'protein'
   },
   'hot dogs (opened)': {
@@ -264,14 +285,22 @@ const EXPIRATION_DATES = {
     keyWords: [ 'hot dogs, opened' ],
     category: 'protein'
   },
-  'hot dogs (unopened)': {
-    refrigerator: '2 weeks',
-    refrigeratorInt: 1209600000,
-    freezer: '1 - 2 months',
-    keyWords: [ 'hot dogs' ],
-    category: 'protein'
-  },
 
+  'lemons': {
+    refrigerator: '3-4 weeks',
+    refrigeratorInt: 1814400000,
+    freezer: null,
+    category: 'produce'
+  },
+  'green cabbage (shredded, washed)': {
+    refrigerator: '7-10 days',
+    refrigeratorInt: 604800000,
+    freezer: null,
+    keyWords: [
+      'salad, bagged'
+    ],
+    category: 'produce'
+  },
   'lettuce (iceberg, romaine)': {
     refrigerator: '7-10 days',
     refrigeratorInt: 604800000,
@@ -282,28 +311,37 @@ const EXPIRATION_DATES = {
     ],
     category: 'produce'
   },
-  'lemons': {
-    refrigerator: '3-4 weeks',
-    refrigeratorInt: 1814400000,
-    freezer: null,
-    category: 'produce'
-  },
-
-  'lunch meats, opened package': {
-    refrigerator: '3 - 5 days',
-    refrigeratorInt: 259200000,
+  'pastrami, sandwich meat': {
+    refrigerator: '2 weeks',
+    refrigeratorInt: 1209600000,
     freezer: '1 - 2 months',
     keyWords: [
-      'lunch meats, opened',
-      'sliced turkey, opened',
-      'sliced ham, opened',
-      'sliced roast beef, opened',
-      'sliced pastrami, opened',
-      'sliced pepperoni, opened',
-      'sliced salami, opened'
+      'lunch meats, unopened',
+      'sliced pastrami, unopened',
     ],
     category: 'protein'
   },
+  'roast beef, sandwich meat': {
+    refrigerator: '2 weeks',
+    refrigeratorInt: 1209600000,
+    freezer: '1 - 2 months',
+    keyWords: [
+      'lunch meats, unopened',
+      'sliced roast beef, unopened',
+    ],
+    category: 'protein'
+  },
+  'turkey, sandwich meat': {
+    refrigerator: '2 weeks',
+    refrigeratorInt: 1209600000,
+    freezer: '1 - 2 months',
+    keyWords: [
+      'lunch meats, unopened',
+      'sliced turkey, unopened',
+    ],
+    category: 'protein'
+  },
+
   'lunch meats, unopened package': {
     refrigerator: '2 weeks',
     refrigeratorInt: 1209600000,
@@ -320,7 +358,21 @@ const EXPIRATION_DATES = {
     ],
     category: 'protein'
   },
-
+  'lunch meats, opened package': {
+    refrigerator: '3 - 5 days',
+    refrigeratorInt: 259200000,
+    freezer: '1 - 2 months',
+    keyWords: [
+      'lunch meats, opened',
+      'sliced turkey, opened',
+      'sliced ham, opened',
+      'sliced roast beef, opened',
+      'sliced pastrami, opened',
+      'sliced pepperoni, opened',
+      'sliced salami, opened'
+    ],
+    category: 'protein'
+  },
   'meat, cooked': {
     refrigerator: '3 - 4 days',
     refrigeratorInt: 259200000,
