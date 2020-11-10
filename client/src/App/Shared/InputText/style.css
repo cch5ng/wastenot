@@ -12,6 +12,10 @@ input[readonly] {
   background-color: #e5e5e5;
 }
 
+.wide {
+  width: 100%;
+}
+
 @media (min-width: 768px) {
 
   /* input {

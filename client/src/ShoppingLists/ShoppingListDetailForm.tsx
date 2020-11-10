@@ -196,7 +196,8 @@ const ShoppingListDetailForm = (props) => {
               checkboxLabel='' name='' checkClassName=''/>
             <InputText value={listItemInputs[key].name} placeholder="item name" 
               id={key} onChangeHandler={inputChangeHandler} name={key}
-              inputClassName='' readOnly={false} type={null} />
+              inputClassName='' readOnly={false} type={null} 
+              wide={true} />
           </li>
         )
       }
@@ -222,6 +223,7 @@ const ShoppingListDetailForm = (props) => {
         reactSelectInput = parent.querySelector('input');
         if (reactSelectInput && reactSelectInput.id) {
           idStr = reactSelectInput.id;
+          console.log('idStr', idStr)
           setCreateableSelectKey(idStr);  
         }
       }
@@ -233,6 +235,7 @@ const ShoppingListDetailForm = (props) => {
         reactSelectInput = parent.querySelector('input');
         if (reactSelectInput && reactSelectInput.id) {
           idStr = reactSelectInput.id;
+          console.log('idStr', idStr)
           setCreateableSelectKey(idStr);  
         }
       }
@@ -244,6 +247,7 @@ const ShoppingListDetailForm = (props) => {
         reactSelectInput = parent.querySelector('input');
         if (reactSelectInput && reactSelectInput.id) {
           idStr = reactSelectInput.id;
+          console.log('idStr', idStr)
           setCreateableSelectKey(idStr);  
         }
       }
@@ -253,6 +257,7 @@ const ShoppingListDetailForm = (props) => {
       reactSelectInput = target.parentNode.querySelector('input');
       if (reactSelectInput && reactSelectInput.id) {
         idStr = reactSelectInput.id;
+        console.log('idStr', idStr)
         setCreateableSelectKey(idStr);  
       }  
     }
@@ -264,7 +269,6 @@ const ShoppingListDetailForm = (props) => {
     let val = newValue.value;
     let guid = mappedListItemsObj[val] && mappedListItemsObj[val].guid ? mappedListItemsObj[val].guid : null;
     let name = !guid ? val : null;
-    let selectKey = createableSelectKey;
     let newListItemInput = {...listItemInputs[createableSelectKey], list_item_map_guid: guid, name}
     let updatedListItemInputs = {...listItemInputs, 
       [createableSelectKey]: newListItemInput

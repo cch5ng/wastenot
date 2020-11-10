@@ -204,10 +204,10 @@ const ReviewStep2 = (props) => {
         <p>
           The system has automatically found food categories that match with the shopping list items. You can choose to skip getting notifications for an item by clicking its checkbox. If the food category does not look right, you can select a different category from the drop-down list or select "no match" if there is no corresponding category.
         </p>
-        <div className="row">
+        <div className="row-wrap">
           <div className="sixCol">Disable</div>
-          <div className="threeCol">List Item</div>
-          <div className="threeCol">Expiration Category</div>
+          <div className="twoCol">List Item</div>
+          <div className="twoCol">Expiration Category</div>
         </div>
 
         {props.mappings.map((m, idx) => {
@@ -217,14 +217,15 @@ const ReviewStep2 = (props) => {
           let inputTextIdx = `${keyBase}inputText-${idx}`;
           let selectListIdx = `${keyBase}selectList-${idx}`;
           return (
-            <div key={outerKey} className="row">
+            <div key={outerKey} className="row-wrap">
               <Checkbox checkboxVal={m.disabled} onChangeHandler={props.checkboxChangeHandler} 
                 name="checkbox" id={checkboxIdx} checkClassName="sixCol" checkboxLabel={null}/>
               <InputText value={m.text} onChangeHandler={props.inputChangeHandler} 
-                name="inputText" id={inputTextIdx} inputClassName="threeCol" readOnly={true} 
-                placeholder='' type={null} />
+                name="inputText" id={inputTextIdx} inputClassName="twoCol" readOnly={true} 
+                placeholder='' type={null} inline={true} />
               <SelectList value={m.expirationCategory} options={props.expirationCategoryOptions} 
-                onChange={props.selectListChangeHandler} id={selectListIdx} selectClassName="threeCol"/>
+                onChange={props.selectListChangeHandler} id={selectListIdx} selectClassName="twoCol"
+                inline={true} />
             </div>
           )
         })}

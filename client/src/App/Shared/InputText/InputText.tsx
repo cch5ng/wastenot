@@ -14,15 +14,17 @@ type InputTextProps = {
   type: string
 };
 const InputText = (props: InputTextProps) => {
-  let {value, placeholder, id, onChangeHandler, name, inputClassName, readOnly, type } = props;
+  let {value, placeholder, id, onChangeHandler, name, inputClassName, readOnly, type, inline, wide } = props;
   let inputClass: string;
 
   if (inputClassName) {
     inputClass = `formGroup ${inputClassName}`;
   }
 
-  // <div className={inputClass}>
-  // </div>
+  if (inline) {
+    inputClass = `${inputClassName}`;
+  }
+
 
   return (
     <input type={type} className={inputClass} id={id} value={value} 
