@@ -5,11 +5,7 @@ import Home from './Home';
 import './App.css';
 import Header from './App/Header/Header';
 import AuthHeader from './App/Header/AuthHeader';
-//import Footer from './App/Footer/Footer'
-// import ListTemplates from './ListTemplates/ListTemplates';
-// import ListTemplateDetailForm from './ListTemplates/ListTemplateDetailForm';
 import ShoppingListDetailForm from './ShoppingLists/ShoppingListDetailForm';
-// import useListTemplates from './utils/hooks/useListTemplates';
 import ShoppingLists from './ShoppingLists/ShoppingLists';
 import config from './config';
 import AuthForm from './Auth/AuthForm';
@@ -18,9 +14,6 @@ import ExpirationMapTest from './Settings/ExpirationMapTest';
 import Alerts from './Alerts/Alerts';
 
 function App(props) {
-
-  //TODO test, think these hooks are not being used currently
-  //const {listTemplates, updateListTemplates, removeListTemplates} = useListTemplates();
 
   let isLoggedIn = false;
   if (props.authenticate && props.authenticate.isLoggedIn) {
@@ -58,23 +51,6 @@ function App(props) {
             render={({match}) => (<ShoppingListDetailForm mode="edit" listGuid={match.params.listGuid} />
             )}
           />
-
-          {/* <Route exact path="/settings/listTemplates" 
-            render={(props) => (<ListTemplates {...props} updateListTemplates={updateListTemplates}
-              removeListTemplates={removeListTemplates} listTemplates={listTemplates}
-            />
-          )} />
-          <Route exact path="/settings/listTemplatesNew"
-            render={(props) => (<ListTemplateDetailForm {...props} mode="add" 
-              updateListTemplates={updateListTemplates}
-            />
-          )} />
-          <Route exact path="/settings/listTemplatesEdit/:listTemplateGuid"
-            render={({match}) => (<ListTemplateDetailForm mode="edit" 
-              updateListTemplates={updateListTemplates}
-              listTemplateGuid={match.params.listTemplateGuid}
-            />
-          )} /> */}
           <Route exact path="/settings/expirationMapTest" 
             component={ExpirationMapTest}
           />
@@ -95,18 +71,3 @@ const mapStateToProps = state => ({
 })
 
 export default connect(mapStateToProps, null)(App);
-
-/*
-          <Route exact path='/shoppingLists/new' 
-            render={(props) => (<ShoppingListDetailForm {...props} mode="add" 
-              updateShoppingLists={updateShoppingLists}
-            />
-          )} />
-
-          <Route exact path="/shoppingLists/edit/:listGuid"
-            render={({match}) => (<ShoppingListDetailForm mode="edit" 
-              updateShoppingLists={updateShoppingLists}
-              listGuid={match.params.listGuid}
-            />
-          )} />
-*/
