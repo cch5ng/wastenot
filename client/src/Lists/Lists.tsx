@@ -17,9 +17,10 @@ const Lists = (props: ListsProps) => {
         if (list) {
           if (type === "shopping") {
             editListLink = `/shoppingLists/${list.guid}/edit`;
-          } else if (type === "template") {
-            editListLink = `/settings/listTemplatesEdit/${list.guid}`;
           }
+          //else if (type === "template") {
+          //   editListLink = `/settings/listTemplatesEdit/${list.guid}`;
+          // }
           return (
             <li key={list.guid}>
               <Link to={editListLink}><span className="list-name">{list.name}</span></Link>
