@@ -3,7 +3,8 @@ import ReactDOM from 'react-dom';
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 import { Provider } from 'react-redux';
-import { createStore, applyMiddleware, compose } from 'redux';
+//import { createStore, applyMiddleware, compose } from 'redux';
+import store from './app/store'
 import thunk from 'redux-thunk';
 import rootReducer from './reducers';
 import { isAuthenticated } from './actions/authenticate';
@@ -12,11 +13,11 @@ import App from './App';
 import * as serviceWorker from './sw';
 //import {registerServiceWorker} from './serviceWorker';
 
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-const store = createStore(rootReducer, 
-  composeEnhancers(
-    applyMiddleware(thunk)
-));
+// const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+// const store = createStore(rootReducer, 
+//   composeEnhancers(
+//     applyMiddleware(thunk)
+// ));
 
 store.dispatch(isAuthenticated());
 
