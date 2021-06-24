@@ -1,23 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import './Header.css';
-import { logout } from '../../actions/authenticate';
 import Button from '../Shared/Button/Button';
+import {logout} from '../../Auth/authSlice';
 
-type AuthHeaderProps = {
-  logout: any,
-  authenticate: {
-    isLoggedIn: boolean,
-    hasButtonClicked: boolean,
-    status: string,
-    message: string,
-    authStr: string,
-  }
-}
-const AuthHeader = (props: AuthHeaderProps) => {
+//import { logout } from '../../actions/authenticate';
+
+// type AuthHeaderProps = {
+//   logout: any,
+//   authenticate: {
+//     isLoggedIn: boolean,
+//     hasButtonClicked: boolean,
+//     status: string,
+//     message: string,
+//     authStr: string,
+//   }
+// }
+
+const AuthHeader = () => { //props: AuthHeaderProps
   const [menuDisplayed, setMenuDisplayed] = useState(false);
   let history = useHistory();
+  const dispatch = useDispatch();
 
   let toggleMenu = function(
     event: React.MouseEvent<HTMLDivElement>
@@ -83,14 +87,15 @@ const AuthHeader = (props: AuthHeaderProps) => {
   }
 }
 
-const mapStateToProps = state => ({
-  authenticate: state.authenticate
-});
+// const mapStateToProps = state => ({
+//   authenticate: state.authenticate
+// });
 
-const mapDispatchToProps = dispatch => {
-  return {
-    logout: () => dispatch(logout())
-  }
-};
+// const mapDispatchToProps = dispatch => {
+//   return {
+//     logout: () => dispatch(logout())
+//   }
+// };
 
-export default connect(mapStateToProps, mapDispatchToProps)(AuthHeader)
+// export default connect(mapStateToProps, mapDispatchToProps)(AuthHeader)
+export default AuthHeader;
