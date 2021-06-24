@@ -45,6 +45,43 @@ export const login = createAsyncThunk('auth/login', async ({ email, password }) 
   }
 })
 
+export const logout = createAsyncThunk('auth/logout', async () => {
+  let cookie;
+  const cookieKey = 'sessionStr';
+  let cookieVal = sessionStorage.getItem(cookieKey);
+  cookie = `${cookieKey}=${cookieVal}`;
+  let cookieAr = cookieVal.split('|');
+  let email = cookieAr[0];
+
+  const response = await http_requests.Auth.postLogout({ cookie })
+  sessionStorage.removeItem(`${cookieKey}`);
+  serviceWorker.unsubscribeUserFromPush();
+
+  return {
+    message: response.message,
+  }
+})
+
+export const isAuthenticated = createAsyncThunk('auth/isAuthenticated', async () => {
+  let cookie;
+  const cookieKey = 'sessionStr';
+  let cookieVal = getCookieStr();
+  cookie = `${cookieKey}=${cookieVal}`;
+
+  if (cookieVal) {
+    const response = await http_requests.Auth.postAuthenticated({ cookie: cookieVal })
+    let cookieAr;
+  
+    return {
+      message: response.message,
+      authStr: cookieVal
+    }
+  } else {
+    return {
+      message: 'invalid authentication'
+    }
+  }
+})
 
 const authSlice = createSlice({
   name: 'auth',
@@ -81,6 +118,39 @@ const authSlice = createSlice({
       }
     },
     [login.rejected]: (state, action) => {
+      if (state.status === 'loading') {
+        state.status = 'failed'
+        state.error = action.payload
+      }
+    },
+    [logout.pending]: (state, action) => {
+      state.status = 'loading'
+      state.error = null
+    },
+    [logout.fulfilled]: (state, action) => {
+      if (state.status === 'loading') {
+        state.message = action.payload.message;
+        state.status = 'succeeded'
+      }
+    },
+    [logout.rejected]: (state, action) => {
+      if (state.status === 'loading') {
+        state.status = 'failed'
+        state.error = action.payload
+      }
+    },
+    [isAuthenticated.pending]: (state, action) => {
+      state.status = 'loading'
+      state.error = null
+    },
+    [isAuthenticated.fulfilled]: (state, action) => {
+      if (state.status === 'loading') {
+        state.message = action.payload.message;
+        state.authStr = action.payload.authStr;
+        state.status = 'succeeded'
+      }
+    },
+    [isAuthenticated.rejected]: (state, action) => {
       if (state.status === 'loading') {
         state.status = 'failed'
         state.error = action.payload
