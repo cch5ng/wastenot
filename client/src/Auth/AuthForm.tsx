@@ -1,25 +1,28 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React, { Component, useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux'; //connect, 
 import { Redirect } from 'react-router-dom';
-import { register, logout, login, isAuthenticated } from '../actions/authenticate';
 import { getCookieStr } from '../utils/utils';
 import Button from '../App/Shared/Button/Button';
 import InputText from '../App/Shared/InputText/InputText';
+import { register, logout, login, isAuthenticated } from './authSlice';
 
-type MyProps = {
-  login: any,
-  logout: any,
-  title: string,
-  authenticate: {
-    isLoggedIn: boolean,
-    hasButtonClicked: boolean,
-    status: string,
-    message: string,
-    authStr: string,
-  },
-  register: any,
-  isAuthenticated: any,
-};
+//import { register, logout, login, isAuthenticated } from '../actions/authenticate';
+
+// type MyProps = {
+//   login: any,
+//   logout: any,
+//   title: string,
+//   authenticate: {
+//     isLoggedIn: boolean,
+//     hasButtonClicked: boolean,
+//     status: string,
+//     message: string,
+//     authStr: string,
+//   },
+//   register: any,
+//   isAuthenticated: any,
+// };
+
 type MyState = {
   email: string,
   password: string,
@@ -27,79 +30,113 @@ type MyState = {
   inputValidationErrors: string[]
 };
 
-class AuthForm extends React.Component<MyProps, MyState> {
-  constructor(props: MyProps) {
-    super(props);
-    this.state = {
-      email: '',
-      password: '',
-      passwordConfirm: '',
-      inputValidationErrors: []
-    }
-  }
+//class AuthForm extends React.Component { //<MyProps, MyState>
+  // constructor(props) { //: MyProps
+  //   super(props);
+  //   this.state = {
+  //     email: '',
+  //     password: '',
+  //     passwordConfirm: '',
+  //     inputValidationErrors: []
+  //   }
+  // }
 
-  updateInput = (event: React.FormEvent<HTMLInputElement>): void => {
+const AuthForm = ({title}) => {
+
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [passwordConfirm, setPasswordConfirm] = useState('');
+  const [inputValidationErrors, setInputValidationErrors] = useState([]);
+
+  const dispatch = useDispatch();
+  const {status, hasButtonClicked, message} = useSelector(state => state.auth)
+
+  const updateInput = (event: React.FormEvent<HTMLInputElement>): void => {
     let target = event.target as HTMLInputElement;
     const {name, value}  = target;
-    this.setState({[name]: value})
+
+    switch(name) {
+      case 'email':
+        setEmail(value);
+        return;
+      case 'password':
+        setPassword(value);
+        return;
+      case 'passwordConfirm':
+        setPasswordConfirm(value);
+        return;
+      default:
+        return;
+    }
+    //this.setState({[name]: value})
   };
 
-  logInBtnClick = (
+  const logInBtnClick = (
     event: React.MouseEvent<HTMLDivElement>
   ): void => {    
     event.preventDefault();
-    const { email, password } = this.state;
+    //const { email, password } = this.state;
     const emailErrors = ['Email is required.', 'Email must be valid. Please check spelling and try again.'];
-    this.setState({inputValidationErrors: []}); //clear old errors
-    if (!this.isEmailValid()) {
-      this.setState({inputValidationErrors: emailErrors});
+    setInputValidationErrors([]);
+    //this.setState({inputValidationErrors: []}); //clear old errors
+    if (!isEmailValid()) {
+      setInputValidationErrors(emailErrors);
+      //this.setState({inputValidationErrors: emailErrors});
       return;
     }
-    this.props.login({ email, password });  
+    dispatch(login({email, password}));
+    //this.props.login({ email, password });  
   };
 
-  logOutBtnClick = (
+  const logOutBtnClick = (
     event: React.MouseEvent<HTMLDivElement>
   ): void => {  
     event.preventDefault();
-    this.props.logout();
+    dispatch(logout);
+    //this.props.logout();
   };
 
-  signInBtnClick = (
+  const signInBtnClick = (
     event: React.MouseEvent<HTMLDivElement>
   ): void => {  
     event.preventDefault();
-    const { email, password, passwordConfirm } = this.state;
+    //const { email, password, passwordConfirm } = this.state;
     const emailErrors = ['Email is required.', 'Email must be valid. Please check spelling and try again.'];
     const passwordErrors = ['Password and confirmation password values are required.', 
       'Password and confirmation password must be at least 8 characters long, contain one lower-case letter, contain one upper-case letter, contain one number, and container one special character (!, @, #, $, %, ^, &, *, or -).',
       'Password and confirmation password values must match.']
-    this.setState({inputValidationErrors: []}); //clear old errors
-    if (!this.isEmailValid() && !this.isPasswordValid()) {
+
+    setInputValidationErrors([]);
+    //this.setState({inputValidationErrors: []}); //clear old errors
+    if (!isEmailValid() && !isPasswordValid()) {
       let combinedErrors = emailErrors.concat(passwordErrors);
-      this.setState({inputValidationErrors: combinedErrors});
+      setInputValidationErrors(combinedErrors);
+      //this.setState({inputValidationErrors: combinedErrors});
       return;
-    } else if (!this.isEmailValid()) {
-      this.setState({inputValidationErrors: emailErrors});
+    } else if (!isEmailValid()) {
+      setInputValidationErrors(emailErrors);
+      //this.setState({inputValidationErrors: emailErrors});
       return;
-    } else if (!this.isPasswordValid()) {
-      this.setState({inputValidationErrors: passwordErrors});
+    } else if (!isPasswordValid()) {
+      setInputValidationErrors(passwordErrors);
+      //this.setState({inputValidationErrors: passwordErrors});
       return;
     }
-    this.props.register({ email, password });
+    dispatch(register({email, password}));
+    //this.props.register({ email, password });
   };
 
-  isEmailValid = (): boolean => {    
-    const {email} = this.state;
+  const isEmailValid = (): boolean => {    
+    //const {email} = this.state;
     if (!email.length) {
       return false;
     }
     const regex = /^(?=.*?[A-Za-z])(?=.*?[@])(?=.*?[\.]).{6,}$/gm
-    return this.doesStrMatchPattern(email, regex);
+    return doesStrMatchPattern(email, regex);
   };
 
-  isPasswordValid = (): boolean => {    
-    const {password, passwordConfirm} = this.state;
+  const isPasswordValid = (): boolean => {    
+    //const {password, passwordConfirm} = this.state;
     if (!password.length || !passwordConfirm.length) {
       return false;
     }
@@ -107,13 +144,13 @@ class AuthForm extends React.Component<MyProps, MyState> {
       return false;
     }
     const regex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/gm
-    if (!this.doesStrMatchPattern(password, regex) || !this.doesStrMatchPattern(passwordConfirm, regex)) {
+    if (!doesStrMatchPattern(password, regex) || !doesStrMatchPattern(passwordConfirm, regex)) {
       return false;
     }
     return true;
   };
 
-  doesStrMatchPattern = (
+  const doesStrMatchPattern = (
     str: string,
     pattern: any
   ): boolean => {  
@@ -124,85 +161,89 @@ class AuthForm extends React.Component<MyProps, MyState> {
     return false;
   };
 
-  render() {
-    return (
-      <div className="main">
-        <form className="authFormContainer">
-          <h1>{this.props.title}</h1>
+  //this.props.authenticate.status
+  //this.props.authenticate.hasButtonClicked
+  //this.props.authenticate.message
+  return (
+    <div className="main">
+      <form className="authFormContainer">
+        <h1>{title}</h1>
 
-          {this.props.authenticate.status === 'error' && this.props.authenticate.hasButtonClicked === true && (
-            <div>
-              <p>{this.props.authenticate.message}</p>
-            </div>
-          )}
-          {this.state.inputValidationErrors.length > 0 && (
-            <ul className="listErrorMessages">
-              {this.state.inputValidationErrors.map(err => {
-                return (<li>{err}</li>)
-              })}
-            </ul>
-          )}
+        {status === 'error' && hasButtonClicked === true && (
+          <div>
+            <p>{message}</p>
+          </div>
+        )}
+        {inputValidationErrors.length > 0 && (
+          <ul className="listErrorMessages">
+            {inputValidationErrors.map(err => {
+              return (<li>{err}</li>)
+            })}
+          </ul>
+        )}
 
-          <div className="formGroup">
-            <label htmlFor="email">Email</label>
-            <InputText
+        <div className="formGroup">
+          <label htmlFor="email">Email</label>
+          <InputText
             name="email" id="email"
-            value={this.state.email}
+            value={email}
             type="text"
             placeholder="email"
-            onChangeHandler={this.updateInput}
+            onChangeHandler={updateInput}
             inputClassName=''
             readOnly={false} />
-          </div>
-          <div className="formGroup">
-            <label htmlFor="password">Password</label>
+        </div>
+        <div className="formGroup">
+          <label htmlFor="password">Password</label>
+          <InputText type="password"
+          name="password"
+          id="password"
+          value={password}
+          placeholder="password"
+          onChangeHandler={updateInput}
+          inputClassName=''
+          readOnly={false}/>
+        </div>
+        {title === 'Sign Up' && (
+          <div  className="formGroup">
+            <label htmlFor="passwordConfirm">Confirm Password</label>
             <InputText type="password"
-            name="password"
-            id="password"
-            value={this.state.password}
-            placeholder="password"
-            onChangeHandler={this.updateInput}
-            inputClassName=''
-            readOnly={false}/>
+              id="passwordConfirm"
+              name="passwordConfirm"
+              value={passwordConfirm}
+              placeholder="confirm password"
+              onChangeHandler={updateInput}
+              inputClassName=''
+              readOnly={false} />
           </div>
-          {this.props.title === 'Sign Up' && (
-            <div  className="formGroup">
-              <label htmlFor="passwordConfirm">Confirm Password</label>
-              <InputText type="password"
-                id="passwordConfirm"
-                name="passwordConfirm"
-                value={this.state.passwordConfirm}
-                placeholder="confirm password"
-                onChangeHandler={this.updateInput}
-                inputClassName=''
-                readOnly={false} />
-            </div>
-          )}
-          {this.props.title === 'Login' && (
-            <Button label="Log In" onClickHandler={this.logInBtnClick} 
-              classVal='' idVal='' size={null} type={null} noMargin={false}/>
-          )}
-          {this.props.title === 'Sign Up' && (
-            <Button label="Sign Up" onClickHandler={this.signInBtnClick}
-              classVal='' idVal='' size={null} type={null} noMargin={false}/>
-          )}
-        </form>
-      </div>
-    )
-  }
+        )}
+        {title === 'Login' && (
+          <Button label="Log In" onClickHandler={logInBtnClick} 
+            classVal='' idVal='' size={null} type={null} noMargin={false}/>
+        )}
+        {title === 'Sign Up' && (
+          <Button label="Sign Up" onClickHandler={signInBtnClick}
+            classVal='' idVal='' size={null} type={null} noMargin={false}/>
+        )}
+      </form>
+    </div>
+  )
+  
 }
 
-const mapStateToProps = state => ({ authenticate: state.authenticate });
+// const mapStateToProps = state => ({ authenticate: state.authenticate });
 
-const mapDispatchToProps = dispatch => {
-  return {
-    register: ({ email, password }) => dispatch(register({ email, password })),
-    logout: () => dispatch(logout()),
-    login: ({ email, password }) => dispatch(login({ email, password })),
-    isAuthenticated: () => dispatch(isAuthenticated())
-  }
-}
+// const mapDispatchToProps = dispatch => {
+//   return {
+//     register: ({ email, password }) => dispatch(register({ email, password })),
+//     logout: () => dispatch(logout()),
+//     login: ({ email, password }) => dispatch(login({ email, password })),
+//     isAuthenticated: () => dispatch(isAuthenticated())
+//   }
+// }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps)(AuthForm);
+// export default connect(
+//   mapStateToProps,
+//   mapDispatchToProps)(AuthForm);
+
+export default AuthForm;
