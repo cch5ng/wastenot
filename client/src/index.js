@@ -2,15 +2,18 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
-import { Provider } from 'react-redux';
-//import { createStore, applyMiddleware, compose } from 'redux';
+import { Provider, useDispatch } from 'react-redux';
+
+import {isAuthenticated} from './Auth/authSlice';
 import store from './app/store'
-import thunk from 'redux-thunk';
-import rootReducer from './reducers';
-import { isAuthenticated } from './actions/authenticate';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './sw';
+
+// import thunk from 'redux-thunk';
+// import rootReducer from './reducers';
+//import { isAuthenticated } from './actions/authenticate';
+//import { createStore, applyMiddleware, compose } from 'redux';
 //import {registerServiceWorker} from './serviceWorker';
 
 // const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
