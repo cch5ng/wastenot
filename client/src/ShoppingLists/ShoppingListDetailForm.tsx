@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Component } from 'react';
 import { Link, Redirect } from 'react-router-dom';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import uuidv1 from 'uuid/v1';
 import CreatableSelect from 'react-select/creatable';
 import Button from '../App/Shared/Button/Button';
@@ -11,9 +11,11 @@ import Checkbox from '../App/Shared/Checkbox/Checkbox';
 import ShoppingListFormNoExpiration from './ShoppingListFormNoExpiration';
 import ShoppingListFormExpiration from './ShoppingListFormExpiration';
 import http_requests from '../utils/http_requests';
-import { fetchShoppingListCreate, fetchShoppingListEdit } from '../actions/shoppingLists';
-import { isUsingExpiration } from '../actions/setting';
 import { objToArray, getCookieStr, arrayToObj, mappedListItemsArToObj, daysToMilliseconds } from '../utils/utils';
+import { isUsingExpiration } from '../Settings/settingSlice';
+
+import { fetchShoppingListCreate, fetchShoppingListEdit } from '../actions/shoppingLists';
+//import { isUsingExpiration } from '../actions/setting';
 
 const KEY_BASE: string = 'shoppingListItem';
 const listType: string = 'shopping';
@@ -64,6 +66,7 @@ type ShoppingListDetailFormProps = {
 const ShoppingListDetailForm = (props) => {
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [title, setTitle] = useState(props.mode === 'edit' ? 'Edit Shopping List' : 'Add Shopping List');
+
   let editListItemTemplates;
   let editListTemplateName;
   let listGuid;
@@ -76,6 +79,9 @@ const ShoppingListDetailForm = (props) => {
   const [createableSelectKey, setCreateableSelectKey] = useState(null);
   const [reactSelectError, setReactSelectError] = useState(null);
   const [clickedCancelBtnCount, setClickedCancelBtnCount] = useState(0);
+
+  const dispatch = useDispatch();
+  const appIsUsingExpiration = useSelector(state => state.setting.isUsingExpiration)
 
   for (let i = 0; i < 50; i++) {
     let key = `${KEY_BASE}${i}`;
@@ -415,7 +421,7 @@ const ShoppingListDetailForm = (props) => {
   useEffect(() => {
     if (props.authenticate.authStr) {
       let cookieStr = props.authenticate.authStr;
-      props.isUsingExpiration({cookieStr})
+      dispatch(isUsingExpiration({cookieStr}));
 
       http_requests.ListItemMap.getListItemMaps(cookieStr)
         .then(resp => {
@@ -460,21 +466,23 @@ const ShoppingListDetailForm = (props) => {
   )
 }
 
-const mapStateToProps = state => (
-  { authenticate: state.authenticate,
-    shoppingLists: state.shoppingLists,
-    setting: state.setting
-  });
+export default ShoppingListDetailForm;
 
-const mapDispatchToProps = dispatch => {
-  return {
-    fetchShoppingListCreate: ({ list, cookieStr }) => dispatch(fetchShoppingListCreate({ list, cookieStr })),
-    fetchShoppingListEdit: ({ list, cookieStr }) => dispatch(fetchShoppingListEdit({ list, cookieStr })),
-    isUsingExpiration: ({cookieStr}) => dispatch(isUsingExpiration({cookieStr}))
-  }
-}
+// const mapStateToProps = state => (
+//   { authenticate: state.authenticate,
+//     shoppingLists: state.shoppingLists,
+//     setting: state.setting
+//   });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ShoppingListDetailForm);
+// const mapDispatchToProps = dispatch => {
+//   return {
+//     fetchShoppingListCreate: ({ list, cookieStr }) => dispatch(fetchShoppingListCreate({ list, cookieStr })),
+//     fetchShoppingListEdit: ({ list, cookieStr }) => dispatch(fetchShoppingListEdit({ list, cookieStr })),
+//     isUsingExpiration: ({cookieStr}) => dispatch(isUsingExpiration({cookieStr}))
+//   }
+// }
+
+// export default connect(
+//   mapStateToProps,
+//   mapDispatchToProps
+// )(ShoppingListDetailForm);
