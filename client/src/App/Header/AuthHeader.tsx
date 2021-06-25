@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
-import { connect, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import './Header.css';
 import Button from '../Shared/Button/Button';
 import {logout} from '../../Auth/authSlice';
