@@ -33,11 +33,6 @@ export const login = createAsyncThunk('auth/login', async ({ email, password }) 
   const response = await http_requests.Auth.postLogin(email, password)
   let cookieAr;
 
-  if(response) {
-    console.log('response', response)
-    console.log('resp type', typeof response)
-  }
-
   if (response.cookie && storageAvailable('sessionStorage')) {
     cookieAr = response.cookie.split('=');
     sessionStorage.setItem(cookieAr[0], cookieAr[1]);
@@ -55,15 +50,15 @@ export const logout = createAsyncThunk('auth/logout', async () => {
   const cookieKey = 'sessionStr';
   let cookieVal = sessionStorage.getItem(cookieKey);
   cookie = `${cookieKey}=${cookieVal}`;
-  let cookieAr = cookieVal.split('|');
-  let email = cookieAr[0];
 
   const response = await http_requests.Auth.postLogout({ cookie })
   sessionStorage.removeItem(`${cookieKey}`);
   serviceWorker.unsubscribeUserFromPush();
 
-  return {
-    message: response.message,
+  if (response) {
+    return {
+      message: response.message,
+    }  
   }
 })
 
@@ -136,7 +131,8 @@ const authSlice = createSlice({
     [logout.fulfilled]: (state, action) => {
       if (state.status === 'loading') {
         state.message = action.payload.message;
-        state.status = 'succeeded'
+        state.status = 'succeeded';
+        state.isLoggedIn = false;
       }
     },
     [logout.rejected]: (state, action) => {
