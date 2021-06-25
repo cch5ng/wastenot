@@ -33,16 +33,21 @@ export const login = createAsyncThunk('auth/login', async ({ email, password }) 
   const response = await http_requests.Auth.postLogin(email, password)
   let cookieAr;
 
+  if(response) {
+    console.log('response', response)
+    console.log('resp type', typeof response)
+  }
+
   if (response.cookie && storageAvailable('sessionStorage')) {
-    cookieAr = resp.cookie.split('=');
+    cookieAr = response.cookie.split('=');
     sessionStorage.setItem(cookieAr[0], cookieAr[1]);
+    return {
+      message: response.message,
+      authStr: cookieAr[1]
+    }
   }
   serviceWorker.subscribeUserToPush();
 
-  return {
-    message: response.message,
-    authStr: cookieAr[1]
-  }
 })
 
 export const logout = createAsyncThunk('auth/logout', async () => {
@@ -112,9 +117,10 @@ const authSlice = createSlice({
     },
     [login.fulfilled]: (state, action) => {
       if (state.status === 'loading') {
+        state.status = 'succeeded'
         state.message = action.payload.message;
         state.authStr = action.payload.authStr;
-        state.status = 'succeeded'
+        state.isLoggedIn = true;
       }
     },
     [login.rejected]: (state, action) => {
@@ -187,4 +193,4 @@ function storageAvailable(type) {
   }
 }
 
-export default authSlice.reducers;
+export default authSlice.reducer;
