@@ -5,7 +5,7 @@ import 'regenerator-runtime/runtime';
 import { Provider, useDispatch } from 'react-redux';
 
 import {isAuthenticated} from './Auth/authSlice';
-import store from './app/store'
+import store from './App/store'
 import './index.css';
 import App from './App';
 import * as serviceWorker from './sw';
