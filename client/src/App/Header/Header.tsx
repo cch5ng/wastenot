@@ -30,7 +30,7 @@ const Header = () => { //props: HeaderProps
   let logOutHandler = function(
     event: React.MouseEvent<HTMLDivElement>
   ): void {
-    dispatch(logout);
+    dispatch(logout());
     //props.logout();
   };
 
