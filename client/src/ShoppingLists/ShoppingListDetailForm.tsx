@@ -13,7 +13,7 @@ import ShoppingListFormExpiration from './ShoppingListFormExpiration';
 import http_requests from '../utils/http_requests';
 import { objToArray, getCookieStr, arrayToObj, mappedListItemsArToObj, daysToMilliseconds } from '../utils/utils';
 import { isUsingExpiration } from '../Settings/settingSlice';
-import { createShoppingLists, editShoppingLists } from './shoppingListsSlice';
+import { createShoppingList, editShoppingList } from './shoppingListsSlice';
 
 const KEY_BASE: string = 'shoppingListItem';
 const listType: string = 'shopping';
@@ -57,8 +57,6 @@ type ShoppingListDetailFormProps = {
   setting: {
     hasButtonClicked: boolean
   },
-  //fetchShoppingListCreate: any,
-  //fetchShoppingListEdit: any,
   isUsingExpiration: any
 }
 const ShoppingListDetailForm = (props) => {
@@ -161,7 +159,7 @@ const ShoppingListDetailForm = (props) => {
         item.timestamp = d.toISOString();
       })
       setReactSelectError('');
-      dispatch(createShoppingLists({ list, cookieStr}));
+      dispatch(createShoppingList({ list, cookieStr}));
     } else if (props.mode === 'edit') {
       listGuid = props.listGuid;
       copyListItemInputs = {...listItemInputs};
@@ -179,7 +177,7 @@ const ShoppingListDetailForm = (props) => {
       list.listItems.forEach(item => {
         item.timestamp = d.toISOString();
       })
-      dispatch(editShoppingLists({ list, cookieStr }));
+      dispatch(editShoppingList({ list, cookieStr }));
     }
     clearForm('empty');
     setFormSubmitted(true);
