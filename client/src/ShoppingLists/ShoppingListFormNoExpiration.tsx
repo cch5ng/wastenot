@@ -5,7 +5,6 @@ import InputText from '../App/Shared/InputText/InputText';
 import '../App.css';
 import Checkbox from '../App/Shared/Checkbox/Checkbox';
 import http_requests from '../utils/http_requests';
-import { fetchShoppingListCreate, fetchShoppingListEdit } from '../actions/shoppingLists';
 import { objToArray, getCookieStr, arrayToObj } from '../utils/utils';
 import { render } from 'react-dom';
 
