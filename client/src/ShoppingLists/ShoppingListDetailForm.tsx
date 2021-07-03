@@ -13,9 +13,7 @@ import ShoppingListFormExpiration from './ShoppingListFormExpiration';
 import http_requests from '../utils/http_requests';
 import { objToArray, getCookieStr, arrayToObj, mappedListItemsArToObj, daysToMilliseconds } from '../utils/utils';
 import { isUsingExpiration } from '../Settings/settingSlice';
-
-import { fetchShoppingListCreate, fetchShoppingListEdit } from '../actions/shoppingLists';
-//import { isUsingExpiration } from '../actions/setting';
+import { createShoppingLists, editShoppingLists } from './shoppingListsSlice';
 
 const KEY_BASE: string = 'shoppingListItem';
 const listType: string = 'shopping';
@@ -59,8 +57,8 @@ type ShoppingListDetailFormProps = {
   setting: {
     hasButtonClicked: boolean
   },
-  fetchShoppingListCreate: any,
-  fetchShoppingListEdit: any,
+  //fetchShoppingListCreate: any,
+  //fetchShoppingListEdit: any,
   isUsingExpiration: any
 }
 const ShoppingListDetailForm = (props) => {
@@ -163,7 +161,7 @@ const ShoppingListDetailForm = (props) => {
         item.timestamp = d.toISOString();
       })
       setReactSelectError('');
-      props.fetchShoppingListCreate({ list, cookieStr});
+      dispatch(createShoppingLists({ list, cookieStr}));
     } else if (props.mode === 'edit') {
       listGuid = props.listGuid;
       copyListItemInputs = {...listItemInputs};
@@ -181,7 +179,7 @@ const ShoppingListDetailForm = (props) => {
       list.listItems.forEach(item => {
         item.timestamp = d.toISOString();
       })
-      props.fetchShoppingListEdit({ list, cookieStr });
+      dispatch(editShoppingLists({ list, cookieStr }));
     }
     clearForm('empty');
     setFormSubmitted(true);
@@ -229,7 +227,6 @@ const ShoppingListDetailForm = (props) => {
         reactSelectInput = parent.querySelector('input');
         if (reactSelectInput && reactSelectInput.id) {
           idStr = reactSelectInput.id;
-          console.log('idStr', idStr)
           setCreateableSelectKey(idStr);  
         }
       }
@@ -241,7 +238,6 @@ const ShoppingListDetailForm = (props) => {
         reactSelectInput = parent.querySelector('input');
         if (reactSelectInput && reactSelectInput.id) {
           idStr = reactSelectInput.id;
-          console.log('idStr', idStr)
           setCreateableSelectKey(idStr);  
         }
       }
@@ -253,7 +249,6 @@ const ShoppingListDetailForm = (props) => {
         reactSelectInput = parent.querySelector('input');
         if (reactSelectInput && reactSelectInput.id) {
           idStr = reactSelectInput.id;
-          console.log('idStr', idStr)
           setCreateableSelectKey(idStr);  
         }
       }
@@ -263,7 +258,6 @@ const ShoppingListDetailForm = (props) => {
       reactSelectInput = target.parentNode.querySelector('input');
       if (reactSelectInput && reactSelectInput.id) {
         idStr = reactSelectInput.id;
-        console.log('idStr', idStr)
         setCreateableSelectKey(idStr);  
       }  
     }
@@ -467,22 +461,3 @@ const ShoppingListDetailForm = (props) => {
 }
 
 export default ShoppingListDetailForm;
-
-// const mapStateToProps = state => (
-//   { authenticate: state.authenticate,
-//     shoppingLists: state.shoppingLists,
-//     setting: state.setting
-//   });
-
-// const mapDispatchToProps = dispatch => {
-//   return {
-//     fetchShoppingListCreate: ({ list, cookieStr }) => dispatch(fetchShoppingListCreate({ list, cookieStr })),
-//     fetchShoppingListEdit: ({ list, cookieStr }) => dispatch(fetchShoppingListEdit({ list, cookieStr })),
-//     isUsingExpiration: ({cookieStr}) => dispatch(isUsingExpiration({cookieStr}))
-//   }
-// }
-
-// export default connect(
-//   mapStateToProps,
-//   mapDispatchToProps
-// )(ShoppingListDetailForm);
