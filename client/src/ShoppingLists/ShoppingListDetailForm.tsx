@@ -408,7 +408,6 @@ const ShoppingListDetailForm = (props) => {
       emptyListItemInputs[key] = inputObj;
       emptyListItemInputs[key].sortOrder = i;
     }
-    console.log('emptyListItemInputs', emptyListItemInputs)
     return emptyListItemInputs;
   }
 
