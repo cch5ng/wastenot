@@ -5,6 +5,7 @@ import { getCookieStr } from '../utils/utils';
 import Button from '../App/Shared/Button/Button';
 import InputText from '../App/Shared/InputText/InputText';
 import { register, logout, login, isAuthenticated } from './authSlice';
+import type { RootState } from '../App/store';
 
 //import { register, logout, login, isAuthenticated } from '../actions/authenticate';
 
@@ -49,7 +50,7 @@ const AuthForm = ({title}) => {
   const [inputValidationErrors, setInputValidationErrors] = useState([]);
 
   const dispatch = useDispatch();
-  const {status, hasButtonClicked, message} = useSelector(state => state.auth)
+  const {status, hasButtonClicked, message} = useSelector((state: RootState) => state.auth)
 
   const updateInput = (event: React.FormEvent<HTMLInputElement>): void => {
     let target = event.target as HTMLInputElement;
