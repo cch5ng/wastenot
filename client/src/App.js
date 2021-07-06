@@ -90,24 +90,3 @@ function App(props) {
 }
 
 export default App;
-
-// const mapStateToProps = state => ({
-//   authenticate: state.authenticate
-// })
-
-// export default connect(mapStateToProps, null)(App);
-
-/*
-          <Route exact path='/shoppingLists/new' 
-            render={(props) => (<ShoppingListDetailForm {...props} mode="add" 
-              updateShoppingLists={updateShoppingLists}
-            />
-          )} />
-
-          <Route exact path="/shoppingLists/edit/:listGuid"
-            render={({match}) => (<ShoppingListDetailForm mode="edit" 
-              updateShoppingLists={updateShoppingLists}
-              listGuid={match.params.listGuid}
-            />
-          )} />
-*/
