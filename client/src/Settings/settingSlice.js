@@ -8,7 +8,7 @@ import {
 import http_requests from '../utils/http_requests';
 import { getCookieStr } from '../utils/utils';
 
-export const isUsingExpiration = createAsyncThunk('setting/isUsingExpiration', async ({cookieStr}) => {
+export const userIsUsingExpiration = createAsyncThunk('setting/userIsUsingExpiration', async ({cookieStr}) => {
   if (cookieStr) { 
     const response = await http_requests.Setting.postListItemMapSetting(cookieStr)
     return {
@@ -28,16 +28,16 @@ const settingSlice = createSlice({
   reducers: {
   },
   extraReducers: {
-    [isUsingExpiration.pending]: (state, action) => {
+    [userIsUsingExpiration.pending]: (state, action) => {
       state.status = 'loading'
       state.error = null
     },
-    [isUsingExpiration.fulfilled]: (state, action) => {
+    [userIsUsingExpiration.fulfilled]: (state, action) => {
       state.status = 'succeeded'
       state.message = action.payload.message
       state.isUsingExpiration = action.payload.isUsingExpiration
     },
-    [isUsingExpiration.rejected]: (state, action) => {
+    [userIsUsingExpiration.rejected]: (state, action) => {
       if (state.status === 'loading') {
         state.status = 'failed'
         state.error = action.payload
