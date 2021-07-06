@@ -12,8 +12,9 @@ import ShoppingListFormNoExpiration from './ShoppingListFormNoExpiration';
 import ShoppingListFormExpiration from './ShoppingListFormExpiration';
 import http_requests from '../utils/http_requests';
 import { objToArray, getCookieStr, arrayToObj, mappedListItemsArToObj, daysToMilliseconds } from '../utils/utils';
-import { isUsingExpiration } from '../Settings/settingSlice';
+import { userIsUsingExpiration } from '../Settings/settingSlice';
 import { createShoppingList, editShoppingList } from './shoppingListsSlice';
+import type { RootState } from '../App/store';
 
 const KEY_BASE: string = 'shoppingListItem';
 const listType: string = 'shopping';
@@ -37,27 +38,27 @@ const listItemStyles = {
 
 type ShoppingListDetailFormProps = {
   mode: string,
-  authenticate: {
-    isLoggedIn: boolean,
-    hasButtonClicked: boolean,
-    status: string,
-    message: string,
-    authStr: string,
-  },
-  shoppingLists: {
-    status: string,
-    message: string,
-    shoppingLists: {
-      id: {
-        name: string,
-        guid: string
-      },
-    }
-  },
-  setting: {
-    hasButtonClicked: boolean
-  },
-  isUsingExpiration: any
+  // authenticate: {
+  //   isLoggedIn: boolean,
+  //   hasButtonClicked: boolean,
+  //   status: string,
+  //   message: string,
+  //   authStr: string,
+  // },
+  // shoppingLists: {
+  //   status: string,
+  //   message: string,
+  //   shoppingLists: {
+  //     id: {
+  //       name: string,
+  //       guid: string
+  //     },
+  //   }
+  // },
+  // setting: {
+  //   hasButtonClicked: boolean
+  // },
+  // isUsingExpiration: any
 }
 const ShoppingListDetailForm = (props) => {
   const [formSubmitted, setFormSubmitted] = useState(false);
@@ -77,7 +78,8 @@ const ShoppingListDetailForm = (props) => {
   const [clickedCancelBtnCount, setClickedCancelBtnCount] = useState(0);
 
   const dispatch = useDispatch();
-  const appIsUsingExpiration = useSelector(state => state.setting.isUsingExpiration)
+  const appIsUsingExpiration = useSelector((state: RootState) => state.setting.isUsingExpiration);
+  const authStr = useSelector((state: RootState) => state.auth.authStr);
 
   for (let i = 0; i < 50; i++) {
     let key = `${KEY_BASE}${i}`;
@@ -139,7 +141,7 @@ const ShoppingListDetailForm = (props) => {
     event.preventDefault();  
     let requestBody;
     let listGuid;
-    let cookieStr = (props.authenticate && props.authenticate.authStr) ? props.authenticate.authStr : null;
+    let cookieStr = authStr ? authStr : null;
     let copyListItemInputs;
 
     if (props.mode === 'add') {
@@ -411,9 +413,9 @@ const ShoppingListDetailForm = (props) => {
   }
 
   useEffect(() => {
-    if (props.authenticate.authStr) {
-      let cookieStr = props.authenticate.authStr;
-      dispatch(isUsingExpiration({cookieStr}));
+    if (authStr) {
+      let cookieStr = authStr;
+      dispatch(userIsUsingExpiration({cookieStr}));
 
       http_requests.ListItemMap.getListItemMaps(cookieStr)
         .then(resp => {
@@ -435,21 +437,21 @@ const ShoppingListDetailForm = (props) => {
           })
       }  
     }
-  }, [props.authenticate.authStr, clickedCancelBtnCount]);
+  }, [authStr, clickedCancelBtnCount]);
 
   return (
     <div className="main">
       {formSubmitted && (
         <Redirect to="/shoppingLists" />
       )}
-      {props.setting.isUsingExpiration === true && mappedListItems.length > 0 &&(
+      {appIsUsingExpiration === true && mappedListItems.length > 0 &&(
         <ShoppingListFormExpiration title={title} listName={listName}
           onClickHandler={clearForm} formSubmitHandler={formSubmitHandler} 
           inputChangeHandler={inputChangeHandler} renderForm={renderExpirationForm} 
           setNotificationClickHandler={setNotificationClickHandler} 
           displayError={reactSelectError} mode={props.mode} />
       )}
-      {(props.setting.isUsingExpiration === false || mappedListItems.length === 0) && (
+      {(appIsUsingExpiration === false || mappedListItems.length === 0) && (
         <ShoppingListFormNoExpiration title={title} formSubmitHandler={formSubmitHandler}
           onClickHandler={clearForm} listName={listName} inputChangeHandler={inputChangeHandler}
           renderForm={renderForm} mode={props.mode} />
