@@ -418,7 +418,7 @@ const ShoppingListDetailForm = (props) => {
 
       http_requests.ListItemMap.getListItemMaps(cookieStr)
         .then(resp => {
-          if (resp && resp.mapped_list_items && resp.mapped_list_items.length) {
+          if (resp && resp.mapped_list_items) {
             setMappedListItems(resp.mapped_list_items);
             setMappedListItemsObj(mappedListItemsArToObj(resp.mapped_list_items));
           }
