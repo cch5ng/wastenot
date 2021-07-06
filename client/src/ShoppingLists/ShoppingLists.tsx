@@ -7,6 +7,7 @@ import { objToArray } from '../utils/utils';
 import http_requests from '../utils/http_requests';
 import '../App.css';
 import {fetchShoppingLists, deleteShoppingList} from './shoppingListsSlice';
+import type { RootState } from '../App/store';
 
 //import { fetchShoppingLists, fetchShoppingListDelete } from '../actions/shoppingLists';
 
@@ -41,9 +42,9 @@ const ShoppingLists = () => {
 //   }
 
   const dispatch = useDispatch();
-  let authStr = useSelector(state => state.auth.authStr);
-  let shoppingListsMessage = useSelector(state => state.shoppingLists.message);
-  let shoppingLists = useSelector(state => state.shoppingLists.shoppingLists);
+  let authStr = useSelector((state: RootState) => state.auth.authStr);
+  let shoppingListsMessage = useSelector((state: RootState) => state.shoppingLists.message);
+  let shoppingLists = useSelector((state: RootState) => state.shoppingLists.shoppingLists.entities);
 
 
   useEffect(() => {
