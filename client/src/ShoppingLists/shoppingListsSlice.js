@@ -9,6 +9,10 @@ import * as serviceWorker from '../sw';
 import http_requests from '../utils/http_requests';
 import { getCookieStr, arrayToObj } from '../utils/utils';
 
+// const shoppingListsAdapter = createEntityAdapter({
+//   sortComparer: (a, b) => b.date.localeCompare(a.date)
+// })
+
 //TODO stub out the async thunks and extra reducers
 //export const XXX = createAsyncThunk('shoppingLists/YYY', async () => {
 //});
@@ -28,15 +32,13 @@ export const createShoppingList = createAsyncThunk('shoppingLists/createShopping
   const response = await http_requests.Lists.postShoppingList({ list, cookieStr })
   if (response) {
     let guid = Object.keys(response.shoppingList)[0];
-    let shortShoppingList = {};
-    shortShoppingList[guid] = {
-      name: response.shoppingList[guid].name,
-      guid
-    }
+    let shortShoppingList = {name: response.shoppingList[guid].name,
+      guid};
     if (response.type === 'success') {
       return {
         message: response.message,
-        shoppingList: shortShoppingList
+        shoppingList: shortShoppingList,
+        guid
       }
     }
   }
@@ -91,7 +93,10 @@ export const fetchShoppingListDelete = ({ guid, cookieStr }) => dispatch => {
 */
 
 const initialState = {
-  shoppingLists: [],
+  shoppingLists: {
+    ids: [],
+    entities: {},
+  },
   message: 'no shopping lists have been retrieved',
 }
 
@@ -109,7 +114,9 @@ const shoppingListsSlice = createSlice({
     [fetchShoppingLists.fulfilled]: (state, action) => {
       if (state.status === 'loading') {
         state.message = action.payload.message;
-        state.shoppingLists = action.payload.shoppingLists;
+
+        state.shoppingLists.entities = action.payload.shoppingLists;
+        state.shoppingLists.ids = Object.keys(state.shoppingLists.entities);
         state.status = 'succeeded'
       }
     },
@@ -127,7 +134,9 @@ const shoppingListsSlice = createSlice({
     [createShoppingList.fulfilled]: (state, action) => {
       if (state.status === 'loading') {
         state.message = action.payload.message;
-        state.shoppingLists.push(action.payload.shoppingList);
+        let {guid, shoppingList} = action.payload;
+        state.shoppingLists.ids.push(guid);
+        state.shoppingLists.entities[guid] = shoppingList;
         state.status = 'succeeded'
       }
     },
@@ -147,9 +156,9 @@ const shoppingListsSlice = createSlice({
         state.message = action.payload.message;
         let updatedList = action.payload.shoppingList;
         //TODO TEST
-        let updatedShoppingLists = state.shoppingLists.filter(list => list.guid !== updatedList.guid);
+        let updatedShoppingLists = state.shoppingLists.entities.filter(list => list.guid !== updatedList.guid);
         updatedShoppingLists.push(updatedList);
-        state.shoppingLists = updatedShoppingLists;
+        state.shoppingLists.entities = updatedShoppingLists;
         state.status = 'succeeded'
       }
     },
@@ -168,7 +177,7 @@ const shoppingListsSlice = createSlice({
       if (state.status === 'loading') {
         state.message = action.payload.message;
         //TODO TEST
-        let filteredShoppingLists = state.shoppingLists.filter(list => list.guid !== action.payload.deletedGuid);
+        let filteredShoppingLists = state.shoppingLists.shoppingLists.filter(list => list.guid !== action.payload.deletedGuid);
         state.shoppingLists = filteredShoppingLists;
         state.status = 'succeeded'
       }
