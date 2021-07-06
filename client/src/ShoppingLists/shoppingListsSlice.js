@@ -29,17 +29,15 @@ export const fetchShoppingLists = createAsyncThunk('shoppingLists/fetchShoppingL
 });
 
 export const createShoppingList = createAsyncThunk('shoppingLists/createShoppingList', async ({ list, cookieStr }) => {
-  const response = await http_requests.Lists.postShoppingList({ list, cookieStr })
-  if (response) {
-    let guid = Object.keys(response.shoppingList)[0];
-    let shortShoppingList = {name: response.shoppingList[guid].name,
+  const response = await http_requests.Lists.postShoppingList({ list, cookieStr });
+  if (response && response.type === 'success') {
+    let guid = Object.keys(response.shoppingList);
+    guid = guid[0];
+    let shortShoppingList = {name: list.name,
       guid};
-    if (response.type === 'success') {
-      return {
-        message: response.message,
-        shoppingList: shortShoppingList,
-        guid
-      }
+    return {
+      message: response.message,
+      shoppingList: shortShoppingList,
     }
   }
 });
@@ -47,9 +45,12 @@ export const createShoppingList = createAsyncThunk('shoppingLists/createShopping
 export const editShoppingList = createAsyncThunk('shoppingLists/editShoppingList', async ({ list, cookieStr }) => {
   const response = await http_requests.Lists.putShoppingList({ list, cookieStr });
   if (response && response.type === 'success') {
+    let shortShoppingList = {name: list.name,
+      guid: list.guid};
+
     return {
       message: response.message,
-      shoppingList: list
+      shoppingList: shortShoppingList,
     }
   }
 });
@@ -63,34 +64,6 @@ export const deleteShoppingList = createAsyncThunk('shoppingLists/deleteShopping
     }
   }
 });
-
-
-
-/*
-
-export const fetchShoppingListDelete = ({ guid, cookieStr }) => dispatch => {
-  dispatch({ type: SHOPPING_LISTS_FETCH });
-
-  if (cookieStr) {
-    http_requests.Lists.deleteTemplateList({ guid, cookieStr })
-      .then(response => {
-        if (response.type === 'success') {
-          dispatch(
-            { type: SHOPPING_LISTS_DELETE_FETCH_SUCCESS,
-              message: response.message,
-              deletedGuid: response.guid
-            }
-          )
-        }
-      })
-      .catch(function(err) {
-        dispatch({ type: SHOPPING_LISTS_ERR, message: err.message});
-        console.log('fetch err: ' + err.message)
-      })
-  }
-}
-
-*/
 
 const initialState = {
   shoppingLists: {
@@ -134,7 +107,8 @@ const shoppingListsSlice = createSlice({
     [createShoppingList.fulfilled]: (state, action) => {
       if (state.status === 'loading') {
         state.message = action.payload.message;
-        let {guid, shoppingList} = action.payload;
+        let {shoppingList} = action.payload;
+        let {guid} = shoppingList;
         state.shoppingLists.ids.push(guid);
         state.shoppingLists.entities[guid] = shoppingList;
         state.status = 'succeeded'
@@ -154,11 +128,11 @@ const shoppingListsSlice = createSlice({
     [editShoppingList.fulfilled]: (state, action) => {
       if (state.status === 'loading') {
         state.message = action.payload.message;
-        let updatedList = action.payload.shoppingList;
-        //TODO TEST
-        let updatedShoppingLists = state.shoppingLists.entities.filter(list => list.guid !== updatedList.guid);
-        updatedShoppingLists.push(updatedList);
-        state.shoppingLists.entities = updatedShoppingLists;
+        let { guid, name } = action.payload.shoppingList;
+        let curList = state.shoppingLists.entities[guid];
+        if (curList.name !== name) {
+          curList.name = name;
+        }
         state.status = 'succeeded'
       }
     },
