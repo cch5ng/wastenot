@@ -9,14 +9,6 @@ import * as serviceWorker from '../sw';
 import http_requests from '../utils/http_requests';
 import { getCookieStr, arrayToObj } from '../utils/utils';
 
-// const shoppingListsAdapter = createEntityAdapter({
-//   sortComparer: (a, b) => b.date.localeCompare(a.date)
-// })
-
-//TODO stub out the async thunks and extra reducers
-//export const XXX = createAsyncThunk('shoppingLists/YYY', async () => {
-//});
-
 export const fetchShoppingLists = createAsyncThunk('shoppingLists/fetchShoppingLists', async ({ cookieStr }) => {
   const response = await http_requests.Lists.getAllShoppingLists({ cookieStr });
   if (response && response.shoppingLists) {
