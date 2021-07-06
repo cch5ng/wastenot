@@ -11,9 +11,11 @@ import { getCookieStr } from '../utils/utils';
 export const userIsUsingExpiration = createAsyncThunk('setting/userIsUsingExpiration', async ({cookieStr}) => {
   if (cookieStr) { 
     const response = await http_requests.Setting.postListItemMapSetting(cookieStr)
-    return {
-      message: resp.message,
-      isUsingExpiration: resp.mapped_items_to_categories
+    if (response && response.type === 'success') {
+      return {
+        message: response.message,
+        isUsingExpiration: response.mapped_items_to_categories,
+      }
     }
   } else {
     return { message: 'settings could not be retrieve; auth issue' }
