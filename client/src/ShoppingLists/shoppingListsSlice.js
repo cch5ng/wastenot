@@ -47,7 +47,6 @@ export const editShoppingList = createAsyncThunk('shoppingLists/editShoppingList
   if (response && response.type === 'success') {
     let shortShoppingList = {name: list.name,
       guid: list.guid};
-
     return {
       message: response.message,
       shoppingList: shortShoppingList,
@@ -149,10 +148,11 @@ const shoppingListsSlice = createSlice({
     },
     [deleteShoppingList.fulfilled]: (state, action) => {
       if (state.status === 'loading') {
-        state.message = action.payload.message;
-        //TODO TEST
-        let filteredShoppingLists = state.shoppingLists.shoppingLists.filter(list => list.guid !== action.payload.deletedGuid);
-        state.shoppingLists = filteredShoppingLists;
+        const { deletedGuid, message } = action.payload;
+        state.message = message;
+        let idIdx = state.shoppingLists.ids.indexOf(deletedGuid);
+        state.shoppingLists.ids.splice(idIdx, 1);
+        delete state.shoppingLists.entities[deletedGuid];
         state.status = 'succeeded'
       }
     },
