@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Component } from 'react';
 import { Link, Redirect } from 'react-router-dom';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import uuidv1 from 'uuid/v1';
 import CreatableSelect from 'react-select/creatable';
 import Button from '../App/Shared/Button/Button';
@@ -11,9 +11,10 @@ import Checkbox from '../App/Shared/Checkbox/Checkbox';
 import ShoppingListFormNoExpiration from './ShoppingListFormNoExpiration';
 import ShoppingListFormExpiration from './ShoppingListFormExpiration';
 import http_requests from '../utils/http_requests';
-import { fetchShoppingListCreate, fetchShoppingListEdit } from '../actions/shoppingLists';
-import { isUsingExpiration } from '../actions/setting';
 import { objToArray, getCookieStr, arrayToObj, mappedListItemsArToObj, daysToMilliseconds } from '../utils/utils';
+import { userIsUsingExpiration } from '../Settings/settingSlice';
+import { createShoppingList, editShoppingList } from './shoppingListsSlice';
+import type { RootState } from '../App/store';
 
 const KEY_BASE: string = 'shoppingListItem';
 const listType: string = 'shopping';
@@ -37,33 +38,32 @@ const listItemStyles = {
 
 type ShoppingListDetailFormProps = {
   mode: string,
-  authenticate: {
-    isLoggedIn: boolean,
-    hasButtonClicked: boolean,
-    status: string,
-    message: string,
-    authStr: string,
-  },
-  shoppingLists: {
-    status: string,
-    message: string,
-    shoppingLists: {
-      id: {
-        name: string,
-        guid: string
-      },
-    }
-  },
-  setting: {
-    hasButtonClicked: boolean
-  },
-  fetchShoppingListCreate: any,
-  fetchShoppingListEdit: any,
-  isUsingExpiration: any
+  // authenticate: {
+  //   isLoggedIn: boolean,
+  //   hasButtonClicked: boolean,
+  //   status: string,
+  //   message: string,
+  //   authStr: string,
+  // },
+  // shoppingLists: {
+  //   status: string,
+  //   message: string,
+  //   shoppingLists: {
+  //     id: {
+  //       name: string,
+  //       guid: string
+  //     },
+  //   }
+  // },
+  // setting: {
+  //   hasButtonClicked: boolean
+  // },
+  // isUsingExpiration: any
 }
 const ShoppingListDetailForm = (props) => {
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [title, setTitle] = useState(props.mode === 'edit' ? 'Edit Shopping List' : 'Add Shopping List');
+
   let editListItemTemplates;
   let editListTemplateName;
   let listGuid;
@@ -76,6 +76,10 @@ const ShoppingListDetailForm = (props) => {
   const [createableSelectKey, setCreateableSelectKey] = useState(null);
   const [reactSelectError, setReactSelectError] = useState(null);
   const [clickedCancelBtnCount, setClickedCancelBtnCount] = useState(0);
+
+  const dispatch = useDispatch();
+  const appIsUsingExpiration = useSelector((state: RootState) => state.setting.isUsingExpiration);
+  const authStr = useSelector((state: RootState) => state.auth.authStr);
 
   for (let i = 0; i < 50; i++) {
     let key = `${KEY_BASE}${i}`;
@@ -137,7 +141,7 @@ const ShoppingListDetailForm = (props) => {
     event.preventDefault();  
     let requestBody;
     let listGuid;
-    let cookieStr = (props.authenticate && props.authenticate.authStr) ? props.authenticate.authStr : null;
+    let cookieStr = authStr ? authStr : null;
     let copyListItemInputs;
 
     if (props.mode === 'add') {
@@ -157,7 +161,7 @@ const ShoppingListDetailForm = (props) => {
         item.timestamp = d.toISOString();
       })
       setReactSelectError('');
-      props.fetchShoppingListCreate({ list, cookieStr});
+      dispatch(createShoppingList({ list, cookieStr}));
     } else if (props.mode === 'edit') {
       listGuid = props.listGuid;
       copyListItemInputs = {...listItemInputs};
@@ -175,7 +179,7 @@ const ShoppingListDetailForm = (props) => {
       list.listItems.forEach(item => {
         item.timestamp = d.toISOString();
       })
-      props.fetchShoppingListEdit({ list, cookieStr });
+      dispatch(editShoppingList({ list, cookieStr }));
     }
     clearForm('empty');
     setFormSubmitted(true);
@@ -223,7 +227,6 @@ const ShoppingListDetailForm = (props) => {
         reactSelectInput = parent.querySelector('input');
         if (reactSelectInput && reactSelectInput.id) {
           idStr = reactSelectInput.id;
-          console.log('idStr', idStr)
           setCreateableSelectKey(idStr);  
         }
       }
@@ -235,7 +238,6 @@ const ShoppingListDetailForm = (props) => {
         reactSelectInput = parent.querySelector('input');
         if (reactSelectInput && reactSelectInput.id) {
           idStr = reactSelectInput.id;
-          console.log('idStr', idStr)
           setCreateableSelectKey(idStr);  
         }
       }
@@ -247,7 +249,6 @@ const ShoppingListDetailForm = (props) => {
         reactSelectInput = parent.querySelector('input');
         if (reactSelectInput && reactSelectInput.id) {
           idStr = reactSelectInput.id;
-          console.log('idStr', idStr)
           setCreateableSelectKey(idStr);  
         }
       }
@@ -257,7 +258,6 @@ const ShoppingListDetailForm = (props) => {
       reactSelectInput = target.parentNode.querySelector('input');
       if (reactSelectInput && reactSelectInput.id) {
         idStr = reactSelectInput.id;
-        console.log('idStr', idStr)
         setCreateableSelectKey(idStr);  
       }  
     }
@@ -408,18 +408,17 @@ const ShoppingListDetailForm = (props) => {
       emptyListItemInputs[key] = inputObj;
       emptyListItemInputs[key].sortOrder = i;
     }
-    console.log('emptyListItemInputs', emptyListItemInputs)
     return emptyListItemInputs;
   }
 
   useEffect(() => {
-    if (props.authenticate.authStr) {
-      let cookieStr = props.authenticate.authStr;
-      props.isUsingExpiration({cookieStr})
+    if (authStr) {
+      let cookieStr = authStr;
+      dispatch(userIsUsingExpiration({cookieStr}));
 
       http_requests.ListItemMap.getListItemMaps(cookieStr)
         .then(resp => {
-          if (resp && resp.mapped_list_items && resp.mapped_list_items.length) {
+          if (resp && resp.mapped_list_items) {
             setMappedListItems(resp.mapped_list_items);
             setMappedListItemsObj(mappedListItemsArToObj(resp.mapped_list_items));
           }
@@ -437,21 +436,21 @@ const ShoppingListDetailForm = (props) => {
           })
       }  
     }
-  }, [props.authenticate.authStr, clickedCancelBtnCount]);
+  }, [authStr, clickedCancelBtnCount]);
 
   return (
     <div className="main">
       {formSubmitted && (
         <Redirect to="/shoppingLists" />
       )}
-      {props.setting.isUsingExpiration === true && mappedListItems.length > 0 &&(
+      {appIsUsingExpiration === true && mappedListItems.length > 0 &&(
         <ShoppingListFormExpiration title={title} listName={listName}
           onClickHandler={clearForm} formSubmitHandler={formSubmitHandler} 
           inputChangeHandler={inputChangeHandler} renderForm={renderExpirationForm} 
           setNotificationClickHandler={setNotificationClickHandler} 
           displayError={reactSelectError} mode={props.mode} />
       )}
-      {(props.setting.isUsingExpiration === false || mappedListItems.length === 0) && (
+      {(appIsUsingExpiration === false || mappedListItems.length === 0) && (
         <ShoppingListFormNoExpiration title={title} formSubmitHandler={formSubmitHandler}
           onClickHandler={clearForm} listName={listName} inputChangeHandler={inputChangeHandler}
           renderForm={renderForm} mode={props.mode} />
@@ -460,21 +459,4 @@ const ShoppingListDetailForm = (props) => {
   )
 }
 
-const mapStateToProps = state => (
-  { authenticate: state.authenticate,
-    shoppingLists: state.shoppingLists,
-    setting: state.setting
-  });
-
-const mapDispatchToProps = dispatch => {
-  return {
-    fetchShoppingListCreate: ({ list, cookieStr }) => dispatch(fetchShoppingListCreate({ list, cookieStr })),
-    fetchShoppingListEdit: ({ list, cookieStr }) => dispatch(fetchShoppingListEdit({ list, cookieStr })),
-    isUsingExpiration: ({cookieStr}) => dispatch(isUsingExpiration({cookieStr}))
-  }
-}
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ShoppingListDetailForm);
+export default ShoppingListDetailForm;

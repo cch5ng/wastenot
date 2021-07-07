@@ -1,14 +1,12 @@
 import React, { useState, useEffect, Component } from 'react';
+import { render } from 'react-dom';
 import Creatable, { makeCreatableSelect }  from 'react-select/creatable';
 import Button from '../App/Shared/Button/Button';
 import '../App.css';
 import InputText from '../App/Shared/InputText/InputText';
 import Checkbox from '../App/Shared/Checkbox/Checkbox';
 import http_requests from '../utils/http_requests';
-import { fetchShoppingListCreate, fetchShoppingListEdit } from '../actions/shoppingLists';
-import { isUsingExpiration } from '../actions/setting';
 import { objToArray, getCookieStr, arrayToObj } from '../utils/utils';
-import { render } from 'react-dom';
 
 type ShoppingListFormExpirationProps = {
     title: string, 

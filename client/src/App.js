@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
-import { connect } from 'react-redux';
-import Home from './Home';
+import { useSelector } from 'react-redux';
 import './App.css';
 import Header from './App/Header/Header';
 import AuthHeader from './App/Header/AuthHeader';
@@ -14,11 +13,10 @@ import ExpirationMapTest from './Settings/ExpirationMapTest';
 import Alerts from './Alerts/Alerts';
 
 function App(props) {
+  //TODO test, think these hooks are not being used currently
+  const {listTemplates, updateListTemplates, removeListTemplates} = useListTemplates();
 
-  let isLoggedIn = false;
-  if (props.authenticate && props.authenticate.isLoggedIn) {
-    isLoggedIn = true;
-  }
+  let isLoggedIn = useSelector(state => state.auth.isLoggedIn);
 
   if (!isLoggedIn) {
     return (
@@ -66,8 +64,4 @@ function App(props) {
   }
 }
 
-const mapStateToProps = state => ({
-  authenticate: state.authenticate
-})
-
-export default connect(mapStateToProps, null)(App);
+export default App;
