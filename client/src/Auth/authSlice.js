@@ -133,6 +133,7 @@ const authSlice = createSlice({
         state.message = action.payload.message;
         state.status = 'succeeded';
         state.isLoggedIn = false;
+        state.authStr = '';
       }
     },
     [logout.rejected]: (state, action) => {
