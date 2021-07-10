@@ -13,9 +13,6 @@ import ExpirationMapTest from './Settings/ExpirationMapTest';
 import Alerts from './Alerts/Alerts';
 
 function App(props) {
-  //TODO test, think these hooks are not being used currently
-  const {listTemplates, updateListTemplates, removeListTemplates} = useListTemplates();
-
   let isLoggedIn = useSelector(state => state.auth.isLoggedIn);
 
   if (!isLoggedIn) {
