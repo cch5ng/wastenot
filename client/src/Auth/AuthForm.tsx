@@ -7,41 +7,6 @@ import InputText from '../App/Shared/InputText/InputText';
 import { register, logout, login, isAuthenticated } from './authSlice';
 import type { RootState } from '../App/store';
 
-//import { register, logout, login, isAuthenticated } from '../actions/authenticate';
-
-// type MyProps = {
-//   login: any,
-//   logout: any,
-//   title: string,
-//   authenticate: {
-//     isLoggedIn: boolean,
-//     hasButtonClicked: boolean,
-//     status: string,
-//     message: string,
-//     authStr: string,
-//   },
-//   register: any,
-//   isAuthenticated: any,
-// };
-
-type MyState = {
-  email: string,
-  password: string,
-  passwordConfirm: string,
-  inputValidationErrors: string[]
-};
-
-//class AuthForm extends React.Component { //<MyProps, MyState>
-  // constructor(props) { //: MyProps
-  //   super(props);
-  //   this.state = {
-  //     email: '',
-  //     password: '',
-  //     passwordConfirm: '',
-  //     inputValidationErrors: []
-  //   }
-  // }
-
 const AuthForm = ({title}) => {
 
   const [email, setEmail] = useState('');
@@ -69,24 +34,19 @@ const AuthForm = ({title}) => {
       default:
         return;
     }
-    //this.setState({[name]: value})
   };
 
   const logInBtnClick = (
     event: React.MouseEvent<HTMLDivElement>
   ): void => {    
     event.preventDefault();
-    //const { email, password } = this.state;
     const emailErrors = ['Email is required.', 'Email must be valid. Please check spelling and try again.'];
     setInputValidationErrors([]);
-    //this.setState({inputValidationErrors: []}); //clear old errors
     if (!isEmailValid()) {
       setInputValidationErrors(emailErrors);
-      //this.setState({inputValidationErrors: emailErrors});
       return;
     }
-    dispatch(login({email, password}));
-    //this.props.login({ email, password });  
+    dispatch(login({email, password}));  
   };
 
   const logOutBtnClick = (
@@ -94,41 +54,33 @@ const AuthForm = ({title}) => {
   ): void => {  
     event.preventDefault();
     dispatch(logout);
-    //this.props.logout();
   };
 
   const signInBtnClick = (
     event: React.MouseEvent<HTMLDivElement>
   ): void => {  
     event.preventDefault();
-    //const { email, password, passwordConfirm } = this.state;
     const emailErrors = ['Email is required.', 'Email must be valid. Please check spelling and try again.'];
     const passwordErrors = ['Password and confirmation password values are required.', 
       'Password and confirmation password must be at least 8 characters long, contain one lower-case letter, contain one upper-case letter, contain one number, and container one special character (!, @, #, $, %, ^, &, *, or -).',
       'Password and confirmation password values must match.']
 
     setInputValidationErrors([]);
-    //this.setState({inputValidationErrors: []}); //clear old errors
     if (!isEmailValid() && !isPasswordValid()) {
       let combinedErrors = emailErrors.concat(passwordErrors);
       setInputValidationErrors(combinedErrors);
-      //this.setState({inputValidationErrors: combinedErrors});
       return;
     } else if (!isEmailValid()) {
       setInputValidationErrors(emailErrors);
-      //this.setState({inputValidationErrors: emailErrors});
       return;
     } else if (!isPasswordValid()) {
       setInputValidationErrors(passwordErrors);
-      //this.setState({inputValidationErrors: passwordErrors});
       return;
     }
     dispatch(register({email, password}));
-    //this.props.register({ email, password });
   };
 
   const isEmailValid = (): boolean => {    
-    //const {email} = this.state;
     if (!email.length) {
       return false;
     }
@@ -137,7 +89,6 @@ const AuthForm = ({title}) => {
   };
 
   const isPasswordValid = (): boolean => {    
-    //const {password, passwordConfirm} = this.state;
     if (!password.length || !passwordConfirm.length) {
       return false;
     }
@@ -162,9 +113,6 @@ const AuthForm = ({title}) => {
     return false;
   };
 
-  //this.props.authenticate.status
-  //this.props.authenticate.hasButtonClicked
-  //this.props.authenticate.message
   return (
     <div className="main">
       <form className="authFormContainer">
