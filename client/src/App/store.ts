@@ -3,7 +3,7 @@ import authReducer  from '../Auth/authSlice';
 import settingReducer from '../Settings/settingSlice';
 import shoppingListsReducer from '../ShoppingLists/shoppingListsSlice';
 
-export default configureStore({
+export const store =  configureStore({
   reducer: {
     auth: authReducer,
     setting: settingReducer,
