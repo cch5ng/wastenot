@@ -9,37 +9,7 @@ import '../App.css';
 import {fetchShoppingLists, deleteShoppingList} from './shoppingListsSlice';
 import type { RootState } from '../App/store';
 
-//import { fetchShoppingLists, fetchShoppingListDelete } from '../actions/shoppingLists';
-
-type MyProps = {
-  authenticate: {
-    isLoggedIn: boolean,
-    hasButtonClicked: boolean,
-    status: string,
-    message: string,
-    authStr: string,
-  },
-  shoppingLists: {
-    status: string,
-    message: string,
-    shoppingLists: {
-      id: {
-        name: string,
-        guid: string
-      },
-    }
-  },
-  // fetchShoppingLists: any,
-  // fetchShoppingListDelete: any,
-}
-type MyState = {}
-
 const ShoppingLists = () => {
-
-// class ShoppingLists extends Component<MyProps, MyState> {
-//   constructor(props) {
-//     super(props);
-//   }
 
   const dispatch = useDispatch();
   let authStr = useSelector((state: RootState) => state.auth.authStr);
@@ -52,20 +22,6 @@ const ShoppingLists = () => {
       dispatch(fetchShoppingLists({cookieStr: authStr}));
     }
   }, [])
-
-  // componentDidMount() {
-  //   if (this.props.authenticate && this.props.authenticate.authStr
-  //     && this.props.shoppingLists.message === 'no shopping lists have been retrieved') {
-  //     dispatch(fetchShoppingLists({cookieStr: this.props.authenticate.authStr}));
-  //   }
-  // }
-
-  // componentDidUpdate(prevProps) {
-  //   if (prevProps.authenticate.authStr !== this.props.authenticate.authStr
-  //     && this.props.shoppingLists.message === 'no shopping lists have been retrieved') {
-  //     this.props.fetchShoppingLists({cookieStr: this.props.authenticate.authStr});
-  //   }
-  // }
 
   const removeListTemplates = (ev) => {
     let listGuid = ev.target.id;
@@ -90,17 +46,3 @@ const ShoppingLists = () => {
 }
 
 export default ShoppingLists;
-
-// const mapStateToProps = state => ({ authenticate: state.authenticate, shoppingLists: state.shoppingLists });
-
-// const mapDispatchToProps = dispatch => {
-//   return {
-//     fetchShoppingLists: ({cookieStr}) => dispatch(fetchShoppingLists({cookieStr})),
-//     fetchShoppingListDelete: ({ guid, cookieStr }) => dispatch(fetchShoppingListDelete({ guid, cookieStr }))
-//   }
-// }
-
-// export default connect(
-//   mapStateToProps,
-//   mapDispatchToProps
-// )(ShoppingLists);
