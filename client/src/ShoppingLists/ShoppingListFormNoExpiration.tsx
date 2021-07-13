@@ -5,7 +5,7 @@ import InputText from '../App/Shared/InputText/InputText';
 import '../App.css';
 import Checkbox from '../App/Shared/Checkbox/Checkbox';
 import http_requests from '../utils/http_requests';
-import { getCookieStr, arrayToObj } from '../utils/utils';
+import { getCookieStr } from '../utils/utils';
 import { render } from 'react-dom';
 
 type ShoppingListFormNoExpirationProps = {
