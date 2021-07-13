@@ -6,7 +6,7 @@ import '../App.css';
 import InputText from '../App/Shared/InputText/InputText';
 import Checkbox from '../App/Shared/Checkbox/Checkbox';
 import http_requests from '../utils/http_requests';
-import { getCookieStr, arrayToObj } from '../utils/utils';
+import { getCookieStr } from '../utils/utils';
 
 type ShoppingListFormExpirationProps = {
     title: string, 
