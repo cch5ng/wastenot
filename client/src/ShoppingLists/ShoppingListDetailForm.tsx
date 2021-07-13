@@ -11,7 +11,7 @@ import Checkbox from '../App/Shared/Checkbox/Checkbox';
 import ShoppingListFormNoExpiration from './ShoppingListFormNoExpiration';
 import ShoppingListFormExpiration from './ShoppingListFormExpiration';
 import http_requests from '../utils/http_requests';
-import { objToArray, getCookieStr, arrayToObj, mappedListItemsArToObj, daysToMilliseconds } from '../utils/utils';
+import { objToArray, getCookieStr, mappedListItemsArToObj, daysToMilliseconds } from '../utils/utils';
 import { userIsUsingExpiration } from '../Settings/settingSlice';
 import { createShoppingList, editShoppingList } from './shoppingListsSlice';
 import type { RootState } from '../App/store';
@@ -38,27 +38,6 @@ const listItemStyles = {
 
 type ShoppingListDetailFormProps = {
   mode: string,
-  // authenticate: {
-  //   isLoggedIn: boolean,
-  //   hasButtonClicked: boolean,
-  //   status: string,
-  //   message: string,
-  //   authStr: string,
-  // },
-  // shoppingLists: {
-  //   status: string,
-  //   message: string,
-  //   shoppingLists: {
-  //     id: {
-  //       name: string,
-  //       guid: string
-  //     },
-  //   }
-  // },
-  // setting: {
-  //   hasButtonClicked: boolean
-  // },
-  // isUsingExpiration: any
 }
 const ShoppingListDetailForm = (props) => {
   const [formSubmitted, setFormSubmitted] = useState(false);
@@ -172,7 +151,7 @@ const ShoppingListDetailForm = (props) => {
       let list = {
         name: listName,
         type: listType,
-        listItems: objToArray(listItemInputs),
+        listItems: objToArray(copyListItemInputs), //not sure
         guid: listGuid
       }
       let d = new Date();
