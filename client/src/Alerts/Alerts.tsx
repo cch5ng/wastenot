@@ -1,22 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import {connect} from 'react-redux';
+import {useSelector} from 'react-redux';
 import http_requests from '../utils/http_requests';
 import Button from '../App/Shared/Button/Button';
 import './Alerts.css';
 
-type AlertsProps = {
-    authenticate: {
-        isLoggedIn: boolean,
-        hasButtonClicked: boolean,
-        status: string,
-        message: string,
-        authStr: string,
-    }    
-}
-const Alerts = (props: AlertsProps) => {
+const Alerts = () => {
     const [alertsAr, setAlertsAr] = useState([]);
     const [alertsObj, setAlertsObj] = useState({});
     const [daysUntilExpiration, setDaysUntilExpiration] = useState(7);
+
+    const authStr = useSelector(state => state.auth.authStr);
 
     let handlePostponeAlert = function(
         event: React.MouseEvent<HTMLDivElement>
@@ -30,11 +23,11 @@ const Alerts = (props: AlertsProps) => {
         let newNotifyTimestamp = new Date(notify_timestamp);
         newNotifyTimestamp.setDate(newNotifyTimestamp.getDate() + 1);
 
-        if (props.authenticate && props.authenticate.authStr) {
+        if (authStr) {
             http_requests.Lists.putPostponeListItemNotification({
                 list_item_guid: guid,
                 timestamp: newNotifyTimestamp,
-                cookieStr: props.authenticate.authStr
+                cookieStr: authStr
             })
                 .then(resp => {
                     let guid = resp.guid;
@@ -54,10 +47,10 @@ const Alerts = (props: AlertsProps) => {
         const {className} = target;
         const classAr = className.split(' ')
         const guid = classAr[classAr.length - 1];
-        if (props.authenticate && props.authenticate.authStr) {
+        if (authStr) {
             http_requests.Lists.putCancelListItemNotification({
                 list_item_guid: guid,
-                cookieStr: props.authenticate.authStr
+                cookieStr: authStr
             })
                 .then(resp => {
                     let guidToRemove = resp.guid;
@@ -109,8 +102,8 @@ const Alerts = (props: AlertsProps) => {
 
     //get init list of alerts to display
     useEffect(() => {
-        if (props.authenticate && props.authenticate.authStr) {
-            http_requests.Lists.getRecentListItemNotifications({cookieStr: props.authenticate.authStr})
+        if (authStr) {
+            http_requests.Lists.getRecentListItemNotifications({cookieStr: authStr})
             .then(resp => {
                 if (resp && resp.notifications) {
                     setAlertsAr(resp.notifications);
@@ -120,7 +113,7 @@ const Alerts = (props: AlertsProps) => {
             })
             .catch(err => console.error('err', err))
         }
-    }, [props.authenticate.authStr]);
+    }, [authStr]);
 
     useEffect(() => {
         let newAlertsAr = getAlertsArFromObj(alertsObj)
@@ -165,11 +158,4 @@ let getAlertsArFromObj = function(alertsObj: object): object[] {
     return alertsAr;
 }
 
-const mapStateToProps = state => ({ 
-    authenticate: state.authenticate
-});
-    
-export default connect(
-    mapStateToProps,
-    null
-)(Alerts);
+export default Alerts;
