@@ -86,80 +86,67 @@ type PutCancelListItemNotification = { list_item_guid: string; cookieStr: string
 
 type ListItemNotificationSentPutParams = { list_item_id: string; email: string };
 
-//type ShoppingListPostParams = { list: string; cookieStr: string };
+interface ListItem {
+  checked: boolean;
+  list_item_map_guid: string;
+  name: string | null;
+  notify_timestamp: string | null;
+  parentId: string;
+  section: string;
+  sortOrder: number;
+  timestamp: string;
+}
 
-// interface AuthStringObject {
-//   cookieStr: string;
-// }
+interface ListItems {
+  name: string;
+  type: string;
+  listItems: Array<ListItem>;
+}
 
-// interface TemplateListGetParams {
-//   guid: string;
-//   cookieStr: string;
-// }
-
-// interface PostponeListItemNotificationPutParams {
-//   list_item_guid: string;
-//   timestamp: string;
-//   cookieStr: string;
-// }
-
-// interface PutCancelListItemNotification {
-//   list_item_guid: string;
-//   cookieStr: string;
-// }
-
-// interface ListItemNotificationSentPutParams {
-//   list_item_id: string;
-//   email: string;
-// }
-
-// interface ShoppingListPostParams {
-//   list: ;
-//   cookieStr: string;
-// }
+type ShoppingListPostParams = { list: ListItems; cookieStr: string };
 
 const Lists = {
   getAllShoppingLists: ({cookieStr}: AuthStringParams) => {
     return requests.post(`${API_ROOT}${API_LIST_MIDDLE}${GET_SHOPPING_LISTS_SUFFIX}`, { cookieStr });
   },
-  getTemplateList: ({guid, cookieStr}) => {
+  getTemplateList: ({guid, cookieStr}: TemplateListGetParams) => {
     return requests.post(`${API_ROOT}${API_LIST_MIDDLE}${LIST_DETAIL_SUFFIX}/${guid}`, { cookieStr });
   },
-  postShoppingList: ({ list, cookieStr }) => {
+  postShoppingList: ({ list, cookieStr }: ShoppingListPostParams) => {
     return requests.post(`${API_ROOT}${API_LIST_MIDDLE}${CREATE_SHOPPING_LIST_SUFFIX}`, { ...list, cookieStr });
   },
-  putShoppingList: ({ list, cookieStr }) => {
+  putShoppingList: ({ list, cookieStr }: ShoppingListPostParams) => {
     return requests.put(`${API_ROOT}${API_LIST_MIDDLE}${SHOPPING_LIST_DETAIL_SUFFIX}/${list.guid}`, { ...list, cookieStr });
   },
   //this DELETE is used for templates and shopping lists because done by id
-  deleteTemplateList: ({guid, cookieStr}) => {
+  deleteTemplateList: ({guid, cookieStr}: TemplateListGetParams) => {
     return requests.delete(`${API_ROOT}${API_LIST_MIDDLE}${LIST_DETAIL_SUFFIX}/${guid}`, { cookieStr });
   },
-  putListItemNotificationSent: ({list_item_id, email}) => {
+  putListItemNotificationSent: ({list_item_id, email}: ListItemNotificationSentPutParams) => {
     return requests.put(`${API_ROOT}${API_LIST_MIDDLE}/sentNotification/${list_item_id}`, { email });
   },
-  getRecentListItemNotifications: ({cookieStr}) => {
+  getRecentListItemNotifications: ({cookieStr}: AuthStringParams) => {
     return requests.post(`${API_ROOT}${API_LIST_MIDDLE}/notifications`, {cookieStr});
   },
-  putPostponeListItemNotification: ({list_item_guid, timestamp, cookieStr}) => {
+  putPostponeListItemNotification: ({list_item_guid, timestamp, cookieStr}: PostponeListItemNotificationPutParams) => {
     return requests.put(`${API_ROOT}${API_LIST_MIDDLE}/notifications/postpone/${list_item_guid}`, { timestamp, cookieStr });
   },
-  putCancelListItemNotification: ({list_item_id, email}) => {
+  putCancelListItemNotification: ({list_item_guid, cookieStr}: PutCancelListItemNotification) => {
     return requests.put(`${API_ROOT}${API_LIST_MIDDLE}/notifications/cancel/${list_item_guid}`, { cookieStr });
   }
 };
 
-interface TimezoneParams {
+type TimezoneParams = {
   timezone: string;
-  cookieStr: string;
+  cookieStr: string
 }
 
-interface PushSubscriptionPostParams {
+type PushSubscriptionPostParams = {
   email: string;
-  pushSubscription: string;
+  pushSubscription: string
 }
 
-interface EmailParams {
+type EmailParams = {
   email: string;
 }
 
@@ -176,16 +163,16 @@ const Auth = {
   postAuthenticated: (cookie: string) => {
     return requests.post(`${API_ROOT}${API_AUTH_MIDDLE}${AUTH_AUTHENTICATED_SUFFIX}`, { cookie });
   },
-  putTimezone: ({timezone, cookieStr}) => {
+  putTimezone: ({timezone, cookieStr}: TimezoneParams) => {
     return requests.put(`${API_ROOT}${API_AUTH_MIDDLE}${SETTINGS_TIMEZONE_SUFFIX}`, { timezone, cookieStr });
   },
-  getTimezone: ({cookieStr}) => {
+  getTimezone: ({cookieStr}: AuthStringParams) => {
     return requests.post(`${API_ROOT}${API_AUTH_MIDDLE}${SETTINGS_TIMEZONE_SUFFIX}`, { cookieStr });
   },
-  postPushSubscription: ({email, pushSubscription}) => {
+  postPushSubscription: ({email, pushSubscription}: PushSubscriptionPostParams) => {
     return requests.post(`${API_ROOT}${API_AUTH_MIDDLE}${AUTH_PUSH_SUBSCRIPTION_SUFFIX}`, {email, pushSubscription})
   },
-  putPushSubscription: ({email}) => {
+  putPushSubscription: ({email}: EmailParams) => {
     return requests.put(`${API_ROOT}${API_AUTH_MIDDLE}${AUTH_REMOVE_PUSH_SUBSCRIPTION_SUFFIX}`, {email})
   }
 }
