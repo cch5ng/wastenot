@@ -18,12 +18,10 @@ ReactDOM.render(
   </Provider>, document.getElementById('root'));
 
 if (!('serviceWorker' in navigator)) {
-//   // Service Worker isn't supported on this browser, disable or hide UI.
-//   //return;
+  // Service Worker isn't supported on this browser, disable or hide UI.
   alert("This browser does not support service workers");
 } else if (!('PushManager' in window)) {
-//   // Push isn't supported on this browser, disable or hide UI.
-//   //return;
+  // Push isn't supported on this browser, disable or hide UI.
   alert("This browser does not support the push api");
 } else if (!('Notification' in window)) {
   alert("This browser does not support desktop notification");
