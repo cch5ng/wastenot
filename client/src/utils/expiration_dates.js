@@ -1,106 +1,133 @@
 //refrigeratorInt units in milliseconds
 
+// interface foodExpirationMetaData {
+//   refrigerator: string | null;
+//   refrigeratorInt: number;
+//   freezer: string | null;
+//   category: string | null;
+//   keywords: Array<string>;
+// }
+
+// interface ExpirationDatesType {
+//   name: foodExpirationMetaData
+// }
+
 const EXPIRATION_DATES = {
-  'no match': { refrigerator: null, refrigeratorInt: null, freezer: null },
+  'no match': { refrigerator: null, refrigeratorInt: null, freezer: null, category: null, keyWords: [] },
   'apples': {
     refrigerator: '4-8 weeks',
     refrigeratorInt: 2592000000,
     freezer: null,
-    category: 'produce'
+    category: 'produce',
+    keyWords: []
   },
-
   'bacon': {
     refrigerator: '7 days',
     refrigeratorInt: 604800000,
     freezer: '1 month',
-    category: 'deli'
+    category: 'deli',
+    keyWords: []
   },
   'beef, veal, lamb, pork steaks': {
     refrigerator: '3 - 5 days',
     refrigeratorInt: 259200000,
     freezer: '6 - 12 months',
-    category: 'protein'
+    category: 'protein',
+    keyWords: []
   },
   'beef, veal, lamb, pork roasts': {
     refrigerator: '3 - 5 days',
     refrigeratorInt: 259200000,
     freezer: '4 - 12 months',
-    category: 'protein'
+    category: 'protein',
+    keyWords: []
   },
   'beef, veal, lamb, pork chops': {
     refrigerator: '3 - 5 days',
     refrigeratorInt: 259200000,
     freezer: '4 - 6 months',
-    category: 'protein'
+    category: 'protein',
+    keyWords: []
   },
   'blueberries': {
     refrigerator: '1-2 weeks',
     refrigeratorInt: 604800000,
     freezer: null,
-    category: 'produce'
+    category: 'produce',
+    keyWords: []
   },
   'breakfast links, patties (smoked)': {
     refrigerator: '7 days',
     refrigeratorInt: 604800000,
     freezer: '1 - 2 months',
-    category: 'protein'
+    category: 'protein',
+    keyWords: []
   },
 
   'broccoli': {
     refrigerator: '1-2 weeks',
     refrigeratorInt: 604800000,
     freezer: null,
-    category: 'produce'
+    category: 'produce',
+    keyWords: []
   },
   'cauliflower': {
     refrigerator: '1-2 weeks',
     refrigeratorInt: 604800000,
     freezer: null,
-    category: 'produce'
+    category: 'produce',
+    keyWords: []
   },
 
   'carrots': {
     refrigerator: '3-4 weeks',
     refrigeratorInt: 1814400000,
     freezer: null,
-    category: 'produce'
+    category: 'produce',
+    keyWords: []
   },
 
   'chicken, turkey (whole and fresh)': {
     refrigerator: '1 - 2 days',
     refrigeratorInt: 86400000,
     freezer: '1 year',
-    category: 'protein'
+    category: 'protein',
+    keyWords: []
   },
   'chicken, turkey': {
     refrigerator: '1 - 2 days',
     refrigeratorInt: 86400000,
     freezer: '9 months',
-    category: 'protein'
+    category: 'protein',
+    keyWords: []
   },
   'chicken, turkey (cooked)': {
     refrigerator: '3 - 4 days',
     refrigeratorInt: 259200000,
     freezer: '4 months',
-    category: 'protein'
+    category: 'protein',
+    keyWords: []
   },
   'chicken, turkey (cooked with broth, gravy)': {
     refrigerator: '3 - 4 days',
     refrigeratorInt: 259200000,
     freezer: '6 months',
-    category: 'protein'
+    category: 'protein',
+    keyWords: []
   },
   'chicken nuggets, patties (cooked)': {
     refrigerator: '3 - 4 days',
     refrigeratorInt: 259200000,
     freezer: '1 - 3 months',
-    category: 'protein'
+    category: 'protein',
+    keyWords: []
   },
   'cucumbers': {
     refrigerator: '7 days',
     refrigeratorInt: 604800000,
     freezer: null,
-    category: 'produce'
+    category: 'produce',
+    keyWords: []
   },
 
 
@@ -150,42 +177,50 @@ const EXPIRATION_DATES = {
     refrigerator: '1 - 2 days',
     refrigeratorInt: 86400000,
     freezer: '6 - 8 months',
-    category: 'protein'
+    category: 'protein',
+    keyWords: []
   },
   'fish (fatty)': {
     refrigerator: '1 - 2 days',
     refrigeratorInt: 86400000,
     freezer: '2 - 3 months',
-    category: 'protein'
+    category: 'protein',
+    keyWords: []
   },
   'fish, cooked': {
     refrigerator: '3 - 4 days',
     refrigeratorInt: 259200000,
     freezer: '4 - 6 months',
-    category: 'protein'
+    category: 'protein',
+    keyWords: []
   },
   'fish, smoked': {
     refrigerator: '14 days',
     refrigeratorInt: 1209600000,
     freezer: '2 months',
-    category: 'protein'
+    category: 'protein',
+    keyWords: []
   },
   'fried chicken': {
     refrigerator: '3 - 4 days',
     refrigeratorInt: 259200000,
     freezer: '4 months',
-    category: 'deli'
+    category: 'deli',
+    keyWords: []
   },
   'giblets, fresh': {
     refrigerator: '1 - 2 days',
     refrigeratorInt: 86400000,
     freezer: '3 - 4 months',
-    category: 'protein'
+    category: 'protein',
+    keyWords: []
   },
   'gravy, meat broth': {
     refrigerator: '1 - 2 days',
     refrigeratorInt: 86400000,
-    freezer: '2 - 3 months'
+    freezer: '2 - 3 months',
+    keyWords: [],
+    category: 'protein',
   },
 
   'ground turkey, chicken, pork, veal, lamb': {
@@ -205,13 +240,15 @@ const EXPIRATION_DATES = {
     refrigerator: '7 days',
     refrigeratorInt: 604800000,
     freezer: null,
-    category: 'dairy'
+    category: 'dairy',
+    keyWords: [],
   },
   'half and half': {
     refrigerator: '5 days',
     refrigeratorInt: 432000000,
     freezer: null,
-    category: 'dairy'
+    category: 'dairy',
+    keyWords: [],
   },
   'ham, sliced': {
     refrigerator: '3 - 4 days',
@@ -290,7 +327,8 @@ const EXPIRATION_DATES = {
     refrigerator: '3-4 weeks',
     refrigeratorInt: 1814400000,
     freezer: null,
-    category: 'produce'
+    category: 'produce',
+    keyWords: [],
   },
   'green cabbage (shredded, washed)': {
     refrigerator: '7-10 days',
@@ -377,25 +415,29 @@ const EXPIRATION_DATES = {
     refrigerator: '3 - 4 days',
     refrigeratorInt: 259200000,
     freezer: '2 - 3 months',
-    category: 'protein'
+    category: 'protein',
+    keyWords: [],
   },
   'milk': {
     refrigerator: '7 days',
     refrigeratorInt: 604800000,
     freezer: null,
-    category: 'dairy'
+    category: 'dairy',
+    keyWords: [],
   },
   'mushrooms (whole)': {
     refrigerator: '7-10 days',
     refrigeratorInt: 604800000,
     freezer: null,
-    category: 'produce'
+    category: 'produce',
+    keyWords: [],
   },
   'oranges': {
     refrigerator: '3-4 weeks',
     refrigeratorInt: 1814400000,
     freezer: null,
-    category: 'produce'
+    category: 'produce',
+    keyWords: [],
   },
   'pasta (cooked)': {
     refrigerator: '3-4 days',
@@ -425,8 +467,6 @@ const EXPIRATION_DATES = {
     keyWords: [],
     category: 'deli'
   },
-
-
   'rice (cooked)': {
     refrigerator: '3-4 days',
     refrigeratorInt: 259200000,
@@ -440,38 +480,40 @@ const EXPIRATION_DATES = {
     refrigerator: '1 - 2 days',
     refrigeratorInt: 86400000,
     freezer: '1 - 2 months',
-    category: 'protein'
+    category: 'protein',
+    keyWords: [],
   },
 
   'seafood, canned (opened)': {
     refrigerator: '3 - 4 days',
     refrigeratorInt: 259200000,
     freezer: '2 months',
-    category: 'protein'
+    category: 'protein',
+    keyWords: [],
   },
   'shrimp, scallops, crawfish, squid': {
     refrigerator: '1 - 2 days',
     refrigeratorInt: 86400000,
     freezer: '3 - 6 months',
-    category: 'protein'
+    category: 'protein',
+    keyWords: [],
   },
-
-
-
 
   'soups, stews': {
     refrigerator: '3 - 4 days',
     refrigeratorInt: 259200000,
-    freezer: '2 - 3 months'
+    freezer: '2 - 3 months',
+    keyWords: [],
+    category: null,
   },
 
   'strawberries': {
     refrigerator: '3-7 days',
     refrigeratorInt: 259200000,
     freezer: null,
-    category: 'produce'
+    category: 'produce',
+    keyWords: [],
   },
-
 
   'Store-cooked convenience meals': {
     refrigerator: '3 - 4 days',
@@ -484,9 +526,9 @@ const EXPIRATION_DATES = {
     refrigerator: '3-5 days',
     refrigeratorInt: 259200000,
     freezer: null,
-    category: 'produce'
+    category: 'produce',
+    keyWords: [],
   },
-
 
   'turkey, chicken, pork, veal, lamb, chops (cooked)': {
     refrigerator: '3 - 4 days',
@@ -499,24 +541,27 @@ const EXPIRATION_DATES = {
     refrigerator: null,
     refrigeratorInt: null,
     freezer: '3 - 4 months',
-    keyWords: [ 'frozen dinner', 'microwave dinner', 'frozen meal', 'frozen' ]
+    keyWords: [ 'frozen dinner', 'microwave dinner', 'frozen meal', 'frozen' ],
+    category: 'protein'
   },
   'variety meats (tongue, kidneys, liver, heart, chitterlings)': {
     refrigerator: '1 - 2 days',
     refrigeratorInt: 86400000,
     freezer: '3 - 4 months',
-    category: 'protein'
+    category: 'protein',
+    keyWords: [],
   },
 
   'zucchini': {
     refrigerator: '4-5 days',
     refrigeratorInt: 345600000,
     freezer: null,
-    category: 'produce'
+    category: 'produce',
+    keyWords: [],
   },
-  test_1: { refrigerator: '1 min', refrigeratorInt: 60000, freezer: null, category: 'test'},
-  test_2: { refrigerator: '2 min', refrigeratorInt: 120000, freezer: null, category: 'test'},
-  test_4: { refrigerator: '4 min', refrigeratorInt: 240000, freezer: null, category: 'test'}
+  test_1: { refrigerator: '1 min', refrigeratorInt: 60000, freezer: null, category: 'test', keyWords: [],},
+  test_2: { refrigerator: '2 min', refrigeratorInt: 120000, freezer: null, category: 'test', keyWords: [],},
+  test_4: { refrigerator: '4 min', refrigeratorInt: 240000, freezer: null, category: 'test', keyWords: [],}
 }
 
 export { EXPIRATION_DATES };
