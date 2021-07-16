@@ -12,7 +12,7 @@ import Settings from './Auth/Settings';
 import ExpirationMapTest from './Settings/ExpirationMapTest';
 import Alerts from './Alerts/Alerts';
 
-function App(props) {
+function App() {
   let isLoggedIn = useSelector(state => state.auth.isLoggedIn);
 
   if (!isLoggedIn) {
@@ -21,10 +21,10 @@ function App(props) {
         <div className="App">
           <AuthHeader />
           <Route path='/' exact 
-            render={(props) => (<AuthForm {...props} title="Login" />
+            render={() => (<AuthForm title="Login" />
             )} />
           <Route path='/signup' exact 
-            render={(props) => (<AuthForm {...props} title="Sign Up" />
+            render={() => (<AuthForm title="Sign Up" />
             )} />
         </div>
       </Router>
@@ -39,7 +39,7 @@ function App(props) {
           <Route path='/' exact component={ShoppingLists}/>
           <Route exact path='/shoppingLists' component={ShoppingLists} />
           <Route exact path='/shoppingLists/new'
-            render={(props) => (<ShoppingListDetailForm {...props} mode="add" />
+            render={() => (<ShoppingListDetailForm mode="add" />
             )}
           />
           <Route exact path='/shoppingLists/:listGuid/edit'
@@ -50,10 +50,10 @@ function App(props) {
             component={ExpirationMapTest}
           />
           <Route exact path="/settings"
-            render={(props) => (<Settings {...props}/>
+            render={() => (<Settings />
           )} />
           <Route exact path="/alerts"
-            render={(props) => (<Alerts {...props}/>
+            render={() => (<Alerts />
           )} />
         </div>
       </Router>
