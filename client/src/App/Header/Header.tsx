@@ -1,30 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import './Header.css';
 import InternalNotification from '../InternalNotification/InternalNotification';
 import http_requests from '../../utils/http_requests';
 import { getCookieStr } from '../../utils/utils';
 import { logout, isAuthenticated } from '../../Auth/authSlice';
+import {RootState} from '../store';
 
-//import { logout } from '../../actions/authenticate';
+interface postListItemMapSettingResponse {
+  mapped_items_to_categories: boolean;
+  message: string;
+  type: string;
+}
 
-// type HeaderProps = {
-//   logout: any,
-//   authenticate: {
-//     isLoggedIn: boolean,
-//     hasButtonClicked: boolean,
-//     status: string,
-//     message: string,
-//     authStr: string,
-//   }
-// }
 const Header = () => { //props: HeaderProps
   const [menuDisplayed, setMenuDisplayed] = useState(false);
   const [globalHideInternalNotification, setGlobalHideInternalNotification] = useState(false);
     //refactor so when user runs first mapping test, this should update the database and that should update the globalHideInternalNotification setting on render
   const [sessionHideInternalNotification, setSessionHideInternalNotification] = useState(false);
 
+  const authStr = useSelector((state: RootState) => state.auth.authStr);
   const dispatch = useDispatch();
   
   let logOutHandler = function(
@@ -58,14 +54,14 @@ const Header = () => { //props: HeaderProps
   }
 
   useEffect(() => {
-    if (dispatch(isAuthenticated)) {
+    if (authStr) {
       let cookie = getCookieStr();
       http_requests.Setting.postListItemMapSetting(cookie)
         .then(resp => {
           setGlobalHideInternalNotification(resp.mapped_items_to_categories);
         });
     }
-  }, [isAuthenticated]);
+  }, [authStr]);
 
   if (!menuDisplayed) {
     return (
@@ -135,15 +131,3 @@ const Header = () => { //props: HeaderProps
 }
 
 export default Header;
-
-// const mapStateToProps = state => ({
-//   authenticate: state.authenticate
-// });
-
-// const mapDispatchToProps = dispatch => {
-//   return {
-//     logout: () => dispatch(logout())
-//   }
-// };
-
-//export default connect(mapStateToProps, mapDispatchToProps)(Header)
