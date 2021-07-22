@@ -3,16 +3,29 @@ import {
   nanoid,
   createAsyncThunk,
   createEntityAdapter,
+  PayloadAction
 } from '@reduxjs/toolkit'
 import * as serviceWorker from '../sw';
 
 import http_requests from '../utils/http_requests';
 import { getCookieStr } from '../utils/utils';
 
-const initialState = {
+interface AuthState {
+  isLoggedIn: boolean;
+  hasButtonClicked: boolean;
+  authStr: null | string;
+  message: null | string;
+  status: null | string;
+  error: null | any;
+}
+
+const initialState: AuthState = {
   isLoggedIn: false,
   hasButtonClicked: false,
   authStr: null,
+  message: null,
+  status: null,
+  error: null
 }
 
 export const register = createAsyncThunk('auth/register', async ({ email, password }) => {
@@ -84,6 +97,15 @@ export const isAuthenticated = createAsyncThunk('auth/isAuthenticated', async ()
   }
 })
 
+interface RegisterPayloadFail {
+  error: any
+}
+
+interface RegisterPayloadSuccess {
+  message: string,
+  authStr: string,
+}
+
 const authSlice = createSlice({
   name: 'auth',
   initialState,
@@ -94,14 +116,14 @@ const authSlice = createSlice({
       state.status = 'loading'
       state.error = null
     },
-    [register.fulfilled]: (state, action) => {
+    [register.fulfilled]: (state, action: PayloadAction<RegisterPayloadSuccess>) => {
       if (state.status === 'loading') {
         state.message = action.payload.message;
         state.authStr = action.payload.authStr;
         state.status = 'succeeded'
       }
     },
-    [register.rejected]: (state, action) => {
+    [register.rejected]: (state, action: PayloadAction<RegisterPayloadFail>) => {
       if (state.status === 'loading') {
         state.status = 'failed'
         state.error = action.payload
@@ -111,7 +133,7 @@ const authSlice = createSlice({
       state.status = 'loading'
       state.error = null
     },
-    [login.fulfilled]: (state, action) => {
+    [login.fulfilled]: (state, action: PayloadAction<RegisterPayloadSuccess>) => {
       if (state.status === 'loading') {
         state.status = 'succeeded'
         state.message = action.payload.message;
@@ -119,7 +141,7 @@ const authSlice = createSlice({
         state.isLoggedIn = true;
       }
     },
-    [login.rejected]: (state, action) => {
+    [login.rejected]: (state, action: PayloadAction<RegisterPayloadFail>) => {
       if (state.status === 'loading') {
         state.status = 'failed'
         state.error = action.payload
@@ -137,7 +159,7 @@ const authSlice = createSlice({
         state.authStr = '';
       }
     },
-    [logout.rejected]: (state, action) => {
+    [logout.rejected]: (state, action: PayloadAction<RegisterPayloadFail>) => {
       if (state.status === 'loading') {
         state.status = 'failed'
         state.error = action.payload
@@ -147,14 +169,14 @@ const authSlice = createSlice({
       state.status = 'loading'
       state.error = null
     },
-    [isAuthenticated.fulfilled]: (state, action) => {
+    [isAuthenticated.fulfilled]: (state, action: PayloadAction<RegisterPayloadSuccess>) => {
       if (state.status === 'loading') {
         state.message = action.payload.message;
         state.authStr = action.payload.authStr;
         state.status = 'succeeded'
       }
     },
-    [isAuthenticated.rejected]: (state, action) => {
+    [isAuthenticated.rejected]: (state, action: PayloadAction<RegisterPayloadFail>) => {
       if (state.status === 'loading') {
         state.status = 'failed'
         state.error = action.payload
