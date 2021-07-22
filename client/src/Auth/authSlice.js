@@ -12,6 +12,7 @@ import { getCookieStr } from '../utils/utils';
 const initialState = {
   isLoggedIn: false,
   hasButtonClicked: false,
+  authStr: null,
 }
 
 export const register = createAsyncThunk('auth/register', async ({ email, password }) => {
