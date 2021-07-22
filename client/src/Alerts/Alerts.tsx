@@ -3,13 +3,14 @@ import {useSelector} from 'react-redux';
 import http_requests from '../utils/http_requests';
 import Button from '../App/Shared/Button/Button';
 import './Alerts.css';
+import {RootState} from '../App/store';
 
 const Alerts = () => {
     const [alertsAr, setAlertsAr] = useState([]);
     const [alertsObj, setAlertsObj] = useState({});
     const [daysUntilExpiration, setDaysUntilExpiration] = useState(7);
 
-    const authStr = useSelector(state => state.auth.authStr);
+    const authStr = useSelector((state: RootState) => state.auth.authStr);
 
     let handlePostponeAlert = function(
         event: React.MouseEvent<HTMLDivElement>
