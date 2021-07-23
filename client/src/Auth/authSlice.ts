@@ -38,6 +38,10 @@ interface RegisterResponse {
   message: string
 }
 
+interface LogoutResponse {
+  message: string
+}
+
 export const register = createAsyncThunk('auth/register', async ({ email, password }: AuthParams) => {
   const response = await http_requests.Auth.postRegister(email, password);
   return (await response) as RegisterResponse;
@@ -46,20 +50,6 @@ export const register = createAsyncThunk('auth/register', async ({ email, passwo
 export const login = createAsyncThunk('auth/login', async ({ email, password }: AuthParams) => {
   const response = await http_requests.Auth.postLogin(email, password);
   return (await response) as RegisterResponse;
-
-
-  // let cookieAr;
-
-  // if (response.cookie && storageAvailable('sessionStorage')) {
-  //   cookieAr = response.cookie.split('=');
-  //   sessionStorage.setItem(cookieAr[0], cookieAr[1]);
-  //   return {
-  //     message: response.message,
-  //     authStr: cookieAr[1]
-  //   }
-  // }
-  // serviceWorker.subscribeUserToPush();
-
 })
 
 export const logout = createAsyncThunk('auth/logout', async () => {
@@ -67,16 +57,17 @@ export const logout = createAsyncThunk('auth/logout', async () => {
   const cookieKey = 'sessionStr';
   let cookieVal = sessionStorage.getItem(cookieKey);
   cookie = `${cookieKey}=${cookieVal}`;
-
-  const response = await http_requests.Auth.postLogout({ cookie })
   sessionStorage.removeItem(`${cookieKey}`);
   serviceWorker.unsubscribeUserFromPush();
 
-  if (response) {
-    return {
-      message: response.message,
-    }  
-  }
+  const response = await http_requests.Auth.postLogout(cookie);
+  return (await response) as RegisterResponse;
+
+  // if (response) {
+  //   return {
+  //     message: response.message,
+  //   }  
+  // }
 })
 
 export const isAuthenticated = createAsyncThunk('auth/isAuthenticated', async () => {
@@ -107,6 +98,10 @@ interface RegisterPayloadFail {
 interface RegisterPayloadSuccess {
   message: string,
   cookie: string,
+}
+
+interface LogoutSuccess {
+  message: string
 }
 
 const authSlice = createSlice({
@@ -168,7 +163,7 @@ const authSlice = createSlice({
       state.status = 'loading'
       state.error = null
     },
-    [logout.fulfilled]: (state, action) => {
+    [logout.fulfilled]: (state, action: PayloadAction<LogoutSuccess>) => {
       if (state.status === 'loading') {
         state.message = action.payload.message;
         state.status = 'succeeded';
