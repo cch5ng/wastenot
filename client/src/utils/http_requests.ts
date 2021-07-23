@@ -80,7 +80,7 @@ type AuthStringParams = { cookieStr: string };
 
 type TemplateListGetParams = { guid: string; cookieStr: string };
 
-type PostponeListItemNotificationPutParams = { list_item_guid: string; timestamp: string; cookieStr: string };
+type PostponeListItemNotificationPutParams = { list_item_guid: string; timestamp: Date; cookieStr: string };
 
 type PutCancelListItemNotification = { list_item_guid: string; cookieStr: string };
 
@@ -101,6 +101,7 @@ interface ListItems {
   name: string;
   type: string;
   listItems: Array<ListItem>;
+  guid: string
 }
 
 type ShoppingListPostParams = { list: ListItems; cookieStr: string };
