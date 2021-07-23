@@ -28,34 +28,37 @@ const initialState: AuthState = {
   error: null
 }
 
-export const register = createAsyncThunk('auth/register', async ({ email, password }) => {
-  const response = await http_requests.Auth.postRegister(email, password)
-  let cookieAr;
+type AuthParams = {
+  email: string;
+  password: string
+}
 
-  if (response.cookie && storageAvailable('sessionStorage')) {
-    cookieAr = response.cookie.split('=');
-    sessionStorage.setItem(cookieAr[0], cookieAr[1]);
-  }
+interface RegisterResponse {
+  cookie: string;
+  message: string
+}
 
-  return {
-    message: response.message,
-    authStr: cookieAr[1]
-  }
+export const register = createAsyncThunk('auth/register', async ({ email, password }: AuthParams) => {
+  const response = await http_requests.Auth.postRegister(email, password);
+  return (await response) as RegisterResponse;
 })
 
-export const login = createAsyncThunk('auth/login', async ({ email, password }) => {
-  const response = await http_requests.Auth.postLogin(email, password)
-  let cookieAr;
+export const login = createAsyncThunk('auth/login', async ({ email, password }: AuthParams) => {
+  const response = await http_requests.Auth.postLogin(email, password);
+  return (await response) as RegisterResponse;
 
-  if (response.cookie && storageAvailable('sessionStorage')) {
-    cookieAr = response.cookie.split('=');
-    sessionStorage.setItem(cookieAr[0], cookieAr[1]);
-    return {
-      message: response.message,
-      authStr: cookieAr[1]
-    }
-  }
-  serviceWorker.subscribeUserToPush();
+
+  // let cookieAr;
+
+  // if (response.cookie && storageAvailable('sessionStorage')) {
+  //   cookieAr = response.cookie.split('=');
+  //   sessionStorage.setItem(cookieAr[0], cookieAr[1]);
+  //   return {
+  //     message: response.message,
+  //     authStr: cookieAr[1]
+  //   }
+  // }
+  // serviceWorker.subscribeUserToPush();
 
 })
 
@@ -103,7 +106,7 @@ interface RegisterPayloadFail {
 
 interface RegisterPayloadSuccess {
   message: string,
-  authStr: string,
+  cookie: string,
 }
 
 const authSlice = createSlice({
@@ -118,8 +121,15 @@ const authSlice = createSlice({
     },
     [register.fulfilled]: (state, action: PayloadAction<RegisterPayloadSuccess>) => {
       if (state.status === 'loading') {
+        let cookieAr;
+
+        if (action.payload.cookie && storageAvailable('sessionStorage')) {
+          cookieAr = action.payload.cookie.split('=');
+          sessionStorage.setItem(cookieAr[0], cookieAr[1]);
+        }
+
         state.message = action.payload.message;
-        state.authStr = action.payload.authStr;
+        state.authStr = cookieAr[1];
         state.status = 'succeeded'
       }
     },
@@ -135,10 +145,17 @@ const authSlice = createSlice({
     },
     [login.fulfilled]: (state, action: PayloadAction<RegisterPayloadSuccess>) => {
       if (state.status === 'loading') {
+        let cookieAr;
+        if (action.payload.cookie && storageAvailable('sessionStorage')) {
+          cookieAr = action.payload.cookie.split('=');
+          sessionStorage.setItem(cookieAr[0], cookieAr[1]);
+        }
+
         state.status = 'succeeded'
         state.message = action.payload.message;
-        state.authStr = action.payload.authStr;
+        state.authStr = cookieAr[1];
         state.isLoggedIn = true;
+        serviceWorker.subscribeUserToPush();
       }
     },
     [login.rejected]: (state, action: PayloadAction<RegisterPayloadFail>) => {
