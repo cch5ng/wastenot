@@ -42,6 +42,10 @@ interface LogoutResponse {
   message: string
 }
 
+interface AuthenticatedResponse {
+  message: string
+}
+
 export const register = createAsyncThunk('auth/register', async ({ email, password }: AuthParams) => {
   const response = await http_requests.Auth.postRegister(email, password);
   return (await response) as RegisterResponse;
@@ -74,21 +78,13 @@ export const isAuthenticated = createAsyncThunk('auth/isAuthenticated', async ()
   let cookie;
   const cookieKey = 'sessionStr';
   let cookieVal = getCookieStr();
+  console.log('cookieVal', cookieVal)
   cookie = `${cookieKey}=${cookieVal}`;
 
-  if (cookieVal) {
-    const response = await http_requests.Auth.postAuthenticated({ cookie: cookieVal })
-    let cookieAr;
-  
-    return {
-      message: response.message,
-      authStr: cookieVal
-    }
-  } else {
-    return {
-      message: 'invalid authentication'
-    }
-  }
+  if (cookieVal.length) {
+    const response = await http_requests.Auth.postAuthenticated(cookieVal)
+    return (await response) as AuthenticatedResponse;
+  } 
 })
 
 interface RegisterPayloadFail {
@@ -104,17 +100,21 @@ interface LogoutSuccess {
   message: string
 }
 
+interface AuthenticatedSuccess {
+  message: string
+}
+
 const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
   },
-  extraReducers: {
-    [register.pending]: (state, action) => {
+  extraReducers: (builder) => {
+    builder.addCase(register.pending, (state, action) => {
       state.status = 'loading'
       state.error = null
-    },
-    [register.fulfilled]: (state, action: PayloadAction<RegisterPayloadSuccess>) => {
+    })
+    builder.addCase(register.fulfilled, (state, action: PayloadAction<RegisterPayloadSuccess>) => {
       if (state.status === 'loading') {
         let cookieAr;
 
@@ -127,73 +127,177 @@ const authSlice = createSlice({
         state.authStr = cookieAr[1];
         state.status = 'succeeded'
       }
-    },
-    [register.rejected]: (state, action: PayloadAction<RegisterPayloadFail>) => {
-      if (state.status === 'loading') {
-        state.status = 'failed'
-        state.error = action.payload
-      }
-    },
-    [login.pending]: (state, action) => {
-      state.status = 'loading'
-      state.error = null
-    },
-    [login.fulfilled]: (state, action: PayloadAction<RegisterPayloadSuccess>) => {
-      if (state.status === 'loading') {
-        let cookieAr;
-        if (action.payload.cookie && storageAvailable('sessionStorage')) {
-          cookieAr = action.payload.cookie.split('=');
-          sessionStorage.setItem(cookieAr[0], cookieAr[1]);
+    })
+    builder.addCase(register.rejected, (state, action: PayloadAction<any>) => {
+        if (state.status === 'loading') {
+          state.status = 'failed'
+          state.error = action.payload
         }
+      })
+    
+    builder.addCase(login.pending, (state) => {
+        state.status = 'loading'
+        state.error = null
+      })
 
-        state.status = 'succeeded'
-        state.message = action.payload.message;
-        state.authStr = cookieAr[1];
-        state.isLoggedIn = true;
-        serviceWorker.subscribeUserToPush();
-      }
-    },
-    [login.rejected]: (state, action: PayloadAction<RegisterPayloadFail>) => {
-      if (state.status === 'loading') {
-        state.status = 'failed'
-        state.error = action.payload
-      }
-    },
-    [logout.pending]: (state, action) => {
-      state.status = 'loading'
-      state.error = null
-    },
-    [logout.fulfilled]: (state, action: PayloadAction<LogoutSuccess>) => {
-      if (state.status === 'loading') {
-        state.message = action.payload.message;
-        state.status = 'succeeded';
-        state.isLoggedIn = false;
-        state.authStr = '';
-      }
-    },
-    [logout.rejected]: (state, action: PayloadAction<RegisterPayloadFail>) => {
-      if (state.status === 'loading') {
-        state.status = 'failed'
-        state.error = action.payload
-      }
-    },
-    [isAuthenticated.pending]: (state, action) => {
-      state.status = 'loading'
-      state.error = null
-    },
-    [isAuthenticated.fulfilled]: (state, action: PayloadAction<RegisterPayloadSuccess>) => {
-      if (state.status === 'loading') {
-        state.message = action.payload.message;
-        state.authStr = action.payload.authStr;
-        state.status = 'succeeded'
-      }
-    },
-    [isAuthenticated.rejected]: (state, action: PayloadAction<RegisterPayloadFail>) => {
-      if (state.status === 'loading') {
-        state.status = 'failed'
-        state.error = action.payload
-      }
-    },
+    builder.addCase(login.fulfilled, (state, action: PayloadAction<RegisterPayloadSuccess>) => {
+        if (state.status === 'loading') {
+          let cookieAr;
+          if (action.payload.cookie && storageAvailable('sessionStorage')) {
+            cookieAr = action.payload.cookie.split('=');
+            sessionStorage.setItem(cookieAr[0], cookieAr[1]);
+          }
+  
+          state.status = 'succeeded'
+          state.message = action.payload.message;
+          state.authStr = cookieAr[1];
+          state.isLoggedIn = true;
+          serviceWorker.subscribeUserToPush();
+        }
+      })
+
+    builder.addCase(login.rejected, (state, action: PayloadAction<any>) => {
+        if (state.status === 'loading') {
+          state.status = 'failed'
+          state.error = action.payload
+        }
+      })
+
+    builder.addCase(logout.pending, (state) => {
+        state.status = 'loading'
+        state.error = null
+      })
+
+    builder.addCase(logout.fulfilled, (state, action: PayloadAction<LogoutSuccess>) => {
+        if (state.status === 'loading') {
+          state.message = action.payload.message;
+          state.status = 'succeeded';
+          state.isLoggedIn = false;
+          state.authStr = '';
+        }
+      })
+
+    builder.addCase(logout.rejected, (state, action: PayloadAction<any>) => {
+        if (state.status === 'loading') {
+          state.status = 'failed'
+          state.error = action.payload
+        }
+      })
+
+    builder.addCase(isAuthenticated.pending, (state) => {
+        state.status = 'loading'
+        state.error = null
+      })
+    
+    builder.addCase(isAuthenticated.fulfilled, (state, action: PayloadAction<AuthenticatedSuccess>) => {
+        if (state.status === 'loading') {
+          let cookie;
+          const cookieKey = 'sessionStr';
+          let cookieVal = getCookieStr();
+          cookie = `${cookieKey}=${cookieVal}`;
+  
+          state.message = action.payload.message;
+          state.authStr = cookie;
+          state.status = 'succeeded'
+        }
+      })
+
+    builder.addCase(isAuthenticated.rejected, (state, action: PayloadAction<any>) => {
+        if (state.status === 'loading') {
+          state.status = 'failed'
+          state.error = action.payload
+        }
+      })
+
+    // [register.pending]: (state) => { //action
+    //   state.status = 'loading'
+    //   state.error = null
+    // },
+    // [register.fulfilled]: (state, action: PayloadAction<RegisterPayloadSuccess>) => {
+    //   if (state.status === 'loading') {
+    //     let cookieAr;
+
+    //     if (action.payload.cookie && storageAvailable('sessionStorage')) {
+    //       cookieAr = action.payload.cookie.split('=');
+    //       sessionStorage.setItem(cookieAr[0], cookieAr[1]);
+    //     }
+
+    //     state.message = action.payload.message;
+    //     state.authStr = cookieAr[1];
+    //     state.status = 'succeeded'
+    //   }
+    // },
+    // [register.rejected]: (state, action: PayloadAction<RegisterPayloadFail>) => {
+    //   if (state.status === 'loading') {
+    //     state.status = 'failed'
+    //     state.error = action.payload
+    //   }
+    // },
+    // [login.pending]: (state, action) => {
+    //   state.status = 'loading'
+    //   state.error = null
+    // },
+    // [login.fulfilled]: (state, action: PayloadAction<RegisterPayloadSuccess>) => {
+    //   if (state.status === 'loading') {
+    //     let cookieAr;
+    //     if (action.payload.cookie && storageAvailable('sessionStorage')) {
+    //       cookieAr = action.payload.cookie.split('=');
+    //       sessionStorage.setItem(cookieAr[0], cookieAr[1]);
+    //     }
+
+    //     state.status = 'succeeded'
+    //     state.message = action.payload.message;
+    //     state.authStr = cookieAr[1];
+    //     state.isLoggedIn = true;
+    //     serviceWorker.subscribeUserToPush();
+    //   }
+    // },
+    // [login.rejected]: (state, action: PayloadAction<RegisterPayloadFail>) => {
+    //   if (state.status === 'loading') {
+    //     state.status = 'failed'
+    //     state.error = action.payload
+    //   }
+    // },
+    // [logout.pending]: (state, action) => {
+    //   state.status = 'loading'
+    //   state.error = null
+    // },
+    // [logout.fulfilled]: (state, action: PayloadAction<LogoutSuccess>) => {
+    //   if (state.status === 'loading') {
+    //     state.message = action.payload.message;
+    //     state.status = 'succeeded';
+    //     state.isLoggedIn = false;
+    //     state.authStr = '';
+    //   }
+    // },
+    // [logout.rejected]: (state, action: PayloadAction<RegisterPayloadFail>) => {
+    //   if (state.status === 'loading') {
+    //     state.status = 'failed'
+    //     state.error = action.payload
+    //   }
+    // },
+    // [isAuthenticated.pending]: (state, action) => {
+    //   state.status = 'loading'
+    //   state.error = null
+    // },
+    // [isAuthenticated.fulfilled]: (state, action: PayloadAction<RegisterPayloadSuccess>) => {
+    //   if (state.status === 'loading') {
+    //     let cookie;
+    //     const cookieKey = 'sessionStr';
+    //     let cookieVal = getCookieStr();
+    //     cookie = `${cookieKey}=${cookieVal}`;
+
+    //     state.message = action.payload.message;
+    //     state.authStr = cookie;
+    //     state.status = 'succeeded'
+    //   }
+    // },
+    // [isAuthenticated.rejected]: (state, action: PayloadAction<RegisterPayloadFail>) => {
+    //   if (state.status === 'loading') {
+    //     state.status = 'failed'
+    //     state.error = action.payload
+    //   }
+    // },
   },
 })
 
